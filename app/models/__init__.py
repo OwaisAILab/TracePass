@@ -19,7 +19,6 @@ from app.models.audit_log import AuditLog  # noqa: F401
 from app.models.notification import Notification  # noqa: F401
 from app.models.recall_incident import Recall, Incident  # noqa: F401
 from app.models.purchase_order import PurchaseOrder  # noqa: F401
-from app.models.complaint import Complaint  # noqa: F401
 
 # Phase 6 adds REST API resources on top of these models — no new tables expected.
 from app.models.product_category import ProductCategory  # noqa: F401

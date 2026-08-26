@@ -1,0 +1,34 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    ports:
+      - "5000:5000"
+    environment:
+      SECRET_KEY: ${SECRET_KEY:-change-this-in-production}
+      DATABASE_URL: postgresql+psycopg://tracepass:${POSTGRES_PASSWORD:-change-me}@db:5432/tracepass
+      FLASK_ENV: production
+    volumes:
+      - tracepass_uploads:/app/uploads
+    depends_on:
+      db:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: tracepass
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+      POSTGRES_DB: tracepass
+    volumes:
+      - tracepass_postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U tracepass"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  tracepass_uploads:
+  tracepass_postgres_data:

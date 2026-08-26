@@ -28,3 +28,8 @@ app/static/qrcodes/*.png
 
 # Instance folder (Flask convention for instance-specific config)
 instance/
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3git 

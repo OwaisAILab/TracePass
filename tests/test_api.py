@@ -19,7 +19,20 @@ def test_health(client):
 
 
 # Code explanation: Implement the `test products api returns pagination` operation used by this part of TracePass.
-def test_products_api_returns_pagination(client):
+def test_products_api_requires_authentication(client):
+    response = client.get('/api/v1/products?page=1&per_page=10')
+    assert response.status_code == 401
+
+
+# Code explanation: Implement the `test products api returns pagination` operation used by this part of TracePass.
+def test_products_api_returns_pagination(client, app):
+    with app.app_context():
+        role = Role.query.filter_by(name='admin').first()
+        user = User(name='API Test Admin', email='apiadmin@example.com', role_id=role.id)
+        user.set_password('TestPass123!')
+        db.session.add(user)
+        db.session.commit()
+    login(client, 'apiadmin@example.com', 'TestPass123!')
     response = client.get('/api/v1/products?page=1&per_page=10')
     assert response.status_code == 200
     data = response.get_json()
