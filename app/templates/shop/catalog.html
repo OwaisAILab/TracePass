@@ -1,0 +1,24 @@
+<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
+{% extends "base.html" %}
+{% block title %}Shop | TracePass{% endblock %}
+<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
+{% block content %}
+<section class="catalog-head"><div class="container"><div class="eyebrow">TRACEPASS COLLECTION</div><h1>Fashion with <em>provenance.</em></h1><p>Every listed piece has a Digital Product Passport behind it.</p></div></section>
+<section class="catalog-section"><div class="container">
+<div class="catalog-toolbar"><span>{{ products|length }} traceable pieces</span><span>MEN'S COLLECTION · VERIFIED</span></div>
+<div class="product-grid catalog-grid">
+<!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
+{% for p in products %}
+<a class="fashion-card" href="{{ url_for('shop.product_page', passport_code=p.passport_code) }}">
+  <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
+  <div class="fashion-image {% if not p.image_url %}fashion-placeholder{% endif %}" {% if p.image_url %}style="background-image:url('{{ p.image_url }}')"{% endif %}>
+    <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
+    {% if not p.image_url %}<span>{{ (p.category_ref.name if p.category_ref else p.category or 'FASHION')|upper }}</span>{% endif %}
+    <div class="passport-badge">✓ VERIFIED PASSPORT</div>
+  </div>
+  <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
+  <div class="fashion-info"><div><h3>{{ p.name }}</h3><p>{{ p.brand or 'TRACEPASS COLLECTION' }}{% if p.model %} · {{ p.model }}{% endif %}</p></div><strong>PKR {{ "{:,.0f}".format(p.price|float) }}</strong></div>
+</a>
+{% else %}<div class="empty-store">No products are currently available.</div>{% endfor %}
+</div></div></section>
+{% endblock %}

@@ -1,0 +1,55 @@
+<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
+{% extends "base.html" %}
+{% block title %}New User · TracePass{% endblock %}
+<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card p-4">
+      <h4 class="mb-1">Create User Account</h4>
+      <p class="text-muted small mb-3">
+        Use this to create accounts for suppliers, manufacturers, distributors, and auditors.
+        These roles represent real organizational identities, so they aren't self-registered —
+        verify the person actually represents the organization before creating their account.
+      </p>
+      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
+      <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          {{ form.name.label(class="form-label") }}
+          {{ form.name(class="form-control") }}
+          <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
+          {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="mb-3">
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(class="form-control") }}
+          <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
+          {% for e in form.email.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            {{ form.role.label(class="form-label") }}
+            {{ form.role(class="form-select") }}
+          </div>
+          <div class="col-md-6 mb-3">
+            {{ form.organization_id.label(class="form-label") }}
+            {{ form.organization_id(class="form-select") }}
+            <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
+            {% for e in form.organization_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            <div class="form-text">Required for supplier / manufacturer / distributor / auditor roles.</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          {{ form.password.label(class="form-label") }}
+          {{ form.password(class="form-control") }}
+          <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
+          {% for e in form.password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          <div class="form-text">Share this with the user through a secure channel — they should change it on first login.</div>
+        </div>
+        {{ form.submit(class="btn btn-primary w-100") }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
