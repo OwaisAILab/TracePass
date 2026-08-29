@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/f6a7b8c9d012_final_dpp_completion.py part of the application.
 """Complete general DPP controls: verification history, sustainability and lifecycle data.
 
 This migration is intentionally safe when upgrading from the final hardening
@@ -14,17 +13,14 @@ branch_labels = None
 depends_on = None
 
 
-# Code explanation: Implement the `has table` operation used by this part of TracePass.
 def _has_table(bind, name):
     return inspect(bind).has_table(name)
 
 
-# Code explanation: Implement the `has column` operation used by this part of TracePass.
 def _has_column(bind, table, column):
     return column in {c["name"] for c in inspect(bind).get_columns(table)}
 
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     bind = op.get_bind()
 
@@ -74,7 +70,6 @@ def upgrade():
         )
 
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     bind = op.get_bind()
     if _has_table(bind, "lifecycle_events"):

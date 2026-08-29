@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/7f3a9c2d11ab_phase_1_master_data_categories.py part of the application.
 """Phase 1: product category master data.
 
 Revision ID: 7f3a9c2d11ab
@@ -13,7 +12,6 @@ branch_labels = None
 depends_on = None
 
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     op.create_table(
         "product_categories",
@@ -33,7 +31,6 @@ def upgrade():
         batch_op.create_foreign_key("fk_products_category_id", "product_categories", ["category_id"], ["id"])
 
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     with op.batch_alter_table("products") as batch_op:
         batch_op.drop_constraint("fk_products_category_id", type_="foreignkey")

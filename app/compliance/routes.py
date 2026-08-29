@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/compliance/routes.py part of the application.
 import os
 import uuid
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, abort, send_from_directory
@@ -23,7 +22,6 @@ CAN_REVIEW = (ROLE_ADMIN, ROLE_AUDITOR)
 CAN_VIEW_EVIDENCE = (ROLE_ADMIN, ROLE_MANUFACTURER, ROLE_AUDITOR)
 
 
-# Code explanation: Implement the `save upload` operation used by this part of TracePass.
 def _save_upload(file_storage):
     """Saves an uploaded file with a random-prefixed safe filename, returns the relative path."""
     upload_dir = current_app.config["UPLOAD_FOLDER"]
@@ -37,7 +35,6 @@ def _save_upload(file_storage):
 
 # --- certificates -----------------------------------------------------------
 
-# Code explanation: Implement the `add certificate` operation used by this part of TracePass.
 @compliance_bp.route("/products/<int:product_id>/certificates", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -76,7 +73,6 @@ def add_certificate(product_id):
 
 # --- documents ---------------------------------------------------------------
 
-# Code explanation: Implement the `add document` operation used by this part of TracePass.
 @compliance_bp.route("/products/<int:product_id>/documents", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -109,7 +105,6 @@ def add_document(product_id):
 # no way for a manufacturer to double check what they filed, or for an auditor
 # to open the evidence they are supposed to be reviewing (spec section 11).
 
-# Code explanation: Implement the `download certificate` operation used by this part of TracePass.
 @compliance_bp.route("/certificates/<int:cert_id>/file")
 @login_required
 @role_required(*CAN_VIEW_EVIDENCE)
@@ -121,7 +116,6 @@ def download_certificate(cert_id):
     return send_from_directory(upload_dir, cert.file_path, as_attachment=True)
 
 
-# Code explanation: Implement the `download document` operation used by this part of TracePass.
 @compliance_bp.route("/documents/<int:doc_id>/file")
 @login_required
 @role_required(*CAN_VIEW_EVIDENCE)
@@ -133,7 +127,6 @@ def download_document(doc_id):
 
 # --- certificate evidence review ---------------------------------------------
 
-# Code explanation: Implement the `review certificate` operation used by this part of TracePass.
 @compliance_bp.route("/certificates/<int:cert_id>/review", methods=["POST"])
 @login_required
 @role_required(*CAN_REVIEW)
@@ -165,7 +158,6 @@ def review_certificate(cert_id):
 
 # --- rule engine trigger ------------------------------------------------------
 
-# Code explanation: Evaluate a product against configured compliance rules and persist the result.
 @compliance_bp.route("/products/<int:product_id>/run-check", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN, ROLE_MANUFACTURER, ROLE_AUDITOR)
@@ -186,7 +178,6 @@ def run_compliance_check(product_id):
 
 # --- officer review ------------------------------------------------------------
 
-# Code explanation: Implement the `submit review` operation used by this part of TracePass.
 @compliance_bp.route("/products/<int:product_id>/reviews", methods=["POST"])
 @login_required
 @role_required(*CAN_REVIEW)
@@ -226,7 +217,6 @@ def submit_review(product_id):
 
 # --- rule & requirement management (admin only) -------------------------------
 
-# Code explanation: Implement the `list rules` operation used by this part of TracePass.
 @compliance_bp.route("/admin/compliance-rules")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -235,7 +225,6 @@ def list_rules():
     return render_template("compliance/rules.html", rules=rules)
 
 
-# Code explanation: Implement the `new rule` operation used by this part of TracePass.
 @compliance_bp.route("/admin/compliance-rules/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -257,7 +246,6 @@ def new_rule():
     return render_template("compliance/rule_form.html", form=form)
 
 
-# Code explanation: Implement the `view rule` operation used by this part of TracePass.
 @compliance_bp.route("/admin/compliance-rules/<int:rule_id>")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -267,7 +255,6 @@ def view_rule(rule_id):
     return render_template("compliance/rule_detail.html", rule=rule, req_form=req_form)
 
 
-# Code explanation: Implement the `add requirement` operation used by this part of TracePass.
 @compliance_bp.route("/admin/compliance-rules/<int:rule_id>/requirements", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)

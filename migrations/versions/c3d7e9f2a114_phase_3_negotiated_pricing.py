@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/c3d7e9f2a114_phase_3_negotiated_pricing.py part of the application.
 """Phase 3: negotiated purchase prices and supplier offering cleanup."""
 from alembic import op
 import sqlalchemy as sa
@@ -9,7 +8,6 @@ branch_labels = None
 depends_on = None
 
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     with op.batch_alter_table("supplier_materials", schema=None) as batch_op:
         batch_op.drop_column("price_per_unit")
@@ -44,7 +42,6 @@ def upgrade():
         batch_op.alter_column("agreed_currency", server_default=None)
 
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     op.drop_table("purchase_order_offers")
     with op.batch_alter_table("purchase_orders", schema=None) as batch_op:

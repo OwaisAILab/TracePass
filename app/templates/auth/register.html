@@ -1,7 +1,5 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}Register · TracePass{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <div class="auth-wrapper">
   <div class="auth-card">
@@ -12,31 +10,26 @@
     <div class="alert alert-info mb-4" style="font-size:12px;padding:12px 16px;">
       <strong>Note:</strong> This creates a customer account. Supplier, manufacturer, distributor, and auditor accounts are set up by an administrator after organizational verification.
     </div>
-    <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
     <form method="POST" novalidate>
       {{ form.hidden_tag() }}
       <div class="mb-3">
         {{ form.name.label(class="form-label") }}
         {{ form.name(class="form-control", placeholder="Your full name") }}
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for error in form.name.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
       </div>
       <div class="mb-3">
         {{ form.email.label(class="form-label") }}
         {{ form.email(class="form-control", placeholder="you@example.com") }}
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for error in form.email.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
       </div>
       <div class="mb-3">
         {{ form.password.label(class="form-label") }}
         {{ form.password(class="form-control", placeholder="••••••••") }}
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for error in form.password.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
       </div>
       <div class="mb-4">
         {{ form.confirm_password.label(class="form-label") }}
         {{ form.confirm_password(class="form-control", placeholder="••••••••") }}
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for error in form.confirm_password.errors %}<div class="text-danger small mt-1">{{ error }}</div>{% endfor %}
       </div>
       {{ form.submit(class="btn btn-primary w-100 py-2") }}

@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/api/__init__.py part of the application.
 from flask import Blueprint
 from app.extensions import csrf
 

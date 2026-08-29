@@ -1,47 +1,33 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}Procurement & Purchase Orders · TracePass{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div><h3 class="mb-1">Procurement & Purchase Orders</h3><div class="text-muted small">Request → negotiate → agree → dispatch → delivery → receipt. Prices are negotiated per transaction.</div></div>
-  <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
   {% if current_user.has_role('admin','manufacturer','distributor','retailer') %}<a class="btn btn-primary" href="{{ url_for('partners.new_purchase_order') }}">+ New Purchase Order</a>{% endif %}
 </div>
 
-<!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
 <div class="table-responsive"><table class="table table-bordered table-sm align-middle">
 <thead><tr><th>PO</th><th>Buyer → Supplier</th><th>Product / Material</th><th>Requested</th><th>Negotiated Terms</th><th>Status</th><th>Action</th></tr></thead>
 <tbody>
-<!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
 {% for po in purchase_orders %}
 {% set latest_offer = po.offers|selectattr('status','equalto','proposed')|list|last %}
 <tr>
 <td><strong>{{ po.po_number }}</strong><br><span class="small text-muted">{{ po.created_at.strftime('%Y-%m-%d') if po.created_at else '' }}</span></td>
 <td>{{ po.from_org.name if po.from_org else '—' }}<br>→ {{ po.to_org.name if po.to_org else '—' }}</td>
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 <td>{{ po.product.name if po.product else '—' }}{% if po.material %}<br><span class="badge bg-light text-dark">Raw material: {{ po.material.name }}</span>{% endif %}</td>
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 <td>{{ po.quantity }}{% if po.requested_delivery_date %}<br><span class="small">Need by {{ po.requested_delivery_date }}</span>{% endif %}</td>
 <td>
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if po.agreed_unit_price is not none %}<strong>Agreed: PKR {{ '%.2f'|format(po.agreed_unit_price) }}/unit</strong><br>Total: PKR {{ '%.2f'|format(po.agreed_total_price or 0) }}{% else %}No agreed price yet{% endif %}
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if latest_offer %}<br><span class="small text-primary">Latest offer: PKR {{ '%.2f'|format(latest_offer.unit_price) }}/unit · {{ latest_offer.offered_by.organization.name if latest_offer.offered_by.organization else 'Party' }}</span>{% endif %}
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if po.confirmed_supply_date %}<br><span class="small">Supply: {{ po.confirmed_supply_date }}</span>{% endif %}{% if po.expected_delivery_date %}<br><span class="small">Delivery: {{ po.expected_delivery_date }}</span>{% endif %}
 </td>
 <td><span class="badge bg-{{ 'success' if po.status in ['received','confirmed'] else ('danger' if po.status in ['rejected','cancelled'] else 'primary') }}">{{ po.status.replace('_',' ').title() }}</span></td>
 <td style="min-width:300px">
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if (po.to_org_id == org_id or po.from_org_id == org_id or current_user.has_role('admin')) and po.status in ['requested','confirmed'] %}
-  <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
   {% if latest_offer and latest_offer.offered_by.organization_id != org_id and not current_user.has_role('admin') %}
     <div class="small mb-1"><strong>Counterparty offered PKR {{ '%.2f'|format(latest_offer.unit_price) }}/unit.</strong></div>
-    <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
     <form method="POST" action="{{ url_for('partners.accept_purchase_order_offer', po_id=po.id) }}" class="d-inline mb-1"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-success">Accept Offer</button></form>
   {% endif %}
-  <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
   <form method="POST" action="{{ url_for('partners.submit_purchase_order_offer', po_id=po.id) }}" class="mt-1">
     {{ offer_forms[po.id].hidden_tag() if po.id in offer_forms else '' }}
     <div class="input-group input-group-sm mb-1"><span class="input-group-text">PKR</span><input name="unit_price" type="number" min="0.01" step="0.01" class="form-control" placeholder="Your offer / counter-offer" required></div>
@@ -50,24 +36,17 @@
     <button class="btn btn-sm btn-outline-primary mt-1">Send Offer / Counter-offer</button>
   </form>
 {% endif %}
-<!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
 {% if (po.to_org_id == org_id or current_user.has_role('admin')) and po.status == 'confirmed' %}<form method="POST" action="{{ url_for('partners.prepare_purchase_order', po_id=po.id) }}" class="d-inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-outline-primary">Start Preparing</button></form>{% endif %}
-<!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
 {% if (po.to_org_id == org_id or current_user.has_role('admin')) and po.status == 'preparing' %}<form method="POST" action="{{ url_for('partners.ready_purchase_order', po_id=po.id) }}" class="d-inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-outline-primary">Ready for Dispatch</button></form>{% endif %}
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if (po.to_org_id == org_id or current_user.has_role('admin')) and po.status in ['confirmed','preparing','ready_for_dispatch'] %}<a class="btn btn-sm btn-primary mt-1" href="{{ url_for('partners.dispatch_purchase_order', po_id=po.id) }}">Dispatch Shipment</a>{% endif %}
-<!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
 {% if (po.to_org_id == org_id or current_user.has_role('admin')) and po.status == 'shipped' %}<form method="POST" action="{{ url_for('partners.deliver_purchase_order', po_id=po.id) }}" class="d-inline"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button class="btn btn-sm btn-outline-primary">Mark Delivered</button></form>{% endif %}
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if (po.from_org_id == org_id or current_user.has_role('admin')) and po.status == 'delivered' %}
-<!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
 <form method="POST" action="{{ url_for('partners.receive_purchase_order', po_id=po.id) }}" class="mt-1">{{ receipt_forms[po.id].hidden_tag() if po.id in receipt_forms else '' }}
 <input name="received_quantity" type="number" min="1" max="{{ po.confirmed_quantity or po.quantity }}" value="{{ po.confirmed_quantity or po.quantity }}" class="form-control form-control-sm mb-1" placeholder="Received quantity">
 <input name="received_date" type="date" class="form-control form-control-sm mb-1">
 <textarea name="notes" class="form-control form-control-sm mb-1" rows="2" placeholder="Receipt notes"></textarea>
 <button class="btn btn-sm btn-success">Confirm Receipt</button></form>
 {% endif %}
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if po.status == 'received' %}<span class="text-success small">✓ Procurement completed and receipt confirmed.</span>{% endif %}
 </td>
 </tr>

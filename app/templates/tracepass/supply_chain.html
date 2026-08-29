@@ -1,7 +1,5 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}Supply Chain Traceability · TracePass{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div><h3 class="mb-1">Supply-Chain Traceability</h3><p class="text-muted mb-0">Track product movement, organizational hand-offs and passport activity.</p></div>
@@ -9,18 +7,15 @@
 </div>
 <div class="card shadow-sm">
   <div class="table-responsive">
-    <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
     <table class="table table-hover align-middle mb-0">
       <thead><tr><th>Product</th><th>Passport</th><th>Events</th><th>Shipments</th><th>Last Activity</th><th></th></tr></thead>
       <tbody>
-      <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
       {% for row in rows %}
         <tr>
           <td><strong>{{ row.product.name }}</strong><div class="small text-muted">{{ row.product.brand or '' }} {{ row.product.model or '' }}</div></td>
           <td><code>{{ row.product.passport_code }}</code></td>
           <td>{{ row.event_count }}</td>
           <td>{{ row.shipment_count }}</td>
-          <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
           <td>{% if row.last_activity %}<strong>{{ row.last_activity.title }}</strong><div class="small text-muted">{{ row.last_activity.timestamp }}{% if row.last_activity.org %} · {{ row.last_activity.org }}{% endif %}</div>{% else %}<span class="text-muted">No activity</span>{% endif %}</td>
           <td><a class="btn btn-sm btn-outline-secondary" href="{{ url_for('tracepass.view_product', product_id=row.product.id) }}">Timeline</a></td>
         </tr>

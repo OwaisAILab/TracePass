@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/auth/forms.py part of the application.
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError, Optional
@@ -8,14 +7,12 @@ from app.models.role import ALL_ROLES, ROLE_ADMIN, ROLE_CUSTOMER
 from app.models.organization import Organization
 
 
-# Code explanation: Custom WTForms validator that enforces TracePass password-strength requirements.
-def _validate_password_strength(form, field):
+def _validate_password_strength(field):
     value = field.data or ""
     if len(value) < 8 or not any(c.isupper() for c in value) or not any(c.islower() for c in value) or not any(c.isdigit() for c in value):
         raise ValidationError("Password must be at least 8 characters and include uppercase, lowercase and a number.")
 
 
-# Code explanation: Define the Login Form data model or application component used by TracePass.
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
@@ -23,7 +20,6 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Log In")
 
 
-# Code explanation: Define the Registration Form data model or application component used by TracePass.
 class RegistrationForm(FlaskForm):
     """
     Public self-registration. Deliberately has NO role field — every
@@ -43,13 +39,11 @@ class RegistrationForm(FlaskForm):
     )
     submit = SubmitField("Register")
 
-    # Code explanation: Implement the `validate email` operation used by this part of TracePass.
     def validate_email(self, field):
         if User.query.filter_by(email=field.data.lower()).first():
             raise ValidationError("An account with this email already exists.")
 
 
-# Code explanation: Define the Admin Create User Form data model or application component used by TracePass.
 class AdminCreateUserForm(FlaskForm):
     """Admin-only. Creates accounts for organizational / staff roles.
 
@@ -68,12 +62,10 @@ class AdminCreateUserForm(FlaskForm):
     password = PasswordField("Temporary Password", validators=[DataRequired(), Length(min=8), _validate_password_strength])
     submit = SubmitField("Create User")
 
-    # Code explanation: Implement the `validate email` operation used by this part of TracePass.
     def validate_email(self, field):
         if User.query.filter_by(email=field.data.lower()).first():
             raise ValidationError("An account with this email already exists.")
 
-    # Code explanation: Implement the `validate organization id` operation used by this part of TracePass.
     def validate_organization_id(self, field):
         # Organization is required for every role except customer/admin,
         # since a supplier/manufacturer/distributor/auditor account without

@@ -1,33 +1,24 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}{{ product.name }} · TracePass{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <div class="alert alert-dark d-flex justify-content-between align-items-center"><div><strong>TracePass Digital Product Passport</strong><br><span class="small">{{ product.category_ref.industry.name if product.category_ref and product.category_ref.industry else 'General' }} · {{ product.category_ref.name if product.category_ref else product.category or 'Uncategorised' }}</span></div><span class="badge text-bg-light">{{ product.passport_code }}</span></div>
-<!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
 {% if attribute_values %}<div class="card p-3 mb-4"><h5>Category-specific product information</h5><div class="row">{% for key, value in attribute_values.items() %}<div class="col-md-6 mb-2"><small class="text-muted">{{ key|replace('_',' ')|title }}</small><div>{{ value }}</div></div>{% endfor %}</div></div>{% endif %}
 
 <div class="d-flex justify-content-between align-items-start mb-3">
   <div>
     <h4 class="mb-1">{{ product.name }} <code class="fs-6">{{ product.passport_code }}</code></h4>
-    <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
     {% if current_user.has_role('admin', 'manufacturer') %}<a href="{{ url_for('tracepass.edit_product', product_id=product.id) }}" class="btn btn-sm btn-outline-primary mt-2">Edit Passport Data</a>{% endif %}
     <span class="badge bg-{{ 'success' if product.status == 'published' else ('secondary' if product.status == 'draft' else 'dark') }}">{{ product.status }}</span>
     <span class="badge bg-{{ 'success' if product.compliance_status == 'compliant' else ('danger' if product.compliance_status == 'non_compliant' else 'warning text-dark') }}">{{ product.compliance_status }}</span>
   </div>
-  <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
   {% if current_user.has_role('admin', 'manufacturer') %}
   <div>
-    <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
     {% if product.status != 'published' %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('tracepass.publish_product', product_id=product.id) }}" class="d-inline">
         <button class="btn btn-success btn-sm" type="submit" {{ 'disabled' if missing_fields }}>Publish</button>
       </form>
     {% endif %}
-    <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
     {% if product.status != 'archived' %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('tracepass.archive_product', product_id=product.id) }}" class="d-inline">
         <button class="btn btn-outline-secondary btn-sm" type="submit">Archive</button>
       </form>
@@ -36,7 +27,6 @@
   {% endif %}
 </div>
 
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if missing_fields %}
 <div class="alert alert-warning">Cannot publish yet — missing: {{ missing_fields | join(", ") }}</div>
 {% endif %}
@@ -45,7 +35,6 @@
   <div class="col-md-7">
     <div class="card p-3 mb-3">
       <h6>Identity</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm mb-0">
         <tr><th style="width:40%">Category</th><td>{{ product.category_ref.name if product.category_ref else product.category or "—" }}</td></tr>
         <tr><th>Brand</th><td>{{ product.brand or "—" }}</td></tr>
@@ -55,7 +44,6 @@
       </table>
     </div>
 
-    <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
     {% if product.sustainability_data %}
     <div class="card p-3 mb-3">
       <h6>Sustainability & Circularity</h6>
@@ -65,11 +53,9 @@
 
     <div class="card p-3 mb-3">
       <h6>Batches</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm">
         <thead><tr><th>Batch #</th><th>Manufacture Date</th><th>Location</th><th>Qty</th><th>Shipments</th></tr></thead>
         <tbody>
-          <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
           {% for b in product.batches %}
           <tr>
             <td>{{ b.batch_no }}</td>
@@ -83,9 +69,7 @@
           {% endfor %}
         </tbody>
       </table>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if current_user.has_role('admin', 'manufacturer') %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('tracepass.add_batch', product_id=product.id) }}" class="row g-2 mt-2">
         {{ batch_form.hidden_tag() }}
         <div class="col-md-3">{{ batch_form.batch_no(class="form-control form-control-sm", placeholder="Batch No.") }}</div>
@@ -95,17 +79,14 @@
         <div class="col-md-1">{{ batch_form.submit(class="btn btn-sm btn-outline-primary w-100") }}</div>
       </form>
 
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if product.batches and current_user.has_role('admin', 'supplier', 'manufacturer', 'distributor', 'retailer', 'auditor') %}
       <details class="mt-3">
         <summary class="small text-muted" style="cursor:pointer">+ Record a shipment for a batch</summary>
-        <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
         <form method="POST" action="{{ url_for('tracepass.add_shipment', batch_id=product.batches[0].id) }}"
               onsubmit="this.action = this.action.replace(/batches\/\d+/, 'batches/' + this.batch_select.value);"
               class="row g-2 mt-2">
           <div class="col-md-2">
             <select name="batch_select" class="form-select form-select-sm">
-              <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
               {% for b in product.batches %}<option value="{{ b.id }}">{{ b.batch_no }}</option>{% endfor %}
             </select>
           </div>
@@ -123,19 +104,15 @@
 
     <div class="card p-3 mb-3">
       <h6>Traceability Timeline</h6>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if timeline %}
       <ul class="list-unstyled mb-0">
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for entry in timeline %}
         <li class="border-start ps-3 pb-3 {{ 'border-primary' if entry.kind == 'event' else 'border-secondary' }}" style="border-left-width:3px !important;">
           <div class="d-flex justify-content-between">
             <strong>{{ entry.title }}</strong>
             <span class="text-muted small">{{ entry.timestamp }}</span>
           </div>
-          <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
           <div class="small text-muted">{{ entry.subtitle }}{% if entry.org %} · {{ entry.org }}{% endif %}</div>
-          <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
           {% if entry.detail %}<div class="small">{{ entry.detail }}</div>{% endif %}
         </li>
         {% endfor %}
@@ -144,9 +121,7 @@
       <p class="text-muted small mb-0">No events or shipments recorded yet.</p>
       {% endif %}
 
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if current_user.has_role('admin', 'supplier', 'manufacturer', 'distributor', 'retailer', 'auditor') %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('tracepass.log_event', product_id=product.id) }}" class="row g-2 mt-3 border-top pt-3">
         {{ event_form.hidden_tag() }}
         <div class="col-md-3">{{ event_form.event_type(class="form-select form-select-sm") }}</div>
@@ -164,19 +139,14 @@
         <h6 class="mb-0">Product Lifecycle</h6>
         <span class="badge text-bg-light">{{ lifecycle_events|length }} events</span>
       </div>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if lifecycle_events %}
       <div class="table-responsive">
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm mb-2"><thead><tr><th>Date</th><th>Event</th><th>Organization</th><th>Location</th><th>Notes</th></tr></thead><tbody>
-      <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
       {% for e in lifecycle_events %}
       <tr><td>{{ e.event_date.strftime('%Y-%m-%d %H:%M') }}</td><td><span class="badge text-bg-secondary">{{ e.event_type|replace('_',' ')|title }}</span></td><td>{{ e.organization.name if e.organization else '—' }}</td><td>{{ e.location or '—' }}</td><td>{{ e.notes or '—' }}</td></tr>
       {% endfor %}</tbody></table></div>
       {% else %}<p class="text-muted small">No post-manufacturing lifecycle events recorded yet.</p>{% endif %}
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if current_user.has_role('admin','supplier','manufacturer','distributor','retailer','auditor') %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('tracepass.add_lifecycle_event', product_id=product.id) }}" class="row g-2 mt-2 border-top pt-3">
         {{ lifecycle_form.hidden_tag() }}
         <div class="col-md-3">{{ lifecycle_form.event_type(class="form-select form-select-sm") }}</div>
@@ -191,11 +161,9 @@
 
     <div class="card p-3 mb-3">
       <h6>Materials & Suppliers</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm">
         <thead><tr><th>Material</th><th>Supplier</th><th>Qty</th><th>%</th></tr></thead>
         <tbody>
-          <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
           {% for m in product.materials %}
           <tr>
             <td>{{ m.material.name }}</td>
@@ -208,11 +176,8 @@
           {% endfor %}
         </tbody>
       </table>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       <div class="small text-muted mt-2">Declared composition: <strong>{{ product.material_percentage_total() }}%</strong>{% if product.materials and product.material_percentage_total() != 100 %} — publish requires exactly 100% when percentages are declared.{% endif %}</div>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if current_user.has_role('admin', 'manufacturer') %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('tracepass.link_material', product_id=product.id) }}" class="row g-2 mt-2">
         {{ material_form.hidden_tag() }}
         <div class="col-md-4">{{ material_form.material_id(class="form-select form-select-sm") }}</div>
@@ -227,9 +192,7 @@
     <div class="card p-3 mb-3">
       <div class="d-flex justify-content-between align-items-center">
         <h6 class="mb-0">Compliance</h6>
-        <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
         {% if current_user.has_role('admin', 'manufacturer', 'auditor') %}
-        <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
         <form method="POST" action="{{ url_for('compliance.run_compliance_check', product_id=product.id) }}">
           <button class="btn btn-sm btn-outline-primary" type="submit">Run Compliance Check</button>
         </form>
@@ -237,11 +200,9 @@
       </div>
 
       <h6 class="small text-muted mt-3 mb-1">Certificates</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm">
         <thead><tr><th>Type</th><th>Number</th><th>Expiry</th><th>Scope</th><th>File</th></tr></thead>
         <tbody>
-          <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
           {% for cert in certificates %}
 
           <tr>
@@ -249,12 +210,10 @@
             <td>{{ cert.cert_number or "—" }}</td>
             <td class="{{ 'text-danger' if cert.is_expired() else ('text-warning' if cert.expires_soon() else '') }}">
               {{ cert.expiry_date or "No expiry" }}
-              <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
               {% if cert.is_expired() %}<span class="badge bg-danger">Expired</span>{% elif cert.expires_soon() %}<span class="badge bg-warning text-dark">Expiring soon</span>{% endif %}
             </td>
             <td>{{ "Product" if cert.product_id else "Organization" }}</td>
             <td>
-              <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
               {% if cert.file_path and current_user.has_role('admin', 'manufacturer', 'auditor') %}
               <a href="{{ url_for('compliance.download_certificate', cert_id=cert.id) }}">Download</a>
               {% else %}
@@ -267,9 +226,7 @@
           {% endfor %}
         </tbody>
       </table>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if current_user.has_role('admin', 'manufacturer') %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('compliance.add_certificate', product_id=product.id) }}" enctype="multipart/form-data" class="row g-2 mt-2">
         {{ cert_form.hidden_tag() }}
         <div class="col-md-2">{{ cert_form.cert_type(class="form-control form-control-sm", placeholder="Cert Type") }}</div>
@@ -284,17 +241,14 @@
       <h6 class="small text-muted mt-4 mb-1">
 <div class="alert alert-light border mt-3"><strong>Certificate Evidence Review:</strong> Auditors/admins can approve or reject uploaded certificate evidence. Approval automatically re-runs the compliance engine.</div>
 Documents</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm">
         <thead><tr><th>Type</th><th>Uploaded</th><th>File</th></tr></thead>
         <tbody>
-          <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
           {% for doc in documents %}
           <tr>
             <td>{{ doc.doc_type }}</td>
             <td>{{ doc.uploaded_at.strftime("%Y-%m-%d") }}</td>
             <td>
-              <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
               {% if current_user.has_role('admin', 'manufacturer', 'auditor') %}
               <a href="{{ url_for('compliance.download_document', doc_id=doc.id) }}">Download</a>
               {% else %}
@@ -307,9 +261,7 @@ Documents</h6>
           {% endfor %}
         </tbody>
       </table>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if current_user.has_role('admin', 'manufacturer') %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('compliance.add_document', product_id=product.id) }}" enctype="multipart/form-data" class="row g-2 mt-2">
         {{ doc_form.hidden_tag() }}
         <div class="col-md-4">{{ doc_form.doc_type(class="form-control form-control-sm", placeholder="Document Type") }}</div>
@@ -319,10 +271,8 @@ Documents</h6>
       {% endif %}
 
       <h6 class="small text-muted mt-4 mb-1">Check History</h6>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if recent_checks %}
       <ul class="list-unstyled small mb-0">
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for check in recent_checks %}
         <li class="mb-1">
           <span class="badge bg-{{ 'success' if check.result == 'pass' else 'danger' }}">{{ check.result }}</span>
@@ -336,15 +286,12 @@ Documents</h6>
       {% endif %}
 
       <h6 class="small text-muted mt-4 mb-1">Officer Reviews</h6>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if reviews %}
       <ul class="list-unstyled small mb-2">
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for review in reviews %}
         <li class="mb-1">
           <span class="badge bg-{{ 'success' if review.decision == 'approved' else ('danger' if review.decision == 'rejected' else 'warning text-dark') }}">{{ review.decision.replace('_',' ') }}</span>
           by {{ review.reviewer.name }} · {{ review.reviewed_at.strftime("%Y-%m-%d") }}
-          <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
           {% if review.reasoning %}<div class="text-muted">{{ review.reasoning }}</div>{% endif %}
         </li>
         {% endfor %}
@@ -352,9 +299,7 @@ Documents</h6>
       {% else %}
       <p class="text-muted small mb-2">No reviews yet.</p>
       {% endif %}
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if current_user.has_role('admin', 'auditor') %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('compliance.submit_review', product_id=product.id) }}" class="row g-2 border-top pt-3">
         {{ review_form.hidden_tag() }}
         <div class="col-md-3">{{ review_form.decision(class="form-select form-select-sm") }}</div>
@@ -371,16 +316,12 @@ Documents</h6>
       </div>
 
       <h6 class="small text-muted mb-1">Recalls</h6>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if product.recalls.count() %}
       <ul class="list-unstyled small mb-2">
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for r in product.recalls %}
         <li class="d-flex justify-content-between align-items-center mb-1">
           <span><span class="badge bg-{{ 'danger' if r.status == 'open' else ('warning text-dark' if r.status == 'in_progress' else 'secondary') }}">{{ r.status.replace('_',' ') }}</span> {{ r.reason }}</span>
-          <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
           {% if current_user.has_role('admin', 'manufacturer') and r.status != 'closed' %}
-          <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
           <form method="POST" action="{{ url_for('reporting.update_recall_status', recall_id=r.id) }}" class="d-flex gap-1">
             <select name="status" class="form-select form-select-sm" style="width:auto">
               <option value="in_progress">In Progress</option>
@@ -395,9 +336,7 @@ Documents</h6>
       {% else %}
       <p class="text-muted small mb-2">No recalls issued.</p>
       {% endif %}
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if current_user.has_role('admin', 'manufacturer') %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('reporting.issue_recall', product_id=product.id) }}" class="row g-2">
         {{ recall_form.hidden_tag() }}
         <div class="col-md-4">{{ recall_form.batch_id(class="form-select form-select-sm") }}</div>
@@ -407,10 +346,8 @@ Documents</h6>
       {% endif %}
 
       <h6 class="small text-muted mt-3 mb-1">Incidents</h6>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if product.incidents.count() %}
       <ul class="list-unstyled small mb-2">
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for i in product.incidents %}
         <li class="mb-1"><span class="badge bg-{{ 'danger' if i.status == 'open' else ('warning text-dark' if i.status == 'investigating' else 'success') }}">{{ i.status }}</span> {{ i.description }}</li>
         {% endfor %}
@@ -418,7 +355,6 @@ Documents</h6>
       {% else %}
       <p class="text-muted small mb-2">No incidents reported.</p>
       {% endif %}
-      <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
       <form method="POST" action="{{ url_for('reporting.report_incident', product_id=product.id) }}" class="row g-2">
         {{ incident_form.hidden_tag() }}
         <div class="col-md-10">{{ incident_form.description(class="form-control form-control-sm", placeholder="Describe the issue") }}</div>
@@ -430,7 +366,6 @@ Documents</h6>
   <div class="col-md-5">
     <div class="card p-3 text-center">
       <h6>Public Verification</h6>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if product.qr_code %}
         <img src="{{ url_for('static', filename='qrcodes/' + product.qr_code.code_value + '.png') }}" alt="QR code" class="img-fluid mb-2" style="max-width:220px;margin:0 auto;">
         <a href="{{ url_for('tracepass.verify_passport', passport_code=product.passport_code) }}" target="_blank" class="small d-block">Open public passport page ↗</a>
@@ -442,11 +377,8 @@ Documents</h6>
 </div>
 {% endblock %}
 
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if current_user.has_role('admin','auditor') and certificates %}
 <div class="card p-3 mt-3"><h5>Certificate Evidence Review</h5><p class="text-muted small">Approve or reject certificate evidence. A decision automatically re-runs compliance for the product.</p>
-<!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
 {% for cert in certificates %}<div class="border rounded p-2 mb-2"><div><strong>{{ cert.cert_type }}</strong> — <span class="badge bg-secondary">{{ cert.review_status }}</span></div>
-<!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
 <form method="POST" action="{{ url_for('compliance.review_certificate', cert_id=cert.id) }}" class="row g-2 mt-1">{{ review_certificate_forms[cert.id].hidden_tag() if review_certificate_forms and cert.id in review_certificate_forms else '' }}<div class="col-md-3"><select name="decision" class="form-select form-select-sm"><option value="approved">Approve evidence</option><option value="rejected">Reject evidence</option></select></div><div class="col-md-6"><input name="comments" class="form-control form-control-sm" placeholder="Review comments"></div><div class="col-md-3"><button class="btn btn-sm btn-outline-primary w-100">Record Review</button></div></form></div>{% endfor %}</div>
 {% endif %}

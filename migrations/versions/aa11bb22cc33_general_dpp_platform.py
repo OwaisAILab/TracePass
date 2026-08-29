@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/aa11bb22cc33_general_dpp_platform.py part of the application.
 """General industry/template support for TracePass DPP platform.
 
 Merges the two legacy Phase-6 migration heads and introduces configurable
@@ -12,7 +11,6 @@ down_revision = "c3d7e9f2a114"
 branch_labels = None
 depends_on = None
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     op.create_table(
         "industries",
@@ -55,7 +53,6 @@ def upgrade():
     with op.batch_alter_table("products", schema=None) as batch_op:
         batch_op.add_column(sa.Column("attribute_values", sa.Text(), nullable=True))
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     with op.batch_alter_table("products", schema=None) as batch_op:
         batch_op.drop_column("attribute_values")

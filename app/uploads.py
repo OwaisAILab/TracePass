@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/uploads.py part of the application.
 import mimetypes
 import os
 
@@ -20,7 +19,6 @@ ALLOWED_MIME_BY_EXT = {
     "xlsx": {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/zip"},
 }
 
-# Code explanation: Implement the `validate upload` operation used by this part of TracePass.
 def validate_upload(file_storage, allowed_extensions):
     """Validate extension, MIME and basic file signature before saving."""
     if not file_storage or not file_storage.filename:

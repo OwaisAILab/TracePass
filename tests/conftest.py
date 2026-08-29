@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the tests/conftest.py part of the application.
 import pytest
 from app import create_app
 from app.extensions import db
@@ -6,7 +5,6 @@ from app.models.role import Role, ALL_ROLES
 from app.models.user import User
 
 
-# Code explanation: Implement the `app` operation used by this part of TracePass.
 @pytest.fixture()
 def app():
     app = create_app('testing')
@@ -20,13 +18,11 @@ def app():
         db.drop_all()
 
 
-# Code explanation: Implement the `client` operation used by this part of TracePass.
 @pytest.fixture()
 def client(app):
     return app.test_client()
 
 
-# Code explanation: Implement the `admin` operation used by this part of TracePass.
 @pytest.fixture()
 def admin(app):
     with app.app_context():

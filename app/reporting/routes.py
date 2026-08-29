@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/reporting/routes.py part of the application.
 import os
 import csv
 from io import StringIO
@@ -28,7 +27,6 @@ CAN_REVIEW = (ROLE_ADMIN, ROLE_AUDITOR)
 
 # --- dashboard --------------------------------------------------------------
 
-# Code explanation: Build the authenticated reporting/dashboard view from current system data.
 @reporting_bp.route("/reports/dashboard")
 @login_required
 def dashboard():
@@ -63,7 +61,6 @@ def dashboard():
 
 # --- notifications -----------------------------------------------------------
 
-# Code explanation: Implement the `mark notification read` operation used by this part of TracePass.
 @reporting_bp.route("/notifications/<int:notif_id>/read", methods=["POST"])
 @login_required
 def mark_notification_read(notif_id):
@@ -77,7 +74,6 @@ def mark_notification_read(notif_id):
 
 # --- notification center -------------------------------------------------------
 
-# Code explanation: Implement the `notifications` operation used by this part of TracePass.
 @reporting_bp.route("/notifications")
 @login_required
 def notifications():
@@ -89,7 +85,6 @@ def notifications():
     return render_template("reporting/notifications.html", pagination=pagination, notifications=pagination.items)
 
 
-# Code explanation: Implement the `mark all notifications read` operation used by this part of TracePass.
 @reporting_bp.route("/notifications/read-all", methods=["POST"])
 @login_required
 def mark_all_notifications_read():
@@ -101,7 +96,6 @@ def mark_all_notifications_read():
 
 # --- recalls -------------------------------------------------------------------
 
-# Code explanation: Implement the `issue recall` operation used by this part of TracePass.
 @reporting_bp.route("/products/<int:product_id>/recalls", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -127,7 +121,6 @@ def issue_recall(product_id):
     return redirect(url_for("tracepass.view_product", product_id=product.id))
 
 
-# Code explanation: Implement the `update recall status` operation used by this part of TracePass.
 @reporting_bp.route("/recalls/<int:recall_id>/status", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -146,7 +139,6 @@ def update_recall_status(recall_id):
 
 # --- incidents -----------------------------------------------------------------
 
-# Code explanation: Implement the `report incident` operation used by this part of TracePass.
 @reporting_bp.route("/products/<int:product_id>/incidents", methods=["POST"])
 @login_required
 def report_incident(product_id):
@@ -166,7 +158,6 @@ def report_incident(product_id):
     return redirect(url_for("tracepass.view_product", product_id=product.id))
 
 
-# Code explanation: Implement the `update incident status` operation used by this part of TracePass.
 @reporting_bp.route("/incidents/<int:incident_id>/status", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -186,7 +177,6 @@ def update_incident_status(incident_id):
 
 # --- audit log viewer (admin only) ----------------------------------------------
 
-# Code explanation: Implement the `list audit logs` operation used by this part of TracePass.
 @reporting_bp.route("/admin/audit-logs")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -209,7 +199,6 @@ def list_audit_logs():
                            action=action, entity_type=entity_type, search=search, entity_types=entity_types)
 
 
-# Code explanation: Implement the `export summary csv` operation used by this part of TracePass.
 @reporting_bp.route("/reports/summary.csv")
 @login_required
 def export_summary_csv():
@@ -228,7 +217,6 @@ def export_summary_csv():
 
 # --- PDF export ------------------------------------------------------------------
 
-# Code explanation: Implement the `export compliance report` operation used by this part of TracePass.
 @reporting_bp.route("/products/<int:product_id>/report.pdf")
 @login_required
 def export_compliance_report(product_id):

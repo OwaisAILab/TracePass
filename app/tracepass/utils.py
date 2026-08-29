@@ -1,18 +1,15 @@
-# TracePass code note: This module implements the app/tracepass/utils.py part of the application.
 import os
 import secrets
 import qrcode
 from flask import current_app, url_for
 
 
-# Code explanation: Implement the `qr static dir` operation used by this part of TracePass.
 def qr_static_dir():
     path = os.path.join(current_app.root_path, "static", "qrcodes")
     os.makedirs(path, exist_ok=True)
     return path
 
 
-# Code explanation: Implement the `generate qr for passport code` operation used by this part of TracePass.
 def generate_qr_for_passport_code(passport_code: str) -> str:
     """
     Generates a PNG QR code encoding the public passport verification URL,
@@ -32,12 +29,10 @@ def generate_qr_for_passport_code(passport_code: str) -> str:
     return code_value
 
 
-# Code explanation: Implement the `qr image url` operation used by this part of TracePass.
 def qr_image_url(code_value: str) -> str:
     return url_for("static", filename=f"qrcodes/{code_value}.png")
 
 
-# Code explanation: Implement the `build product timeline` operation used by this part of TracePass.
 def build_product_timeline(product):
     """
     Merge supply_chain_events and shipments (via the product's batches) into
@@ -74,7 +69,6 @@ def build_product_timeline(product):
 
     # Normalize all timestamps to comparable datetimes for sorting — event_date
     # is a full datetime, shipment dates are plain dates.
-    # Code explanation: Implement the `sort key` operation used by this part of TracePass.
     def sort_key(e):
         ts = e["timestamp"]
         if hasattr(ts, "hour"):

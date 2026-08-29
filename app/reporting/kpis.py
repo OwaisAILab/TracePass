@@ -1,11 +1,9 @@
-# TracePass code note: This module implements the app/reporting/kpis.py part of the application.
 from app.models.product import Product, COMPLIANCE_COMPLIANT, COMPLIANCE_NON_COMPLIANT, COMPLIANCE_PENDING, STATUS_PUBLISHED
 from app.models.certificate import Certificate
 from app.models.compliance import ComplianceReview
 from app.models.recall_incident import Recall, Incident, RECALL_OPEN, INCIDENT_OPEN
 
 
-# Code explanation: Implement the `compute kpis` operation used by this part of TracePass.
 def compute_kpis(scope_org_id=None):
     """
     Computes headline KPIs. If scope_org_id is given, scopes to that

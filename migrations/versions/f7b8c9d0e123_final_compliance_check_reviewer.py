@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/f7b8c9d0e123_final_compliance_check_reviewer.py part of the application.
 """Record the user who triggered each compliance check."""
 from alembic import op
 import sqlalchemy as sa
@@ -10,12 +9,10 @@ branch_labels = None
 depends_on = None
 
 
-# Code explanation: Implement the `has column` operation used by this part of TracePass.
 def _has_column(bind, table, column):
     return column in {c["name"] for c in inspect(bind).get_columns(table)}
 
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     bind = op.get_bind()
     if not _has_column(bind, "compliance_checks", "checked_by_user_id"):
@@ -31,7 +28,6 @@ def upgrade():
             )
 
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     bind = op.get_bind()
     if _has_column(bind, "compliance_checks", "checked_by_user_id"):

@@ -1,11 +1,9 @@
-# TracePass code note: This module implements the app/compliance/engine.py part of the application.
 from app.extensions import db
 from app.models.compliance import ComplianceRule, ComplianceRequirement, ComplianceCheck, CHECK_PASS, CHECK_FAIL
 from app.models.certificate import Certificate, Document
 from app.models.product import Product, COMPLIANCE_COMPLIANT, COMPLIANCE_NON_COMPLIANT, COMPLIANCE_PENDING
 
 
-# Code explanation: Implement the `applicable rules for` operation used by this part of TracePass.
 def applicable_rules_for(product: Product):
     return ComplianceRule.query.filter(
         ComplianceRule.is_active.is_(True),
@@ -13,7 +11,6 @@ def applicable_rules_for(product: Product):
     ).all()
 
 
-# Code explanation: Implement the `requirement satisfied` operation used by this part of TracePass.
 def _requirement_satisfied(product: Product, requirement: ComplianceRequirement):
     if requirement.requirement_type == "certificate":
         cert = (
@@ -43,7 +40,6 @@ def _requirement_satisfied(product: Product, requirement: ComplianceRequirement)
     return False, f"Unknown requirement type '{requirement.requirement_type}'."
 
 
-# Code explanation: Implement the `evaluate product compliance` operation used by this part of TracePass.
 def evaluate_product_compliance(product: Product) -> dict:
     rules = applicable_rules_for(product)
     new_checks = []

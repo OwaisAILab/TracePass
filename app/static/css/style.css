@@ -3,7 +3,6 @@
 * { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
 
 
-/* TracePass code explanation: The `body` rule controls the visual layout/appearance of this UI element. */
 body {
   background: linear-gradient(135deg, #f5f7fa 0%, #e8ecf1 100%);
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
@@ -15,7 +14,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Modern Card Design ── */
-/* TracePass code explanation: The `.card` rule controls the visual layout/appearance of this UI element. */
 .card {
   border: none;
   border-radius: 16px;
@@ -25,7 +23,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   overflow: hidden;
 }
 
-/* TracePass code explanation: The `.card:hover` rule controls the visual layout/appearance of this UI element. */
 .card:hover {
   box-shadow: var(--card-hover-shadow);
   transform: translateY(-2px);
@@ -33,7 +30,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Enterprise Navbar Modern ── */
-/* TracePass code explanation: The `.navbar-dark.bg-dark` rule controls the visual layout/appearance of this UI element. */
 .navbar-dark.bg-dark {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%) !important;
   backdrop-filter: blur(20px);
@@ -42,7 +38,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   padding: 0.75rem 0;
 }
 
-/* TracePass code explanation: The `.navbar-brand.fw-bold` rule controls the visual layout/appearance of this UI element. */
 .navbar-brand.fw-bold {
   font-weight: 800 !important;
   letter-spacing: 0.06em;
@@ -54,7 +49,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Modern Buttons ── */
-/* TracePass code explanation: The `.btn` rule controls the visual layout/appearance of this UI element. */
 .btn {
   border-radius: 10px;
   font-weight: 600;
@@ -68,7 +62,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 .btn:active { transform: translateY(0); }
 
-/* TracePass code explanation: The `.btn-primary` rule controls the visual layout/appearance of this UI element. */
 .btn-primary {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #ffffff !important;
@@ -76,7 +69,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   box-shadow: 0 4px 14px rgba(102,126,234,0.4);
 }
 
-/* TracePass code explanation: The `.btn-primary:hover` rule controls the visual layout/appearance of this UI element. */
 .btn-primary:hover {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: #ffffff !important;
@@ -84,20 +76,17 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   box-shadow: 0 6px 20px rgba(102,126,234,0.5);
 }
 
-/* TracePass code explanation: The `.btn-outline-light` rule controls the visual layout/appearance of this UI element. */
 .btn-outline-light {
   border: 1.5px solid rgba(255,255,255,0.3);
   background: transparent;
   backdrop-filter: blur(10px);
 }
 
-/* TracePass code explanation: The `.btn-outline-light:hover` rule controls the visual layout/appearance of this UI element. */
 .btn-outline-light:hover {
   background: rgba(255,255,255,0.15);
   border-color: rgba(255,255,255,0.5);
 }
 
-/* TracePass code explanation: The `.hero-grid` rule controls the visual layout/appearance of this UI element. */
 .hero-grid {
   display: grid;
   grid-template-columns: 1.05fr .95fr;
@@ -105,7 +94,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   align-items: center;
 }
 
-/* TracePass code explanation: The `.eyebrow` rule controls the visual layout/appearance of this UI element. */
 .eyebrow {
   font-size: 11px;
   font-weight: 800;
@@ -115,7 +103,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   text-transform: uppercase;
 }
 
-/* TracePass code explanation: The `.hero-copy h1` rule controls the visual layout/appearance of this UI element. */
 .hero-copy h1 {
   font-size: clamp(50px, 6.5vw, 92px);
   line-height: 0.92;
@@ -128,7 +115,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   background-clip: text;
 }
 
-/* TracePass code explanation: The `.hero-copy h1 em, .section-heading h2 em, .passport-banner h2 em, .catalog-head h1 em, .product-story h2 em` rule controls the visual layout/appearance of this UI element. */
 .hero-copy h1 em, .section-heading h2 em, .passport-banner h2 em, .catalog-head h1 em, .product-story h2 em {
   font-family: 'Georgia', serif;
   font-weight: 400;
@@ -139,7 +125,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-style: italic;
 }
 
-/* TracePass code explanation: The `.hero-copy > p` rule controls the visual layout/appearance of this UI element. */
 .hero-copy > p {
   max-width: 570px;
   color: #5d5953;
@@ -147,33 +132,28 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   line-height: 1.7;
 }
 
-/* TracePass code explanation: The `.hero-actions` rule controls the visual layout/appearance of this UI element. */
 .hero-actions {
   display: flex;
   gap: 14px;
   margin: 34px 0;
 }
 
-/* TracePass code explanation: The `.hero-proof` rule controls the visual layout/appearance of this UI element. */
 .hero-proof {
   font-size: 11px;
   color: #68635c;
   font-weight: 500;
 }
 
-/* TracePass code explanation: The `.hero-proof span` rule controls the visual layout/appearance of this UI element. */
 .hero-proof span {
   font-weight: 800;
   color: #4a4a4a;
 }
 
-/* TracePass code explanation: The `.hero-art` rule controls the visual layout/appearance of this UI element. */
 .hero-art {
   height: 500px;
   position: relative;
 }
 
-/* TracePass code explanation: The `.hero-card` rule controls the visual layout/appearance of this UI element. */
 .hero-card {
   position: absolute;
   width: 310px;
@@ -181,7 +161,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   border-radius: 18px;
 }
 
-/* TracePass code explanation: The `.hero-card-back` rule controls the visual layout/appearance of this UI element. */
 .hero-card-back {
   right: 90px;
   top: 70px;
@@ -189,7 +168,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   transform: rotate(9deg);
 }
 
-/* TracePass code explanation: The `.hero-card-main` rule controls the visual layout/appearance of this UI element. */
 .hero-card-main {
   right: 155px;
   top: 35px;
@@ -202,25 +180,21 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   justify-content: space-between;
 }
 
-/* TracePass code explanation: The `.hero-card-label` rule controls the visual layout/appearance of this UI element. */
 .hero-card-label {
   font-size: 12px;
   letter-spacing: 0.16em;
 }
 
-/* TracePass code explanation: The `.hero-card-code` rule controls the visual layout/appearance of this UI element. */
 .hero-card-code {
   font-size: 18px;
   letter-spacing: 0.06em;
 }
 
-/* TracePass code explanation: The `.hero-card-code span` rule controls the visual layout/appearance of this UI element. */
 .hero-card-code span {
   font-size: 8px;
   color: #c7c4bd;
 }
 
-/* TracePass code explanation: The `.floating-stamp` rule controls the visual layout/appearance of this UI element. */
 .floating-stamp {
   position: absolute;
   right: 20px;
@@ -243,7 +217,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   animation: float 3s ease-in-out infinite;
 }
 
-/* TracePass code explanation: The `@keyframes float` rule controls the visual layout/appearance of this UI element. */
 @keyframes float {
   0%, 100% { transform: rotate(-12deg) translateY(0); }
   50% { transform: rotate(-12deg) translateY(-10px); }
@@ -251,14 +224,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Trust Strip Modern ── */
-/* TracePass code explanation: The `.trust-strip` rule controls the visual layout/appearance of this UI element. */
 .trust-strip {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: #eee;
   padding: 22px 0;
 }
 
-/* TracePass code explanation: The `.trust-strip .container` rule controls the visual layout/appearance of this UI element. */
 .trust-strip .container {
   display: flex;
   gap: 30px;
@@ -266,7 +237,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   flex-wrap: wrap;
 }
 
-/* TracePass code explanation: The `.trust-strip span` rule controls the visual layout/appearance of this UI element. */
 .trust-strip span {
   color: #aaa;
   font-size: 10px;
@@ -274,7 +244,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-weight: 800;
 }
 
-/* TracePass code explanation: The `.trust-strip b` rule controls the visual layout/appearance of this UI element. */
 .trust-strip b {
   font-size: 12px;
   font-weight: 600;
@@ -283,18 +252,15 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Section Modern ── */
-/* TracePass code explanation: The `.section-pad` rule controls the visual layout/appearance of this UI element. */
 .section-pad {
   padding: 105px 0;
 }
 
-/* TracePass code explanation: The `.section-heading` rule controls the visual layout/appearance of this UI element. */
 .section-heading {
   max-width: 760px;
   margin-bottom: 55px;
 }
 
-/* TracePass code explanation: The `.section-heading h2` rule controls the visual layout/appearance of this UI element. */
 .section-heading h2 {
   font-size: 54px;
   line-height: 0.98;
@@ -303,21 +269,18 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-weight: 800;
 }
 
-/* TracePass code explanation: The `.section-heading p` rule controls the visual layout/appearance of this UI element. */
 .section-heading p {
   color: var(--muted);
   font-size: 16px;
   line-height: 1.7;
 }
 
-/* TracePass code explanation: The `.journey-grid` rule controls the visual layout/appearance of this UI element. */
 .journey-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--line);
 }
 
-/* TracePass code explanation: The `.journey-grid > div` rule controls the visual layout/appearance of this UI element. */
 .journey-grid > div {
   padding: 28px 25px 20px 0;
   border-right: 1px solid var(--line);
@@ -325,12 +288,10 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   transition: all 0.3s;
 }
 
-/* TracePass code explanation: The `.journey-grid > div:hover` rule controls the visual layout/appearance of this UI element. */
 .journey-grid > div:hover {
   transform: translateY(-4px);
 }
 
-/* TracePass code explanation: The `.journey-grid span` rule controls the visual layout/appearance of this UI element. */
 .journey-grid span {
   font-size: 11px;
   color: #999;
@@ -341,14 +302,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-weight: 800;
 }
 
-/* TracePass code explanation: The `.journey-grid h4` rule controls the visual layout/appearance of this UI element. */
 .journey-grid h4 {
   margin: 35px 0 10px;
   font-size: 20px;
   font-weight: 700;
 }
 
-/* TracePass code explanation: The `.journey-grid p` rule controls the visual layout/appearance of this UI element. */
 .journey-grid p {
   font-size: 13px;
   color: var(--muted);
@@ -357,13 +316,11 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Collection / Product Section ── */
-/* TracePass code explanation: The `.collection-section` rule controls the visual layout/appearance of this UI element. */
 .collection-section {
   padding: 85px 0 110px;
   background: white;
 }
 
-/* TracePass code explanation: The `.section-top` rule controls the visual layout/appearance of this UI element. */
 .section-top {
   display: flex;
   justify-content: space-between;
@@ -371,7 +328,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   margin-bottom: 35px;
 }
 
-/* TracePass code explanation: The `.section-top h2` rule controls the visual layout/appearance of this UI element. */
 .section-top h2 {
   font-size: 46px;
   letter-spacing: -0.04em;
@@ -379,7 +335,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-weight: 800;
 }
 
-/* TracePass code explanation: The `.section-top a` rule controls the visual layout/appearance of this UI element. */
 .section-top a {
   color: var(--ink);
   font-weight: 700;
@@ -390,20 +345,17 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   transition: all 0.3s;
 }
 
-/* TracePass code explanation: The `.section-top a:hover` rule controls the visual layout/appearance of this UI element. */
 .section-top a:hover {
   background: #ebe6de;
   transform: translateX(4px);
 }
 
-/* TracePass code explanation: The `.product-grid` rule controls the visual layout/appearance of this UI element. */
 .product-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 26px;
 }
 
-/* TracePass code explanation: The `.fashion-card` rule controls the visual layout/appearance of this UI element. */
 .fashion-card {
   color: var(--ink);
   text-decoration: none;
@@ -414,14 +366,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* TracePass code explanation: The `.fashion-card:hover` rule controls the visual layout/appearance of this UI element. */
 .fashion-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 20px 50px rgba(0,0,0,0.12);
   color: var(--ink);
 }
 
-/* TracePass code explanation: The `.fashion-image` rule controls the visual layout/appearance of this UI element. */
 .fashion-image {
   height: 420px;
   background-size: cover;
@@ -432,12 +382,10 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   transition: transform 0.5s;
 }
 
-/* TracePass code explanation: The `.fashion-card:hover .fashion-image` rule controls the visual layout/appearance of this UI element. */
 .fashion-card:hover .fashion-image {
   transform: scale(1.03);
 }
 
-/* TracePass code explanation: The `.fashion-image::after` rule controls the visual layout/appearance of this UI element. */
 .fashion-image::after {
   content: "";
   position: absolute;
@@ -445,7 +393,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   background: linear-gradient(180deg, rgba(0,0,0,0.02) 0%, transparent 55%, rgba(0,0,0,0.18) 100%);
 }
 
-/* TracePass code explanation: The `.fashion-placeholder` rule controls the visual layout/appearance of this UI element. */
 .fashion-placeholder {
   display: flex;
   align-items: center;
@@ -453,7 +400,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
-/* TracePass code explanation: The `.fashion-placeholder > span` rule controls the visual layout/appearance of this UI element. */
 .fashion-placeholder > span {
   font-size: 30px;
   font-weight: 900;
@@ -463,7 +409,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   text-shadow: 0 2px 10px rgba(0,0,0,0.2);
 }
 
-/* TracePass code explanation: The `.passport-badge` rule controls the visual layout/appearance of this UI element. */
 .passport-badge {
   position: absolute;
   z-index: 2;
@@ -480,7 +425,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   color: #1a1a2e;
 }
 
-/* TracePass code explanation: The `.fashion-info` rule controls the visual layout/appearance of this UI element. */
 .fashion-info {
   display: flex;
   justify-content: space-between;
@@ -488,14 +432,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   padding: 18px 4px 8px;
 }
 
-/* TracePass code explanation: The `.fashion-info h3` rule controls the visual layout/appearance of this UI element. */
 .fashion-info h3 {
   font-size: 16px;
   margin: 0 0 6px;
   font-weight: 700;
 }
 
-/* TracePass code explanation: The `.fashion-info p` rule controls the visual layout/appearance of this UI element. */
 .fashion-info p {
   font-size: 11px;
   color: #888;
@@ -504,7 +446,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   letter-spacing: 0.08em;
 }
 
-/* TracePass code explanation: The `.fashion-info strong` rule controls the visual layout/appearance of this UI element. */
 .fashion-info strong {
   font-size: 15px;
   white-space: nowrap;
@@ -517,7 +458,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Passport Banner Modern ── */
-/* TracePass code explanation: The `.passport-banner` rule controls the visual layout/appearance of this UI element. */
 .passport-banner {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   color: white;
@@ -526,7 +466,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   position: relative;
 }
 
-/* TracePass code explanation: The `.passport-banner::before` rule controls the visual layout/appearance of this UI element. */
 .passport-banner::before {
   content: '';
   position: absolute;
@@ -538,7 +477,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   border-radius: 50%;
 }
 
-/* TracePass code explanation: The `.passport-grid` rule controls the visual layout/appearance of this UI element. */
 .passport-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -547,7 +485,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   z-index: 1;
 }
 
-/* TracePass code explanation: The `.passport-banner h2` rule controls the visual layout/appearance of this UI element. */
 .passport-banner h2 {
   font-size: 58px;
   line-height: 0.95;
@@ -556,7 +493,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-weight: 800;
 }
 
-/* TracePass code explanation: The `.passport-banner p` rule controls the visual layout/appearance of this UI element. */
 .passport-banner p {
   max-width: 500px;
   color: #aaa;
@@ -564,13 +500,11 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   margin-bottom: 30px;
 }
 
-/* TracePass code explanation: The `.passport-visual` rule controls the visual layout/appearance of this UI element. */
 .passport-visual {
   height: 420px;
   position: relative;
 }
 
-/* TracePass code explanation: The `.passport-orbit` rule controls the visual layout/appearance of this UI element. */
 .passport-orbit {
   position: absolute;
   width: 330px;
@@ -583,13 +517,11 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   animation: spin 30s linear infinite;
 }
 
-/* TracePass code explanation: The `@keyframes spin` rule controls the visual layout/appearance of this UI element. */
 @keyframes spin {
   from { transform: translate(-50%, -50%) rotate(0deg); }
   to { transform: translate(-50%, -50%) rotate(360deg); }
 }
 
-/* TracePass code explanation: The `.passport-orbit::after` rule controls the visual layout/appearance of this UI element. */
 .passport-orbit::after {
   content: "";
   position: absolute;
@@ -598,7 +530,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   border-radius: 50%;
 }
 
-/* TracePass code explanation: The `.passport-center` rule controls the visual layout/appearance of this UI element. */
 .passport-center {
   position: absolute;
   left: 50%;
@@ -618,13 +549,11 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   box-shadow: 0 20px 50px rgba(201, 255, 82, 0.3);
 }
 
-/* TracePass code explanation: The `.passport-center small` rule controls the visual layout/appearance of this UI element. */
 .passport-center small {
   font-size: 8px;
   letter-spacing: 0.2em;
 }
 
-/* TracePass code explanation: The `.passport-node` rule controls the visual layout/appearance of this UI element. */
 .passport-node {
   position: absolute;
   border: 1px solid rgba(255,255,255,0.2);
@@ -648,7 +577,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Catalog Modern ── */
-/* TracePass code explanation: The `.catalog-head` rule controls the visual layout/appearance of this UI element. */
 .catalog-head {
   background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
   color: white;
@@ -657,7 +585,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   overflow: hidden;
 }
 
-/* TracePass code explanation: The `.catalog-head::after` rule controls the visual layout/appearance of this UI element. */
 .catalog-head::after {
   content: '';
   position: absolute;
@@ -671,7 +598,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 .catalog-head .eyebrow { color: #999; }
 
-/* TracePass code explanation: The `.catalog-head h1` rule controls the visual layout/appearance of this UI element. */
 .catalog-head h1 {
   font-size: 70px;
   letter-spacing: -0.055em;
@@ -684,12 +610,10 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 .catalog-head p { color: #aaa; position: relative; z-index: 1; }
 
-/* TracePass code explanation: The `.catalog-section` rule controls the visual layout/appearance of this UI element. */
 .catalog-section {
   padding: 55px 0 100px;
 }
 
-/* TracePass code explanation: The `.catalog-toolbar` rule controls the visual layout/appearance of this UI element. */
 .catalog-toolbar {
   display: flex;
   justify-content: space-between;
@@ -702,25 +626,21 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-weight: 600;
 }
 
-/* TracePass code explanation: The `.catalog-grid` rule controls the visual layout/appearance of this UI element. */
 .catalog-grid {
   grid-template-columns: repeat(3, 1fr);
 }
 
-/* TracePass code explanation: The `.catalog-grid .fashion-image` rule controls the visual layout/appearance of this UI element. */
 .catalog-grid .fashion-image {
   height: 510px;
 }
 
 
 /* ── Product Detail Modern ── */
-/* TracePass code explanation: The `.product-detail-section` rule controls the visual layout/appearance of this UI element. */
 .product-detail-section {
   padding: 70px 0 100px;
   background: white;
 }
 
-/* TracePass code explanation: The `.product-detail-grid` rule controls the visual layout/appearance of this UI element. */
 .product-detail-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -728,7 +648,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   align-items: start;
 }
 
-/* TracePass code explanation: The `.product-visual` rule controls the visual layout/appearance of this UI element. */
 .product-visual {
   height: 650px;
   background-size: cover;
@@ -740,14 +659,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   box-shadow: var(--card-shadow);
 }
 
-/* TracePass code explanation: The `.product-visual.fashion-placeholder` rule controls the visual layout/appearance of this UI element. */
 .product-visual.fashion-placeholder {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-/* TracePass code explanation: The `.product-visual.fashion-placeholder > span` rule controls the visual layout/appearance of this UI element. */
 .product-visual.fashion-placeholder > span {
   font-size: 55px;
   font-weight: 900;
@@ -756,12 +673,10 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   text-shadow: 0 4px 20px rgba(0,0,0,0.3);
 }
 
-/* TracePass code explanation: The `.product-copy` rule controls the visual layout/appearance of this UI element. */
 .product-copy {
   padding-top: 35px;
 }
 
-/* TracePass code explanation: The `.product-copy h1` rule controls the visual layout/appearance of this UI element. */
 .product-copy h1 {
   font-size: 64px;
   line-height: 0.93;
@@ -770,13 +685,11 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-weight: 800;
 }
 
-/* TracePass code explanation: The `.product-model` rule controls the visual layout/appearance of this UI element. */
 .product-model {
   color: #888;
   font-size: 14px;
 }
 
-/* TracePass code explanation: The `.product-description` rule controls the visual layout/appearance of this UI element. */
 .product-description {
   color: #666;
   line-height: 1.8;
@@ -784,14 +697,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-size: 15px;
 }
 
-/* TracePass code explanation: The `.buy-row` rule controls the visual layout/appearance of this UI element. */
 .buy-row {
   display: flex;
   gap: 12px;
   margin: 30px 0;
 }
 
-/* TracePass code explanation: The `.qty-input` rule controls the visual layout/appearance of this UI element. */
 .qty-input {
   width: 80px;
   border: 1.5px solid #e0e0e0;
@@ -802,14 +713,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   transition: all 0.3s;
 }
 
-/* TracePass code explanation: The `.qty-input:focus` rule controls the visual layout/appearance of this UI element. */
 .qty-input:focus {
   outline: none;
   border-color: #667eea;
   box-shadow: 0 0 0 3px rgba(102,126,234,0.15);
 }
 
-/* TracePass code explanation: The `.passport-link` rule controls the visual layout/appearance of this UI element. */
 .passport-link {
   display: block;
   color: var(--ink);
@@ -822,19 +731,16 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   transition: all 0.3s;
 }
 
-/* TracePass code explanation: The `.passport-link:hover` rule controls the visual layout/appearance of this UI element. */
 .passport-link:hover {
   padding-left: 10px;
   color: #667eea;
   border-color: #667eea;
 }
 
-/* TracePass code explanation: The `.product-facts` rule controls the visual layout/appearance of this UI element. */
 .product-facts {
   margin-top: 10px;
 }
 
-/* TracePass code explanation: The `.product-facts div` rule controls the visual layout/appearance of this UI element. */
 .product-facts div {
   display: flex;
   justify-content: space-between;
@@ -843,25 +749,21 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-size: 13px;
 }
 
-/* TracePass code explanation: The `.product-facts span` rule controls the visual layout/appearance of this UI element. */
 .product-facts span {
   color: #888;
   font-weight: 500;
 }
 
-/* TracePass code explanation: The `.product-facts b` rule controls the visual layout/appearance of this UI element. */
 .product-facts b {
   text-align: right;
   font-weight: 600;
 }
 
-/* TracePass code explanation: The `.product-story` rule controls the visual layout/appearance of this UI element. */
 .product-story {
   padding: 90px 0;
   background: var(--paper);
 }
 
-/* TracePass code explanation: The `.product-story h2` rule controls the visual layout/appearance of this UI element. */
 .product-story h2 {
   font-size: 52px;
   line-height: 0.95;
@@ -869,7 +771,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-weight: 800;
 }
 
-/* TracePass code explanation: The `.story-cards` rule controls the visual layout/appearance of this UI element. */
 .story-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -877,7 +778,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   margin-top: 45px;
 }
 
-/* TracePass code explanation: The `.story-cards > div` rule controls the visual layout/appearance of this UI element. */
 .story-cards > div {
   background: white;
   padding: 32px;
@@ -886,19 +786,16 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   transition: all 0.3s;
 }
 
-/* TracePass code explanation: The `.story-cards > div:hover` rule controls the visual layout/appearance of this UI element. */
 .story-cards > div:hover {
   transform: translateY(-4px);
   box-shadow: var(--card-hover-shadow);
 }
 
-/* TracePass code explanation: The `.story-cards b` rule controls the visual layout/appearance of this UI element. */
 .story-cards b {
   font-size: 20px;
   font-weight: 700;
 }
 
-/* TracePass code explanation: The `.story-cards p` rule controls the visual layout/appearance of this UI element. */
 .story-cards p {
   color: #777;
   font-size: 13px;
@@ -908,14 +805,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Industry Grid Modern ── */
-/* TracePass code explanation: The `.industry-grid` rule controls the visual layout/appearance of this UI element. */
 .industry-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   border-top: 1px solid var(--line);
 }
 
-/* TracePass code explanation: The `.industry-tile` rule controls the visual layout/appearance of this UI element. */
 .industry-tile {
   padding: 28px 22px 32px 0;
   border-right: 1px solid var(--line);
@@ -925,7 +820,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   border-radius: 0 0 16px 0;
 }
 
-/* TracePass code explanation: The `.industry-tile:hover` rule controls the visual layout/appearance of this UI element. */
 .industry-tile:hover {
   background: linear-gradient(135deg, #f8f9ff 0%, #f0f2fa 100%);
   transform: translateY(-4px);
@@ -933,21 +827,18 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   margin-right: 12px;
 }
 
-/* TracePass code explanation: The `.industry-tile span` rule controls the visual layout/appearance of this UI element. */
 .industry-tile span {
   font-size: 11px;
   color: #999;
   font-weight: 800;
 }
 
-/* TracePass code explanation: The `.industry-tile h4` rule controls the visual layout/appearance of this UI element. */
 .industry-tile h4 {
   font-size: 22px;
   margin: 32px 0 12px;
   font-weight: 700;
 }
 
-/* TracePass code explanation: The `.industry-tile p` rule controls the visual layout/appearance of this UI element. */
 .industry-tile p {
   font-size: 13px;
   line-height: 1.65;
@@ -956,14 +847,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Journey Section ── */
-/* TracePass code explanation: The `.journey-section` rule controls the visual layout/appearance of this UI element. */
 .journey-section {
   background: white;
 }
 
 
 /* ── Form / Auth Pages Modern ── */
-/* TracePass code explanation: The `.auth-wrapper` rule controls the visual layout/appearance of this UI element. */
 .auth-wrapper {
   min-height: calc(100vh - 200px);
   display: flex;
@@ -972,7 +861,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   padding: 40px 0;
 }
 
-/* TracePass code explanation: The `.auth-card` rule controls the visual layout/appearance of this UI element. */
 .auth-card {
   background: white;
   border-radius: 24px;
@@ -986,7 +874,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   overflow: hidden;
 }
 
-/* TracePass code explanation: The `.auth-card::before` rule controls the visual layout/appearance of this UI element. */
 .auth-card::before {
   content: '';
   position: absolute;
@@ -997,7 +884,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   background: var(--primary-gradient);
 }
 
-/* TracePass code explanation: The `.auth-card h2` rule controls the visual layout/appearance of this UI element. */
 .auth-card h2 {
   font-size: 32px;
   font-weight: 800;
@@ -1005,14 +891,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   letter-spacing: -0.02em;
 }
 
-/* TracePass code explanation: The `.auth-card .auth-subtitle` rule controls the visual layout/appearance of this UI element. */
 .auth-card .auth-subtitle {
   color: #888;
   margin-bottom: 28px;
   font-size: 14px;
 }
 
-/* TracePass code explanation: The `.form-label` rule controls the visual layout/appearance of this UI element. */
 .form-label {
   font-weight: 600;
   font-size: 13px;
@@ -1020,7 +904,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   margin-bottom: 8px;
 }
 
-/* TracePass code explanation: The `.form-control, .form-select` rule controls the visual layout/appearance of this UI element. */
 .form-control, .form-select {
   border: 1.5px solid #e5e7eb;
   border-radius: 12px;
@@ -1030,7 +913,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   background: #fafafa;
 }
 
-/* TracePass code explanation: The `.form-control:focus, .form-select:focus` rule controls the visual layout/appearance of this UI element. */
 .form-control:focus, .form-select:focus {
   outline: none;
   border-color: #667eea;
@@ -1038,7 +920,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   background: white;
 }
 
-/* TracePass code explanation: The `.form-check-input` rule controls the visual layout/appearance of this UI element. */
 .form-check-input {
   width: 1.15em;
   height: 1.15em;
@@ -1054,7 +935,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   flex-shrink: 0;
 }
 
-/* TracePass code explanation: The `.form-check-input:checked` rule controls the visual layout/appearance of this UI element. */
 .form-check-input:checked {
   background-color: #667eea;
   border-color: #667eea;
@@ -1062,14 +942,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3e%3cpath fill='none' stroke='%23fff' stroke-linecap='round' stroke-linejoin='round' stroke-width='3' d='m6 10 3 3 6-6'/%3e%3c/svg%3e");
 }
 
-/* TracePass code explanation: The `.form-check-input:focus` rule controls the visual layout/appearance of this UI element. */
 .form-check-input:focus {
   border-color: #667eea;
   outline: 0;
   box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
 }
 
-/* TracePass code explanation: The `.form-check-label` rule controls the visual layout/appearance of this UI element. */
 .form-check-label {
   font-size: 14px;
   color: #555;
@@ -1077,7 +955,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   cursor: pointer;
 }
 
-/* TracePass code explanation: The `.auth-divider` rule controls the visual layout/appearance of this UI element. */
 .auth-divider {
   display: flex;
   align-items: center;
@@ -1087,7 +964,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   text-align: center;
 }
 
-/* TracePass code explanation: The `.auth-divider::before, .auth-divider::after` rule controls the visual layout/appearance of this UI element. */
 .auth-divider::before, .auth-divider::after {
   content: '';
   flex: 1;
@@ -1099,7 +975,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 .auth-divider::after { margin-left: 16px; }
 
-/* TracePass code explanation: The `.auth-footer` rule controls the visual layout/appearance of this UI element. */
 .auth-footer {
   text-align: center;
   margin-top: 24px;
@@ -1107,21 +982,18 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   color: #666;
 }
 
-/* TracePass code explanation: The `.auth-footer a` rule controls the visual layout/appearance of this UI element. */
 .auth-footer a {
   color: #667eea;
   font-weight: 600;
   text-decoration: none;
 }
 
-/* TracePass code explanation: The `.auth-footer a:hover` rule controls the visual layout/appearance of this UI element. */
 .auth-footer a:hover {
   text-decoration: underline;
 }
 
 
 /* ── Dashboard Modern ── */
-/* TracePass code explanation: The `.dashboard-header` rule controls the visual layout/appearance of this UI element. */
 .dashboard-header {
   display: flex;
   justify-content: space-between;
@@ -1131,7 +1003,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   gap: 16px;
 }
 
-/* TracePass code explanation: The `.dashboard-title h4` rule controls the visual layout/appearance of this UI element. */
 .dashboard-title h4 {
   font-size: 28px;
   font-weight: 800;
@@ -1139,21 +1010,18 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   margin-bottom: 4px;
 }
 
-/* TracePass code explanation: The `.dashboard-title p` rule controls the visual layout/appearance of this UI element. */
 .dashboard-title p {
   color: #888;
   font-size: 14px;
   margin: 0;
 }
 
-/* TracePass code explanation: The `.dashboard-actions` rule controls the visual layout/appearance of this UI element. */
 .dashboard-actions {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
 }
 
-/* TracePass code explanation: The `.dashboard-actions .btn` rule controls the visual layout/appearance of this UI element. */
 .dashboard-actions .btn {
   padding: 10px 20px;
   font-size: 13px;
@@ -1161,7 +1029,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 }
 
 
-/* TracePass code explanation: The `.kpi-grid` rule controls the visual layout/appearance of this UI element. */
 .kpi-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
@@ -1169,7 +1036,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   margin-bottom: 28px;
 }
 
-/* TracePass code explanation: The `.kpi-card` rule controls the visual layout/appearance of this UI element. */
 .kpi-card {
   background: white;
   border-radius: 20px;
@@ -1180,7 +1046,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   overflow: hidden;
 }
 
-/* TracePass code explanation: The `.kpi-card::before` rule controls the visual layout/appearance of this UI element. */
 .kpi-card::before {
   content: '';
   position: absolute;
@@ -1193,7 +1058,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   transition: opacity 0.3s;
 }
 
-/* TracePass code explanation: The `.kpi-card:hover` rule controls the visual layout/appearance of this UI element. */
 .kpi-card:hover {
   transform: translateY(-4px);
   box-shadow: var(--card-hover-shadow);
@@ -1207,7 +1071,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 .kpi-card.danger::before { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
 
-/* TracePass code explanation: The `.kpi-label` rule controls the visual layout/appearance of this UI element. */
 .kpi-label {
   font-size: 12px;
   font-weight: 600;
@@ -1217,7 +1080,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   margin-bottom: 12px;
 }
 
-/* TracePass code explanation: The `.kpi-value` rule controls the visual layout/appearance of this UI element. */
 .kpi-value {
   font-size: 36px;
   font-weight: 800;
@@ -1236,7 +1098,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 .kpi-value.neutral { color: #1f2937; }
 
 
-/* TracePass code explanation: The `.kpi-icon` rule controls the visual layout/appearance of this UI element. */
 .kpi-icon {
   position: absolute;
   top: 20px;
@@ -1262,14 +1123,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 .kpi-icon.neutral { background: rgba(31,41,55,0.08); color: #1f2937; }
 
 
-/* TracePass code explanation: The `.dashboard-grid` rule controls the visual layout/appearance of this UI element. */
 .dashboard-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
 }
 
-/* TracePass code explanation: The `.dashboard-card` rule controls the visual layout/appearance of this UI element. */
 .dashboard-card {
   background: white;
   border-radius: 20px;
@@ -1278,7 +1137,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   margin-bottom: 20px;
 }
 
-/* TracePass code explanation: The `.dashboard-card h6` rule controls the visual layout/appearance of this UI element. */
 .dashboard-card h6 {
   font-size: 16px;
   font-weight: 700;
@@ -1287,7 +1145,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   border-bottom: 1px solid #f0f0f0;
 }
 
-/* TracePass code explanation: The `.dashboard-card .badge` rule controls the visual layout/appearance of this UI element. */
 .dashboard-card .badge {
   font-size: 11px;
   padding: 6px 12px;
@@ -1304,7 +1161,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 .badge.bg-secondary { background: linear-gradient(135deg, #89909f 0%, #5b6474 100%) !important; }
 
 
-/* TracePass code explanation: The `.notif-item` rule controls the visual layout/appearance of this UI element. */
 .notif-item {
   display: flex;
   justify-content: space-between;
@@ -1318,7 +1174,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 .notif-item:first-child { padding-top: 0; }
 
-/* TracePass code explanation: The `.notif-content` rule controls the visual layout/appearance of this UI element. */
 .notif-content {
   flex: 1;
   font-size: 13px;
@@ -1326,14 +1181,12 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   line-height: 1.5;
 }
 
-/* TracePass code explanation: The `.notif-content .badge` rule controls the visual layout/appearance of this UI element. */
 .notif-content .badge {
   margin-right: 8px;
 }
 
 
 /* ── Alert Modern ── */
-/* TracePass code explanation: The `.alert` rule controls the visual layout/appearance of this UI element. */
 .alert {
   border: none;
   border-radius: 14px;
@@ -1344,28 +1197,24 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   backdrop-filter: blur(10px);
 }
 
-/* TracePass code explanation: The `.alert-success` rule controls the visual layout/appearance of this UI element. */
 .alert-success {
   background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
   color: #065f46;
   border-left: 4px solid #10b981;
 }
 
-/* TracePass code explanation: The `.alert-danger` rule controls the visual layout/appearance of this UI element. */
 .alert-danger {
   background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
   color: #991b1b;
   border-left: 4px solid #ef4444;
 }
 
-/* TracePass code explanation: The `.alert-warning` rule controls the visual layout/appearance of this UI element. */
 .alert-warning {
   background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
   color: #92400e;
   border-left: 4px solid #f59e0b;
 }
 
-/* TracePass code explanation: The `.alert-info` rule controls the visual layout/appearance of this UI element. */
 .alert-info {
   background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%);
   color: #1e40af;
@@ -1374,7 +1223,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Tables Modern ── */
-/* TracePass code explanation: The `.table` rule controls the visual layout/appearance of this UI element. */
 .table {
   border-radius: 16px;
   overflow: hidden;
@@ -1382,7 +1230,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   box-shadow: var(--card-shadow);
 }
 
-/* TracePass code explanation: The `.table thead th` rule controls the visual layout/appearance of this UI element. */
 .table thead th {
   background: #f8f9ff;
   font-weight: 700;
@@ -1394,7 +1241,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   border-bottom: 2px solid #eef0f5;
 }
 
-/* TracePass code explanation: The `.table tbody td` rule controls the visual layout/appearance of this UI element. */
 .table tbody td {
   padding: 16px;
   font-size: 14px;
@@ -1402,31 +1248,26 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   vertical-align: middle;
 }
 
-/* TracePass code explanation: The `.table tbody tr` rule controls the visual layout/appearance of this UI element. */
 .table tbody tr {
   transition: all 0.2s;
 }
 
-/* TracePass code explanation: The `.table tbody tr:hover` rule controls the visual layout/appearance of this UI element. */
 .table tbody tr:hover {
   background: #fafbff;
 }
 
 
 /* ── Passport Hero Card ── */
-/* TracePass code explanation: The `.passport-hero-card` rule controls the visual layout/appearance of this UI element. */
 .passport-hero-card {
   background: linear-gradient(145deg, #1a1a2e 0%, #44413a 100%);
 }
 
-/* TracePass code explanation: The `.passport-stack` rule controls the visual layout/appearance of this UI element. */
 .passport-stack {
   display: grid;
   gap: 10px;
   margin-top: 30px;
 }
 
-/* TracePass code explanation: The `.passport-stack span` rule controls the visual layout/appearance of this UI element. */
 .passport-stack span {
   font-size: 10px;
   letter-spacing: 0.15em;
@@ -1436,7 +1277,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   font-weight: 600;
 }
 
-/* TracePass code explanation: The `.passport-stack span:first-child` rule controls the visual layout/appearance of this UI element. */
 .passport-stack span:first-child {
   border-top: none;
   padding-top: 0;
@@ -1444,19 +1284,16 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── TP Hero Gradient Override ── */
-/* TracePass code explanation: The `.tp-hero` rule controls the visual layout/appearance of this UI element. */
 .tp-hero {
   background: radial-gradient(circle at 80% 40%, #e6e1d7 0, #f5f2ec 42%, #f5f2ec 100%);
 }
 
 
 /* ── Responsive ── */
-/* TracePass code explanation: The `@media (max-width: 1100px)` rule controls the visual layout/appearance of this UI element. */
 @media (max-width: 1100px) {
   .dashboard-grid { grid-template-columns: 1fr; }
 }
 
-/* TracePass code explanation: The `@media (max-width: 900px)` rule controls the visual layout/appearance of this UI element. */
 @media (max-width: 900px) {
   .hero-grid, .passport-grid, .product-detail-grid { grid-template-columns: 1fr; }
   .hero-art { height: 440px; }
@@ -1470,7 +1307,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .story-cards { grid-template-columns: 1fr; }
 }
 
-/* TracePass code explanation: The `@media (max-width: 600px)` rule controls the visual layout/appearance of this UI element. */
 @media (max-width: 600px) {
   .hero-copy h1 { font-size: 54px; }
   .hero-art { height: 350px; }
@@ -1484,7 +1320,6 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
   .passport-banner h2, .section-heading h2, .catalog-head h1 { font-size: 43px; }
   .product-visual { height: 470px; }
   .industry-grid { grid-template-columns: 1fr; }
-/* TracePass code explanation: The `.industry-tile` rule controls the visual layout/appearance of this UI element. */
   .industry-tile {
     border-right: 0;
     border-bottom: 1px solid var(--line);
@@ -1497,38 +1332,32 @@ a { transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); }
 
 
 /* ── Smooth Scroll ── */
-/* TracePass code explanation: The `html` rule controls the visual layout/appearance of this UI element. */
 html {
   scroll-behavior: smooth;
 }
 
 
 /* ── Scrollbar Modern ── */
-/* TracePass code explanation: The `::-webkit-scrollbar` rule controls the visual layout/appearance of this UI element. */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
 }
 
-/* TracePass code explanation: The `::-webkit-scrollbar-track` rule controls the visual layout/appearance of this UI element. */
 ::-webkit-scrollbar-track {
   background: #f1f1f1;
 }
 
-/* TracePass code explanation: The `::-webkit-scrollbar-thumb` rule controls the visual layout/appearance of this UI element. */
 ::-webkit-scrollbar-thumb {
   background: linear-gradient(135deg, #c5cae9 0%, #9fa8da 100%);
   border-radius: 10px;
 }
 
-/* TracePass code explanation: The `::-webkit-scrollbar-thumb:hover` rule controls the visual layout/appearance of this UI element. */
 ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(135deg, #9fa8da 0%, #7986cb 100%);
 }
 
 
 /* ── Selection Color ── */
-/* TracePass code explanation: The `::selection` rule controls the visual layout/appearance of this UI element. */
 ::selection {
   background: rgba(102,126,234,0.2);
   color: #1a1a2e;
@@ -1725,12 +1554,10 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
    TracePass Application Drawer / Sidebar
    Floating overlay drawer: it never reserves permanent page space.
    ========================================================= */
-/* TracePass code explanation: The `.tp-app` rule controls the visual layout/appearance of this UI element. */
 .tp-app {
   min-height: 100vh;
 }
 
-/* TracePass code explanation: The `.tp-sidebar` rule controls the visual layout/appearance of this UI element. */
 .tp-sidebar {
   position: fixed;
   inset: 0 auto 0 0;
@@ -1747,12 +1574,10 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   will-change: transform;
 }
 
-/* TracePass code explanation: The `.tp-sidebar-open .tp-sidebar` rule controls the visual layout/appearance of this UI element. */
 .tp-sidebar-open .tp-sidebar {
   transform: translateX(0);
 }
 
-/* TracePass code explanation: The `.tp-sidebar-brand` rule controls the visual layout/appearance of this UI element. */
 .tp-sidebar-brand {
   min-height: 72px;
   padding: 0 20px;
@@ -1762,7 +1587,6 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   border-bottom: 1px solid rgba(255,255,255,.08);
 }
 
-/* TracePass code explanation: The `.tp-brand` rule controls the visual layout/appearance of this UI element. */
 .tp-brand {
   color: #fff !important;
   text-decoration: none;
@@ -1771,7 +1595,6 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   letter-spacing: .04em;
 }
 
-/* TracePass code explanation: The `.tp-user-panel` rule controls the visual layout/appearance of this UI element. */
 .tp-user-panel {
   margin: 16px 14px 8px;
   padding: 13px;
@@ -1782,7 +1605,6 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   background: rgba(255,255,255,.055);
 }
 
-/* TracePass code explanation: The `.tp-avatar` rule controls the visual layout/appearance of this UI element. */
 .tp-avatar {
   width: 38px;
   height: 38px;
@@ -1815,7 +1637,6 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 /* Main content always uses the full viewport width. */
 .tp-main { min-height:100vh; margin-left:0; }
 
-/* TracePass code explanation: The `.tp-topbar` rule controls the visual layout/appearance of this UI element. */
 .tp-topbar {
   height:72px;
   position:sticky;
@@ -1836,7 +1657,6 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 .tp-topbar-user { color:#4b5563; font-size:12px; font-weight:600; }
 
 /* Always-visible hamburger: the drawer is opened only on demand. */
-/* TracePass code explanation: The `.tp-menu-toggle` rule controls the visual layout/appearance of this UI element. */
 .tp-menu-toggle {
   width:40px;
   height:40px;
@@ -1862,7 +1682,6 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 .tp-content { padding-bottom:40px; }
 
 /* Overlay appears on desktop and mobile. */
-/* TracePass code explanation: The `.tp-sidebar-backdrop` rule controls the visual layout/appearance of this UI element. */
 .tp-sidebar-backdrop {
   display:block;
   position:fixed;
@@ -1877,15 +1696,16 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 }
 .tp-sidebar-open .tp-sidebar-backdrop { opacity:1; visibility:visible; pointer-events:auto; }
 
-/* TracePass code explanation: The `@media (max-width: 991.98px)` rule controls the visual layout/appearance of this UI element. */
 @media (max-width: 991.98px) {
   .tp-topbar { padding:0 16px; }
   .tp-topbar-actions { gap:8px; }
   .tp-sidebar { width:min(300px, 86vw); }
 }
 
-/* TracePass code explanation: The `@media (prefers-reduced-motion: reduce)` rule controls the visual layout/appearance of this UI element. */
 @media (prefers-reduced-motion: reduce) {
   .tp-sidebar, .tp-sidebar-backdrop, .tp-menu-toggle { transition:none; }
 }
 
+
+/* Public landing-page navigation and Contact Us call-to-action. */
+.tp-public-nav{position:absolute;top:0;left:0;right:0;z-index:20;padding:22px 0;color:#fff}.tp-public-nav .container{display:flex;align-items:center;justify-content:space-between}.tp-public-brand{font-weight:900;letter-spacing:.12em;color:#fff;text-decoration:none}.tp-public-brand span{opacity:.65}.tp-public-nav nav{display:flex;align-items:center;gap:24px}.tp-public-nav nav a{color:rgba(255,255,255,.82);text-decoration:none;font-size:12px;font-weight:700}.tp-public-nav nav a:hover{color:#fff}.tp-public-login{padding:9px 16px;border:1px solid rgba(255,255,255,.25);border-radius:999px}.tp-contact-cta{padding:85px 0;background:#f6f7fb}.tp-contact-cta .container{display:flex;align-items:center;justify-content:space-between;gap:40px}.tp-contact-cta h2{font-size:clamp(32px,4vw,54px);margin:8px 0 12px}.tp-contact-cta p{max-width:720px;color:#5b6472;margin:0}.tp-contact-cta .tp-btn{flex:0 0 auto}@media(max-width:768px){.tp-public-nav nav{gap:10px}.tp-public-nav nav a:not(.tp-public-login){display:none}.tp-contact-cta .container{flex-direction:column;align-items:flex-start}}

@@ -1,7 +1,5 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}Verification History · TracePass{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div>
@@ -9,7 +7,6 @@
     <div class="text-muted small">Every public passport verification attempt is retained for auditability.</div>
   </div>
 </div>
-<!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
 <form class="card p-3 mb-3" method="GET">
   <div class="row g-2 align-items-end">
     <div class="col-md-6">
@@ -20,7 +17,6 @@
       <label class="form-label small">Result</label>
       <select class="form-select form-select-sm" name="result">
         <option value="">All results</option>
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for r in ['verified','unpublished','invalid'] %}
         <option value="{{ r }}" {{ 'selected' if result_filter == r }}>{{ r.title() }}</option>
         {% endfor %}
@@ -30,11 +26,9 @@
   </div>
 </form>
 <div class="card p-3">
-<!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
 <table class="table table-hover table-sm mb-0">
 <thead><tr><th>Time</th><th>Passport</th><th>Product</th><th>Result</th><th>Source</th></tr></thead>
 <tbody>
-<!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
 {% for log in logs %}
 <tr>
   <td>{{ log.verified_at.strftime("%Y-%m-%d %H:%M:%S") }}</td>
@@ -47,13 +41,9 @@
 </tbody>
 </table>
 </div>
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if pagination.pages > 1 %}
-<!-- TracePass code explanation: Navigation section provides links to the relevant TracePass module. -->
 <nav class="mt-3"><ul class="pagination pagination-sm justify-content-center">
-<!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
 {% for n in pagination.iter_pages() %}
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if n %}<li class="page-item {{ 'active' if n == pagination.page }}"><a class="page-link" href="{{ url_for('tracepass.verification_history', page=n, q=search, result=result_filter) }}">{{ n }}</a></li>
 {% else %}<li class="page-item disabled"><span class="page-link">…</span></li>{% endif %}
 {% endfor %}

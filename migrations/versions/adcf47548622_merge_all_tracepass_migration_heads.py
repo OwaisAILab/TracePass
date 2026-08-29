@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/adcf47548622_merge_all_tracepass_migration_heads.py part of the application.
 """Merge all TracePass migration heads
 
 Revision ID: adcf47548622
@@ -17,11 +16,9 @@ branch_labels = None
 depends_on = None
 
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     pass
 
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     pass

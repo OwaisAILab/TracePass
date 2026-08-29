@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the tests/test_core_requirements.py part of the application.
 """
 Covers the Testing Expectations (spec section 27) that test_api.py didn't
 touch: auth/role permissions, business-rule calculations, validation of
@@ -19,12 +18,10 @@ from app.models.product_category import ProductCategory
 from app.compliance.engine import evaluate_product_compliance
 
 
-# Code explanation: Authenticate the submitted credentials and create the Flask-Login session.
 def login(client, email, password):
     return client.post("/login", data={"email": email, "password": password}, follow_redirects=True)
 
 
-# Code explanation: Implement the `make user` operation used by this part of TracePass.
 def make_user(role_name, email, org=None, password="TestPass123!"):
     role = Role.query.filter_by(name=role_name).first()
     user = User(name=f"Test {role_name}", email=email, role_id=role.id,
@@ -37,13 +34,11 @@ def make_user(role_name, email, org=None, password="TestPass123!"):
 
 # --- authentication & role permissions --------------------------------------
 
-# Code explanation: Implement the `test protected page redirects anonymous user to login` operation used by this part of TracePass.
 def test_protected_page_redirects_anonymous_user_to_login(client):
     response = client.get("/dashboard")
     assert response.status_code in (302, 401)
 
 
-# Code explanation: Implement the `test customer cannot reach admin only route` operation used by this part of TracePass.
 def test_customer_cannot_reach_admin_only_route(client, app):
     with app.app_context():
         make_user(ROLE_CUSTOMER, "customer@example.com")
@@ -52,7 +47,6 @@ def test_customer_cannot_reach_admin_only_route(client, app):
     assert response.status_code == 403
 
 
-# Code explanation: Implement the `test admin can reach admin only route` operation used by this part of TracePass.
 def test_admin_can_reach_admin_only_route(client, app):
     with app.app_context():
         make_user(ROLE_ADMIN, "admin2@example.com")
@@ -61,7 +55,6 @@ def test_admin_can_reach_admin_only_route(client, app):
     assert response.status_code == 200
 
 
-# Code explanation: Implement the `test deactivated user cannot log in` operation used by this part of TracePass.
 def test_deactivated_user_cannot_log_in(client, app):
     with app.app_context():
         user = make_user(ROLE_CUSTOMER, "inactive@example.com")
@@ -73,7 +66,6 @@ def test_deactivated_user_cannot_log_in(client, app):
 
 # --- registration / validation of invalid input ------------------------------
 
-# Code explanation: Implement the `test registration rejects duplicate email` operation used by this part of TracePass.
 def test_registration_rejects_duplicate_email(client, app):
     with app.app_context():
         make_user(ROLE_CUSTOMER, "dup@example.com")
@@ -91,7 +83,6 @@ def test_registration_rejects_duplicate_email(client, app):
     assert b"already exists" in response.data
 
 
-# Code explanation: Implement the `test registration rejects mismatched passwords` operation used by this part of TracePass.
 def test_registration_rejects_mismatched_passwords(client, app):
     response = client.post(
         "/register",
@@ -107,7 +98,6 @@ def test_registration_rejects_mismatched_passwords(client, app):
         assert User.query.filter_by(email="mismatch@example.com").first() is None
 
 
-# Code explanation: Implement the `test login rejects wrong password` operation used by this part of TracePass.
 def test_login_rejects_wrong_password(client, app):
     with app.app_context():
         make_user(ROLE_CUSTOMER, "wrongpass@example.com")
@@ -117,7 +107,6 @@ def test_login_rejects_wrong_password(client, app):
 
 # --- compliance engine business rules ----------------------------------------
 
-# Code explanation: Implement the `test compliance pending when no rules apply` operation used by this part of TracePass.
 def test_compliance_pending_when_no_rules_apply(app):
     with app.app_context():
         org = Organization(name="Acme Manufacturing", type="manufacturer")
@@ -132,7 +121,6 @@ def test_compliance_pending_when_no_rules_apply(app):
         assert product.compliance_status == COMPLIANCE_PENDING
 
 
-# Code explanation: Implement the `test compliance non compliant when mandatory certificate missing` operation used by this part of TracePass.
 def test_compliance_non_compliant_when_mandatory_certificate_missing(app):
     with app.app_context():
         org = Organization(name="Acme Manufacturing 2", type="manufacturer")
@@ -159,7 +147,6 @@ def test_compliance_non_compliant_when_mandatory_certificate_missing(app):
         assert product.compliance_status == COMPLIANCE_NON_COMPLIANT
 
 
-# Code explanation: Implement the `test compliance compliant when valid certificate present` operation used by this part of TracePass.
 def test_compliance_compliant_when_valid_certificate_present(app):
     with app.app_context():
         org = Organization(name="Acme Manufacturing 3", type="manufacturer")
@@ -190,7 +177,6 @@ def test_compliance_compliant_when_valid_certificate_present(app):
         assert product.compliance_status == COMPLIANCE_COMPLIANT
 
 
-# Code explanation: Implement the `test compliance fails on expired certificate` operation used by this part of TracePass.
 def test_compliance_fails_on_expired_certificate(app):
     from datetime import date, timedelta
 
@@ -229,7 +215,6 @@ def test_compliance_fails_on_expired_certificate(app):
 
 # --- file upload / download restrictions -------------------------------------
 
-# Code explanation: Implement the `test document upload rejects disallowed extension` operation used by this part of TracePass.
 def test_document_upload_rejects_disallowed_extension(client, app):
     with app.app_context():
         org = Organization(name="Acme Manufacturing 5", type="manufacturer")
@@ -257,7 +242,6 @@ def test_document_upload_rejects_disallowed_extension(client, app):
         assert Document.query.filter_by(product_id=product_id).count() == 0
 
 
-# Code explanation: Implement the `test certificate download requires permitted role` operation used by this part of TracePass.
 def test_certificate_download_requires_permitted_role(client, app):
     with app.app_context():
         org = Organization(name="Acme Manufacturing 6", type="manufacturer")
@@ -277,7 +261,6 @@ def test_certificate_download_requires_permitted_role(client, app):
     assert response.status_code == 403
 
 
-# Code explanation: Implement the `test certificate download allows auditor` operation used by this part of TracePass.
 def test_certificate_download_allows_auditor(client, app):
     with app.app_context():
         org = Organization(name="Acme Manufacturing 7", type="manufacturer")
@@ -303,7 +286,6 @@ def test_certificate_download_allows_auditor(client, app):
 # Registration -> passport creation -> material/batch linking -> compliance ->
 # publication -> public QR verification (spec sections 3, 7, 12).
 
-# Code explanation: Implement the `test full passport lifecycle from creation to public verification` operation used by this part of TracePass.
 def test_full_passport_lifecycle_from_creation_to_public_verification(client, app):
     from app.models.material import Material
 

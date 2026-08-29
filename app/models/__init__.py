@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/models/__init__.py part of the application.
 from app.models.role import Role  # noqa: F401
 from app.models.organization import Organization  # noqa: F401
 from app.models.user import User  # noqa: F401
@@ -19,6 +18,7 @@ from app.models.audit_log import AuditLog  # noqa: F401
 from app.models.notification import Notification  # noqa: F401
 from app.models.recall_incident import Recall, Incident  # noqa: F401
 from app.models.purchase_order import PurchaseOrder  # noqa: F401
+from app.models.complaint import Complaint  # noqa: F401
 
 # Phase 6 adds REST API resources on top of these models — no new tables expected.
 from app.models.product_category import ProductCategory  # noqa: F401
@@ -30,3 +30,4 @@ from app.models.product_template import ProductTemplate, TemplateField  # noqa: 
 
 from app.models.lifecycle import LifecycleEvent  # noqa: F401
 from app.models.verification import VerificationLog  # noqa: F401
+from app.models.registration_request import RegistrationRequest  # noqa: F401

@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the seed.py part of the application.
 """Seed roles, admin, and a multi-industry starter catalog for TracePass."""
 import os
 from app import create_app

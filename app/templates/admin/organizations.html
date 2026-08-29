@@ -1,27 +1,22 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}Organizations · TracePass{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <h4 class="mb-0">Organizations</h4>
   <a href="{{ url_for('admin.new_organization') }}" class="btn btn-primary btn-sm">+ New Organization</a>
 </div>
 <div class="card p-3">
-  <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
   <table class="table table-hover mb-0">
     <thead>
       <tr><th>Name</th><th>Type</th><th>Contact</th><th>Verified</th><th></th></tr>
     </thead>
     <tbody>
-      <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
       {% for org in organizations %}
       <tr>
         <td>{{ org.name }}</td>
         <td><span class="badge bg-secondary">{{ org.type }}</span></td>
         <td>{{ org.contact_email or "—" }}</td>
         <td>
-          <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
           {% if org.is_verified %}
             <span class="badge bg-success">Verified</span>
           {% else %}
@@ -29,9 +24,7 @@
           {% endif %}
         </td>
         <td>
-          <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
           {% if not org.is_verified %}
-          <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
           <form method="POST" action="{{ url_for('admin.verify_organization', org_id=org.id) }}">
             <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
             <button class="btn btn-sm btn-outline-success" type="submit">Verify</button>

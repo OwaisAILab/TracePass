@@ -1,14 +1,10 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}Dispatch Shipment · TracePass{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <div class="row justify-content-center"><div class="col-md-7"><div class="card p-4">
 <h3>Dispatch Shipment</h3>
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 <p><strong>{{ po.po_number }}</strong> · {{ po.product.name if po.product else 'Raw Material' }}{% if po.material %} · {{ po.material.name }}{% endif %}</p>
 <p class="text-muted">Confirmed quantity: {{ po.confirmed_quantity or po.quantity }}. This action informs the buyer that the supplier has physically dispatched the material.</p>
-<!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
 <form method="POST">{{ form.hidden_tag() }}
 <div class="mb-3">{{ form.batch_id.label(class="form-label") }}{{ form.batch_id(class="form-select") }}</div>
 <div class="mb-3">{{ form.tracking_no.label(class="form-label") }}{{ form.tracking_no(class="form-control") }}</div>

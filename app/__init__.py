@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/__init__.py part of the application.
 import os
 from flask import Flask, render_template
 
@@ -6,7 +5,6 @@ from config import config
 from app.extensions import db, login_manager, migrate, csrf
 
 
-# Code explanation: Construct the Flask application, load configuration, register extensions, blueprints, and error handlers.
 def create_app(config_name=None):
     config_name = config_name or os.environ.get("FLASK_ENV", "default")
 
@@ -27,7 +25,6 @@ def create_app(config_name=None):
 
     from app.models.user import User
 
-    # Code explanation: Implement the `load user` operation used by this part of TracePass.
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
@@ -41,9 +38,10 @@ def create_app(config_name=None):
     from app.models.recall_incident import Recall, Incident
     from app.models.product_category import ProductCategory
     from app.models.lifecycle import LifecycleEvent
+    from app.models.registration_request import RegistrationRequest
 
     register_audit_listeners([
-        User, Organization, Product, ProductBatch, Certificate, ComplianceReview, Recall, Incident, ProductCategory, LifecycleEvent,
+        User, Organization, Product, ProductBatch, Certificate, ComplianceReview, Recall, Incident, ProductCategory, LifecycleEvent, RegistrationRequest,
     ])
 
     # --- register blueprints ---
@@ -66,7 +64,6 @@ def create_app(config_name=None):
     app.register_blueprint(api_bp)
 
     # --- baseline security headers ---
-    # Code explanation: Implement the `add security headers` operation used by this part of TracePass.
     @app.after_request
     def add_security_headers(response):
         response.headers.setdefault("X-Content-Type-Options", "nosniff")
@@ -77,17 +74,14 @@ def create_app(config_name=None):
         return response
 
     # --- error handlers ---
-    # Code explanation: Implement the `forbidden` operation used by this part of TracePass.
     @app.errorhandler(403)
     def forbidden(e):
         return render_template("errors/403.html"), 403
 
-    # Code explanation: Implement the `not found` operation used by this part of TracePass.
     @app.errorhandler(404)
     def not_found(e):
         return render_template("errors/404.html"), 404
 
-    # Code explanation: Implement the `unauthorized` operation used by this part of TracePass.
     @app.errorhandler(401)
     def unauthorized(e):
         return render_template("errors/401.html"), 401

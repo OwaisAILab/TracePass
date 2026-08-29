@@ -1,13 +1,12 @@
-# TracePass code note: This module implements the app/admin/forms.py part of the application.
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
-from wtforms import StringField, SelectField, TextAreaField, FloatField, BooleanField, SubmitField
-from wtforms.validators import DataRequired, Optional, Email, Length, NumberRange
+from wtforms import StringField, SelectField, TextAreaField, FloatField, BooleanField, SubmitField, PasswordField
+from wtforms.validators import DataRequired, Optional, Email, Length, NumberRange, EqualTo, ValidationError
 
 from app.models.organization import ORG_TYPES
+from app.models.user import User
 
 
-# Code explanation: Define the Organization Form data model or application component used by TracePass.
 class OrganizationForm(FlaskForm):
     name = StringField("Organization Name", validators=[DataRequired(), Length(max=150)])
     type = SelectField("Type", choices=[(x, x.replace("_", " ").title()) for x in ORG_TYPES], validators=[DataRequired()])
@@ -18,7 +17,6 @@ class OrganizationForm(FlaskForm):
     submit = SubmitField("Save Organization")
 
 
-# Code explanation: Define the Supplier Form data model or application component used by TracePass.
 class SupplierForm(FlaskForm):
     organization_id = SelectField("Supplier Organization", coerce=int, validators=[DataRequired()])
     material_categories_supplied = StringField("Material Categories Supplied", validators=[Optional(), Length(max=255)])
@@ -26,7 +24,6 @@ class SupplierForm(FlaskForm):
     submit = SubmitField("Save Supplier")
 
 
-# Code explanation: Define the Material Form data model or application component used by TracePass.
 class MaterialForm(FlaskForm):
     name = StringField("Material Name", validators=[DataRequired(), Length(max=150)])
     category = StringField("Material Category", validators=[Optional(), Length(max=100)])
@@ -35,7 +32,6 @@ class MaterialForm(FlaskForm):
     submit = SubmitField("Save Material")
 
 
-# Code explanation: Define the Product Category Form data model or application component used by TracePass.
 class ProductCategoryForm(FlaskForm):
     name = StringField("Category Name", validators=[DataRequired(), Length(max=100)])
     description = TextAreaField("Description", validators=[Optional()])
@@ -44,7 +40,6 @@ class ProductCategoryForm(FlaskForm):
     is_active = BooleanField("Active", default=True)
     submit = SubmitField("Save Category")
 
-# Code explanation: Define the Industry Form data model or application component used by TracePass.
 class IndustryForm(FlaskForm):
     name = StringField("Industry Name", validators=[DataRequired(), Length(max=120)])
     description = TextAreaField("Description", validators=[Optional()])
@@ -59,7 +54,6 @@ class IndustryForm(FlaskForm):
     submit = SubmitField("Save Industry")
 
 
-# Code explanation: Define the Edit Industry Form data model or application component used by TracePass.
 class EditIndustryForm(FlaskForm):
     name = StringField("Industry Name", validators=[DataRequired(), Length(max=120)])
     description = TextAreaField("Description", validators=[Optional()])
@@ -73,7 +67,6 @@ class EditIndustryForm(FlaskForm):
     is_active = BooleanField("Active", default=True)
     submit = SubmitField("Save Industry")
 
-# Code explanation: Define the Product Template Form data model or application component used by TracePass.
 class ProductTemplateForm(FlaskForm):
     name = StringField("Template Name", validators=[DataRequired(), Length(max=150)])
     industry_id = SelectField("Industry", coerce=int, validators=[DataRequired()])
@@ -82,3 +75,46 @@ class ProductTemplateForm(FlaskForm):
     fields_definition = TextAreaField("Fields Definition", validators=[Optional()], description="One field per line: key|Label|type|required|help text")
     is_active = BooleanField("Active", default=True)
     submit = SubmitField("Save Template")
+
+def _validate_request_password_strength(form, field):
+    """Require a strong password for the account that will be created after approval."""
+    value = field.data or ""
+    if (not any(c.isupper() for c in value) or
+            not any(c.islower() for c in value) or
+            not any(c.isdigit() for c in value)):
+        raise ValidationError("Password must include uppercase, lowercase and a number.")
+
+
+class RegistrationRequestForm(FlaskForm):
+    """Public form used to request a non-customer organizational account."""
+
+    name = StringField("Full Name", validators=[DataRequired(), Length(max=120)])
+    email = StringField("Applicant Email", validators=[DataRequired(), Email(), Length(max=120)])
+    phone = StringField("Applicant Phone", validators=[Optional(), Length(max=30)])
+    requested_role = SelectField(
+        "Requested Role",
+        choices=[
+            ("manufacturer", "Manufacturer"),
+            ("supplier", "Supplier"),
+            ("distributor", "Distributor"),
+            ("retailer", "Retailer"),
+            ("auditor", "Auditor"),
+        ],
+        validators=[DataRequired()],
+    )
+    organization_name = StringField("Organization Name", validators=[DataRequired(), Length(max=150)])
+    registration_no = StringField("Registration / License No.", validators=[Optional(), Length(max=100)])
+    organization_email = StringField("Organization Email", validators=[Optional(), Email(), Length(max=120)])
+    organization_phone = StringField("Organization Phone", validators=[Optional(), Length(max=30)])
+    address = TextAreaField("Organization Address", validators=[Optional()])
+    password = PasswordField("Requested Password", validators=[DataRequired(), Length(min=8), _validate_request_password_strength])
+    confirm_password = PasswordField(
+        "Confirm Password",
+        validators=[DataRequired(), EqualTo("password", message="Passwords must match.")],
+    )
+    reason = TextAreaField("Reason for joining TracePass", validators=[Optional()])
+    submit = SubmitField("Submit Account Request")
+
+    def validate_email(self, field):
+        if User.query.filter_by(email=field.data.lower().strip()).first():
+            raise ValidationError("An account with this email already exists. Please use Login instead.")

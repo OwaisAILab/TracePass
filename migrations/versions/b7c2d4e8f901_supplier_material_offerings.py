@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/b7c2d4e8f901_supplier_material_offerings.py part of the application.
 """Phase 3: supplier material offerings for material-based sourcing."""
 from alembic import op
 import sqlalchemy as sa
@@ -9,7 +8,6 @@ branch_labels = None
 depends_on = None
 
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     op.create_table(
         "supplier_materials",
@@ -29,6 +27,5 @@ def upgrade():
     )
 
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     op.drop_table("supplier_materials")

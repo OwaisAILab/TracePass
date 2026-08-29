@@ -1,20 +1,15 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}{{ rule.name }} · TracePass{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <h4 class="mb-1">{{ rule.name }}</h4>
 <p class="text-muted small">Applies to: {{ rule.category or "All categories" }} · <span class="badge bg-{{ 'success' if rule.is_active else 'secondary' }}">{{ "Active" if rule.is_active else "Inactive" }}</span></p>
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if rule.description %}<p>{{ rule.description }}</p>{% endif %}
 
 <div class="card p-3 mb-3">
   <h6>Requirements</h6>
-  <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
   <table class="table table-sm">
     <thead><tr><th>Type</th><th>Required Value</th><th>Mandatory</th><th>Description</th></tr></thead>
     <tbody>
-      <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
       {% for req in rule.requirements %}
       <tr>
         <td>{{ req.requirement_type.capitalize() }}</td>
@@ -28,7 +23,6 @@
     </tbody>
   </table>
 
-  <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
   <form method="POST" action="{{ url_for('compliance.add_requirement', rule_id=rule.id) }}" class="row g-2 mt-2 border-top pt-3">
     {{ req_form.hidden_tag() }}
     <div class="col-md-2">{{ req_form.requirement_type(class="form-select form-select-sm") }}</div>

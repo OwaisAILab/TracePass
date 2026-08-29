@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the fix_industry_image_urls.py part of the application.
 """
 One-time fix for industries whose image_url was saved before the /admin
 routing fix (they were stored as /uploads/industry_images/<file> instead of

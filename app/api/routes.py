@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/api/routes.py part of the application.
 from datetime import date, datetime, timezone
 from functools import wraps
 
@@ -18,7 +17,6 @@ from app.models.lifecycle import LifecycleEvent
 from app.models.shipment import Shipment
 
 
-# Code explanation: Implement the `json error` operation used by this part of TracePass.
 def json_error(message, status=400, details=None):
     payload = {'error': message}
     if details:
@@ -26,9 +24,7 @@ def json_error(message, status=400, details=None):
     return jsonify(payload), status
 
 
-# Code explanation: Implement the `api login required` operation used by this part of TracePass.
 def api_login_required(fn):
-    # Code explanation: Implement the `wrapped` operation used by this part of TracePass.
     @wraps(fn)
     def wrapped(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -39,11 +35,8 @@ def api_login_required(fn):
     return wrapped
 
 
-# Code explanation: Implement the `api roles` operation used by this part of TracePass.
 def api_roles(*roles):
-    # Code explanation: Implement the `decorator` operation used by this part of TracePass.
     def decorator(fn):
-        # Code explanation: Implement the `wrapped` operation used by this part of TracePass.
         @wraps(fn)
         def wrapped(*args, **kwargs):
             if not current_user.has_role(*roles):
@@ -53,7 +46,6 @@ def api_roles(*roles):
     return decorator
 
 
-# Code explanation: Implement the `api product allowed` operation used by this part of TracePass.
 def api_product_allowed(product):
     """Enforce organization-aware access to internal product APIs."""
     if current_user.has_role('admin', 'auditor'):
@@ -70,7 +62,6 @@ def api_product_allowed(product):
     return False
 
 
-# Code explanation: Implement the `product json` operation used by this part of TracePass.
 def product_json(product):
     return {
         'id': product.id,
@@ -88,13 +79,11 @@ def product_json(product):
     }
 
 
-# Code explanation: Implement the `health` operation used by this part of TracePass.
 @api_bp.get('/health')
 def health():
     return jsonify({'status': 'ok', 'service': 'TracePass API', 'version': 'v1'})
 
 
-# Code explanation: Implement the `products` operation used by this part of TracePass.
 @api_bp.get('/products')
 @api_login_required
 def products():
@@ -133,7 +122,6 @@ def products():
     })
 
 
-# Code explanation: Implement the `product` operation used by this part of TracePass.
 @api_bp.get('/products/<passport_code>')
 @api_login_required
 def product(passport_code):
@@ -145,7 +133,6 @@ def product(passport_code):
     return jsonify(product_json(item))
 
 
-# Code explanation: Expose the approved public Digital Product Passport without private administrative data.
 @api_bp.get('/public/passports/<passport_code>')
 def public_passport(passport_code):
     item = Product.query.filter_by(passport_code=passport_code, status=STATUS_PUBLISHED).first()
@@ -174,7 +161,6 @@ def public_passport(passport_code):
     })
 
 
-# Code explanation: Implement the `report summary` operation used by this part of TracePass.
 @api_bp.get('/reports/summary')
 @api_login_required
 @api_roles('admin', 'auditor')
@@ -196,7 +182,6 @@ def report_summary():
     })
 
 
-# Code explanation: Implement the `api 404` operation used by this part of TracePass.
 @api_bp.errorhandler(404)
 def api_404(_):
     return json_error('API endpoint not found', 404)

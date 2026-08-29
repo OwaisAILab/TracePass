@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the demo_seed.py part of the application.
 """Populate a presentation-ready TracePass demonstration dataset.
 Safe to run repeatedly: records are created only when the demo records do not exist.
 Demo password for non-admin users: Demo1234!
@@ -24,7 +23,6 @@ app = create_app()
 
 with app.app_context():
     roles = {r.name: r for r in Role.query.all()}
-    # Code explanation: Implement the `org` operation used by this part of TracePass.
     def org(name, typ, reg):
         x = Organization.query.filter_by(registration_no=reg).first()
         if not x:
@@ -37,7 +35,6 @@ with app.app_context():
     retailer = org("CircularWear Retail", "retailer", "DEMO-RET-001")
     auditor_org = org("Independent DPP Audit Bureau", "auditor", "DEMO-AUD-001")
 
-    # Code explanation: Implement the `user` operation used by this part of TracePass.
     def user(email, name, role, organization=None):
         x = User.query.filter_by(email=email).first()
         if not x:
@@ -79,7 +76,6 @@ with app.app_context():
     if not ProductMaterial.query.filter_by(product_id=product.id, material_id=material.id).first():
         db.session.add(ProductMaterial(product_id=product.id, material_id=material.id, supplier_id=supplier.id, quantity=500, percentage=100))
 
-    # Code explanation: Implement the `event` operation used by this part of TracePass.
     def event(etype, when, organization, location, notes):
         if not SupplyChainEvent.query.filter_by(product_id=product.id, event_type=etype, event_date=when).first():
             db.session.add(SupplyChainEvent(product_id=product.id, batch_id=batch.id, organization_id=organization.id, event_type=etype, event_date=when, location=location, notes=notes, recorded_by_user_id=manufacturer_user.id))

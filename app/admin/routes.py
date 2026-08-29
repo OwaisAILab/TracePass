@@ -1,9 +1,8 @@
-# TracePass code note: This module implements the app/admin/routes.py part of the application.
 import os
 import uuid
 
 from flask import Blueprint, render_template, redirect, url_for, flash, abort, current_app, send_from_directory
-from flask_login import login_required
+from flask_login import login_required, current_user
 from werkzeug.exceptions import HTTPException
 from werkzeug.utils import secure_filename
 
@@ -17,6 +16,9 @@ from app.models.material import Material
 from app.models.product_category import ProductCategory
 from app.models.industry import Industry
 from app.models.product_template import ProductTemplate, TemplateField
+from app.models.registration_request import RegistrationRequest, REQUEST_PENDING, REQUEST_APPROVED, REQUEST_REJECTED, REQUESTABLE_ROLES
+from app.models.role import Role
+from app.models.notification import Notification
 from app.auth.forms import AdminCreateUserForm
 from app.admin.forms import OrganizationForm, SupplierForm, MaterialForm, ProductCategoryForm, IndustryForm, EditIndustryForm, ProductTemplateForm
 from app.uploads import validate_upload
@@ -24,7 +26,6 @@ from app.uploads import validate_upload
 admin_bp = Blueprint("admin", __name__, template_folder="../templates/admin", url_prefix="/admin")
 
 
-# Code explanation: Implement the `save industry image` operation used by this part of TracePass.
 def _save_industry_image(file_storage):
     """Save an uploaded industry image and return its browser-accessible URL."""
     upload_dir = os.path.join(current_app.config["UPLOAD_FOLDER"], "industry_images")
@@ -36,7 +37,6 @@ def _save_industry_image(file_storage):
     return url_for("admin.industry_image", filename=filename)
 
 
-# Code explanation: Serve a validated uploaded industry image to the browser.
 @admin_bp.route("/uploads/industry_images/<path:filename>")
 def industry_image(filename):
     """Serve uploaded industry images (used on the admin list and public landing page)."""
@@ -44,7 +44,6 @@ def industry_image(filename):
     return send_from_directory(upload_dir, filename)
 
 
-# Code explanation: Load users from the database in newest-first order for the Admin user-management screen.
 @admin_bp.route("/users")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -53,7 +52,6 @@ def list_users():
     return render_template("admin/users.html", users=users)
 
 
-# Code explanation: Handle the Admin create-user form: validate input, create the account, hash its password, and save it.
 @admin_bp.route("/users/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -78,7 +76,6 @@ def new_user():
     return render_template("admin/user_form.html", form=form)
 
 
-# Code explanation: Switch a user between active and inactive without deleting the account.
 @admin_bp.route("/users/<int:user_id>/toggle-active", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -90,7 +87,6 @@ def toggle_user_active(user_id):
     return redirect(url_for("admin.list_users"))
 
 
-# Code explanation: Permanently delete a user only after safety checks prevent deleting an active account or the current administrator.
 @admin_bp.route("/users/<int:user_id>/delete", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -112,7 +108,122 @@ def delete_user(user_id):
     return redirect(url_for("admin.list_users"))
 
 
-# Code explanation: Implement the `list organizations` operation used by this part of TracePass.
+@admin_bp.route("/registration-requests")
+@login_required
+@role_required(ROLE_ADMIN)
+def list_registration_requests():
+    """List account requests submitted through the public Contact Us page."""
+    requests = RegistrationRequest.query.order_by(RegistrationRequest.created_at.desc()).all()
+    return render_template("admin/registration_requests.html", requests=requests)
+
+
+@admin_bp.route("/registration-requests/<int:request_id>")
+@login_required
+@role_required(ROLE_ADMIN)
+def view_registration_request(request_id):
+    """Show the applicant and organization details before an admin decides."""
+    item = RegistrationRequest.query.get_or_404(request_id)
+    from flask_wtf import FlaskForm
+    return render_template("admin/registration_request_detail.html", item=item, form=FlaskForm())
+
+
+@admin_bp.route("/registration-requests/<int:request_id>/approve", methods=["POST"])
+@login_required
+@role_required(ROLE_ADMIN)
+def approve_registration_request(request_id):
+    """Verify the organization and create the requested role account."""
+    from datetime import datetime, timezone
+    item = RegistrationRequest.query.get_or_404(request_id)
+    if item.status != REQUEST_PENDING:
+        flash("This registration request has already been reviewed.", "warning")
+        return redirect(url_for("admin.view_registration_request", request_id=item.id))
+
+    if User.query.filter_by(email=item.email).first():
+        flash("An account with this email already exists. The request was not approved.", "danger")
+        return redirect(url_for("admin.view_registration_request", request_id=item.id))
+
+    role = Role.query.filter_by(name=item.requested_role).first()
+    if role is None or item.requested_role not in REQUESTABLE_ROLES:
+        flash("The requested role is not configured for organizational registration.", "danger")
+        return redirect(url_for("admin.view_registration_request", request_id=item.id))
+
+    organization = None
+    if item.registration_no:
+        organization = Organization.query.filter_by(registration_no=item.registration_no).first()
+    if organization is not None and organization.type != item.organization_type:
+        flash("The registration number belongs to an organization of a different type. Verify the request before approving it.", "danger")
+        return redirect(url_for("admin.view_registration_request", request_id=item.id))
+
+    if organization is None:
+        organization = Organization(
+            name=item.organization_name,
+            type=item.organization_type,
+            registration_no=item.registration_no,
+            contact_email=item.organization_email,
+            contact_phone=item.organization_phone or item.phone,
+            address=item.address,
+            is_verified=True,
+        )
+        db.session.add(organization)
+        db.session.flush()
+    else:
+        organization.is_verified = True
+        if item.organization_email and not organization.contact_email:
+            organization.contact_email = item.organization_email
+        if item.organization_phone and not organization.contact_phone:
+            organization.contact_phone = item.organization_phone
+        if item.address and not organization.address:
+            organization.address = item.address
+
+    user = User(
+        name=item.name.strip(),
+        email=item.email.lower().strip(),
+        role_id=role.id,
+        organization_id=organization.id,
+        is_active=True,
+    )
+    user.password_hash = item.password_hash
+    db.session.add(user)
+    db.session.flush()
+
+    item.status = REQUEST_APPROVED
+    item.organization_id = organization.id
+    item.created_user_id = user.id
+    item.reviewed_by_id = current_user.id
+    item.reviewed_at = datetime.now(timezone.utc)
+    db.session.add(Notification(
+        user_id=user.id,
+        notif_type="account_request",
+        message="Your TracePass account request has been approved. You can now log in.",
+    ))
+    db.session.commit()
+    flash(f"Request approved. Account created for {user.email} under {organization.name}.", "success")
+    return redirect(url_for("admin.list_registration_requests"))
+
+
+@admin_bp.route("/registration-requests/<int:request_id>/reject", methods=["POST"])
+@login_required
+@role_required(ROLE_ADMIN)
+def reject_registration_request(request_id):
+    """Reject a request while preserving the decision and reason for auditability."""
+    from datetime import datetime, timezone
+    item = RegistrationRequest.query.get_or_404(request_id)
+    if item.status != REQUEST_PENDING:
+        flash("This registration request has already been reviewed.", "warning")
+        return redirect(url_for("admin.view_registration_request", request_id=item.id))
+    reason = (request.form.get("rejection_reason") or "").strip()
+    if not reason:
+        flash("Please provide a rejection reason.", "danger")
+        return redirect(url_for("admin.view_registration_request", request_id=item.id))
+    item.status = REQUEST_REJECTED
+    item.rejection_reason = reason[:500]
+    item.reviewed_by_id = current_user.id
+    item.reviewed_at = datetime.now(timezone.utc)
+    db.session.commit()
+    flash("Registration request rejected.", "info")
+    return redirect(url_for("admin.list_registration_requests"))
+
+
 @admin_bp.route("/organizations")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -121,7 +232,6 @@ def list_organizations():
     return render_template("admin/organizations.html", organizations=organizations)
 
 
-# Code explanation: Implement the `new organization` operation used by this part of TracePass.
 @admin_bp.route("/organizations/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -146,7 +256,6 @@ def new_organization():
     return render_template("admin/organization_form.html", form=form)
 
 
-# Code explanation: Implement the `verify organization` operation used by this part of TracePass.
 @admin_bp.route("/organizations/<int:org_id>/verify", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -158,7 +267,6 @@ def verify_organization(org_id):
     return redirect(url_for("admin.list_organizations"))
 
 
-# Code explanation: Implement the `list suppliers` operation used by this part of TracePass.
 @admin_bp.route("/suppliers")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -167,7 +275,6 @@ def list_suppliers():
     return render_template("admin/suppliers.html", suppliers=suppliers)
 
 
-# Code explanation: Implement the `new supplier` operation used by this part of TracePass.
 @admin_bp.route("/suppliers/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -188,7 +295,6 @@ def new_supplier():
     return render_template("admin/supplier_form.html", form=form)
 
 
-# Code explanation: Implement the `list materials` operation used by this part of TracePass.
 @admin_bp.route("/materials")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -197,7 +303,6 @@ def list_materials():
     return render_template("admin/materials.html", materials=materials)
 
 
-# Code explanation: Implement the `new material` operation used by this part of TracePass.
 @admin_bp.route("/materials/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -213,7 +318,6 @@ def new_material():
     return render_template("admin/material_form.html", form=form)
 
 
-# Code explanation: Implement the `list categories` operation used by this part of TracePass.
 @admin_bp.route("/categories")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -222,7 +326,6 @@ def list_categories():
     return render_template("admin/categories.html", categories=categories)
 
 
-# Code explanation: Load all configured industries for the Admin master-data screen.
 @admin_bp.route("/industries")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -231,7 +334,6 @@ def list_industries():
     return render_template("admin/industries.html", industries=industries)
 
 
-# Code explanation: Create or update an industry record, including its uploaded image used by the landing page.
 @admin_bp.route("/industries/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -259,7 +361,6 @@ def new_industry():
     return render_template("admin/industry_form.html", form=form)
 
 
-# Code explanation: Implement the `delete industry image` operation used by this part of TracePass.
 def _delete_industry_image(image_url):
     """Delete a locally uploaded industry image, but never delete bundled/static or external images."""
     prefix = "/admin/uploads/industry_images/"
@@ -274,7 +375,6 @@ def _delete_industry_image(image_url):
         pass
 
 
-# Code explanation: Implement the `edit industry` operation used by this part of TracePass.
 @admin_bp.route("/industries/<int:industry_id>/edit", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -307,7 +407,6 @@ def edit_industry(industry_id):
     return render_template("admin/industry_form.html", form=form, industry=industry)
 
 
-# Code explanation: Implement the `delete industry` operation used by this part of TracePass.
 @admin_bp.route("/industries/<int:industry_id>/delete", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -331,7 +430,6 @@ def delete_industry(industry_id):
     return redirect(url_for("admin.list_industries"))
 
 
-# Code explanation: Implement the `list templates` operation used by this part of TracePass.
 @admin_bp.route("/templates")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -340,7 +438,6 @@ def list_templates():
     return render_template("admin/templates.html", templates=templates)
 
 
-# Code explanation: Implement the `new template` operation used by this part of TracePass.
 @admin_bp.route("/templates/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -374,7 +471,6 @@ def new_template():
     return render_template("admin/template_form.html", form=form)
 
 
-# Code explanation: Implement the `new category` operation used by this part of TracePass.
 @admin_bp.route("/categories/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)

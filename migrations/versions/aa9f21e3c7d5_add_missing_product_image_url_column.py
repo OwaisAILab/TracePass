@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/aa9f21e3c7d5_add_missing_product_image_url_column.py part of the application.
 """Add missing products.image_url column
 
 The Product model has always defined `image_url`, but no prior migration
@@ -21,12 +20,10 @@ branch_labels = None
 depends_on = None
 
 
-# Code explanation: Implement the `has column` operation used by this part of TracePass.
 def _has_column(bind, table, column):
     return column in {c["name"] for c in inspect(bind).get_columns(table)}
 
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     bind = op.get_bind()
     if not _has_column(bind, "products", "image_url"):
@@ -34,7 +31,6 @@ def upgrade():
             batch_op.add_column(sa.Column("image_url", sa.String(length=500), nullable=True))
 
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     bind = op.get_bind()
     if _has_column(bind, "products", "image_url"):

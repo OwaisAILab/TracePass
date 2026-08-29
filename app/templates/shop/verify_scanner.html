@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% block title %}Verify Product | TracePass{% endblock %}
+{% block content %}
+<style>
+.verify-page{min-height:78vh;background:#f7f3ee;padding:5rem 1.25rem}
+.verify-wrap{max-width:980px;margin:auto;display:grid;grid-template-columns:1.05fr .95fr;gap:2rem;align-items:stretch}
+.verify-intro{background:#202020;color:#f7f3ee;padding:3rem;display:flex;flex-direction:column;justify-content:center}
+.verify-eyebrow{font-size:.7rem;letter-spacing:.16em;font-weight:700;color:#b76e4a;margin-bottom:1rem}
+.verify-intro h1{font-family:Georgia,serif;font-size:clamp(2.2rem,5vw,4rem);line-height:1.05;margin-bottom:1rem}
+.verify-intro p{color:#cfc8c2;line-height:1.8;max-width:520px}
+.verify-points{list-style:none;padding:0;margin:1.5rem 0 0}.verify-points li{padding:.65rem 0;border-bottom:1px solid #ffffff18;color:#ddd}
+.verify-card{background:white;border:1px solid #ddd6cf;padding:2rem;box-shadow:0 12px 40px #00000010}
+.verify-card h2{font-family:Georgia,serif;margin-bottom:.5rem}.verify-card .muted{color:#777;font-size:.9rem;margin-bottom:1.5rem}
+#qr-reader{width:100%;max-width:430px;margin:0 auto 1rem;display:none;border:1px solid #ddd}
+.scan-actions{display:flex;gap:.75rem;flex-wrap:wrap}.scan-btn{border:0;background:#202020;color:#fff;padding:.8rem 1.1rem;font-weight:600;cursor:pointer}.scan-btn.secondary{background:#b76e4a}.scan-btn:disabled{opacity:.5;cursor:not-allowed}
+.verify-divider{display:flex;align-items:center;gap:.75rem;margin:1.5rem 0;color:#999;font-size:.75rem;text-transform:uppercase;letter-spacing:.1em}.verify-divider:before,.verify-divider:after{content:"";height:1px;background:#ddd;flex:1}
+.manual-row{display:flex}.manual-row input{flex:1;padding:.85rem 1rem;border:1px solid #ccc;min-width:0}.manual-row button{border:0;background:#202020;color:#fff;padding:0 1.2rem;font-weight:600}.scan-status{min-height:1.5rem;margin-top:.75rem;font-size:.85rem;color:#666}.camera-note{font-size:.72rem;color:#888;margin-top:1rem;line-height:1.5}
+@media(max-width:800px){.verify-wrap{grid-template-columns:1fr}.verify-intro{padding:2rem}.verify-page{padding:2rem 1rem}}
+</style>
+<section class="verify-page">
+  <div class="verify-wrap">
+    <div class="verify-intro">
+      <div class="verify-eyebrow">TRACEPASS VERIFICATION</div>
+      <h1>Verify the product.<br><em>Know its story.</em></h1>
+      <p>Scan the TracePass QR code attached to a product, package or document to open its public Digital Product Passport.</p>
+      <ul class="verify-points">
+        <li>✓ Product identity and manufacturer</li>
+        <li>✓ Materials and origin information</li>
+        <li>✓ Supply-chain and compliance status</li>
+        <li>✓ Public passport information only</li>
+      </ul>
+    </div>
+    <div class="verify-card">
+      <h2>Scan a QR code</h2>
+      <p class="muted">Allow camera access, point it at a TracePass QR code, and we will open the passport automatically.</p>
+      <div id="qr-reader"></div>
+      <div class="scan-actions">
+        <button id="startScan" class="scan-btn secondary" type="button">📷 Scan with Camera</button>
+        <button id="stopScan" class="scan-btn" type="button" disabled>Stop Camera</button>
+      </div>
+      <div id="scanStatus" class="scan-status">Camera scanning is optional. You can enter a passport code below.</div>
+      <div class="verify-divider">or enter code</div>
+      <form id="manualVerify" method="get">
+        <div class="manual-row">
+          <input id="passportCode" type="text" placeholder="e.g. TP-8F3K92A1" autocomplete="off" required>
+          <button type="submit">Verify</button>
+        </div>
+      </form>
+      <p class="camera-note">Camera access is supported by modern browsers. On a phone, use HTTPS or localhost when testing locally. Your camera image is processed in the browser by the QR scanner.</p>
+    </div>
+  </div>
+</section>
+<script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js"></script>
+<script>
+(function(){
+  const reader = document.getElementById('qr-reader');
+  const start = document.getElementById('startScan');
+  const stop = document.getElementById('stopScan');
+  const status = document.getElementById('scanStatus');
+  const form = document.getElementById('manualVerify');
+  const input = document.getElementById('passportCode');
+  let scanner = null, running = false;
+
+  function openResult(raw){
+    try {
+      const u = new URL(raw, window.location.origin);
+      if (u.origin === window.location.origin && u.pathname.startsWith('/verify/')) {
+        window.location.href = u.href; return;
+      }
+    } catch(e) {}
+    const match = String(raw).match(/(?:\/verify\/)([^/?#]+)/i);
+    if (match) { window.location.href = '/verify/' + encodeURIComponent(match[1]); return; }
+    input.value = String(raw).trim();
+    status.textContent = 'QR detected, but it is not a TracePass verification link. If it contains a passport code, enter that code below.';
+  }
+
+  start.addEventListener('click', async function(){
+    if (running) return;
+    if (typeof Html5Qrcode === 'undefined') { status.textContent='QR scanner library could not be loaded. Use the manual code option.'; return; }
+    reader.style.display='block'; start.disabled=true; stop.disabled=false; status.textContent='Requesting camera access…';
+    scanner = new Html5Qrcode('qr-reader');
+    try {
+      await scanner.start({facingMode:'environment'}, {fps:10, qrbox:{width:250,height:250}}, openResult, function(){});
+      running=true; status.textContent='Camera active — point it at the TracePass QR code.';
+    } catch(err) {
+      start.disabled=false; stop.disabled=true; reader.style.display='none';
+      status.textContent='Unable to access the camera. Check browser permission, then try again or enter the passport code manually.';
+    }
+  });
+  stop.addEventListener('click', async function(){
+    if(scanner && running){ try{await scanner.stop();}catch(e){} try{scanner.clear();}catch(e){} }
+    running=false; reader.style.display='none'; start.disabled=false; stop.disabled=true; status.textContent='Camera stopped. You can scan again or enter a passport code.';
+  });
+  form.addEventListener('submit', function(e){
+    e.preventDefault(); const code=input.value.trim(); if(code) window.location.href='/verify/'+encodeURIComponent(code);
+  });
+})();
+</script>
+{% endblock %}

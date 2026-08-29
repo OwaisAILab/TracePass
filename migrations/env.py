@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/env.py part of the application.
 import logging
 from logging.config import fileConfig
 
@@ -16,7 +15,6 @@ fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
 
 
-# Code explanation: Implement the `get engine` operation used by this part of TracePass.
 def get_engine():
     try:
         # this works with Flask-SQLAlchemy<3 and Alchemical
@@ -26,7 +24,6 @@ def get_engine():
         return current_app.extensions['migrate'].db.engine
 
 
-# Code explanation: Implement the `get engine url` operation used by this part of TracePass.
 def get_engine_url():
     try:
         return get_engine().url.render_as_string(hide_password=False).replace(
@@ -48,14 +45,12 @@ target_db = current_app.extensions['migrate'].db
 # ... etc.
 
 
-# Code explanation: Implement the `get metadata` operation used by this part of TracePass.
 def get_metadata():
     if hasattr(target_db, 'metadatas'):
         return target_db.metadatas[None]
     return target_db.metadata
 
 
-# Code explanation: Implement the `run migrations offline` operation used by this part of TracePass.
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
@@ -77,7 +72,6 @@ def run_migrations_offline():
         context.run_migrations()
 
 
-# Code explanation: Implement the `run migrations online` operation used by this part of TracePass.
 def run_migrations_online():
     """Run migrations in 'online' mode.
 
@@ -89,7 +83,6 @@ def run_migrations_online():
     # this callback is used to prevent an auto-migration from being generated
     # when there are no changes to the schema
     # reference: http://alembic.zzzcomputing.com/en/latest/cookbook.html
-    # Code explanation: Implement the `process revision directives` operation used by this part of TracePass.
     def process_revision_directives(context, revision, directives):
         if getattr(config.cmd_opts, 'autogenerate', False):
             script = directives[0]

@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/auth/routes.py part of the application.
 from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_user, logout_user, login_required, current_user
 
@@ -10,7 +9,6 @@ from app.auth.forms import LoginForm, RegistrationForm
 auth_bp = Blueprint("auth", __name__, template_folder="../templates/auth")
 
 
-# Code explanation: Create a new user account from the public registration form.
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
@@ -40,7 +38,6 @@ def register():
     return render_template("auth/register.html", form=form)
 
 
-# Code explanation: Authenticate the submitted credentials and create the Flask-Login session.
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
@@ -70,7 +67,6 @@ def login():
     return render_template("auth/login.html", form=form)
 
 
-# Code explanation: End the current authenticated session.
 @auth_bp.route("/logout")
 @login_required
 def logout():

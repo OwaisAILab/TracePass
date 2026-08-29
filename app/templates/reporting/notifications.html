@@ -1,16 +1,12 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}Notifications · TracePass{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <div class="d-flex justify-content-between align-items-center mb-3">
   <div>
     <h4 class="mb-1">Notification Center</h4>
-    <div class="text-muted small">Compliance, certificate, review and recall alerts.</div>
+    <div class="text-muted small">Compliance, certificate, review, recall and account-request alerts.</div>
   </div>
-  <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
   {% if notifications %}
-  <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
   <form method="POST" action="{{ url_for('reporting.mark_all_notifications_read') }}">
     <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
     <button class="btn btn-sm btn-outline-secondary">Mark all as read</button>
@@ -19,7 +15,6 @@
 </div>
 
 <div class="card p-3">
-  <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
   {% for n in notifications %}
   <div class="d-flex justify-content-between align-items-start gap-3 py-3 border-bottom {{ 'bg-light' if n.is_read else '' }}">
     <div>
@@ -29,9 +24,7 @@
       <div class="mt-1">{{ n.message }}</div>
       <div class="text-muted small">{{ n.created_at.strftime('%Y-%m-%d %H:%M') }}</div>
     </div>
-    <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
     {% if not n.is_read %}
-    <!-- TracePass code explanation: This form collects user input and submits it to the corresponding Flask route. -->
     <form method="POST" action="{{ url_for('reporting.mark_notification_read', notif_id=n.id) }}">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
       <button class="btn btn-sm btn-link">Dismiss</button>
@@ -43,9 +36,7 @@
   {% endfor %}
 </div>
 
-<!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
 {% if pagination.pages > 1 %}
-<!-- TracePass code explanation: Navigation section provides links to the relevant TracePass module. -->
 <nav class="mt-3">
   <ul class="pagination pagination-sm justify-content-center">
     <li class="page-item {{ 'disabled' if not pagination.has_prev }}"><a class="page-link" href="{{ url_for('reporting.notifications', page=pagination.prev_num) }}">Previous</a></li>

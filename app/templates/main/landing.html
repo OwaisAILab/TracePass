@@ -1,9 +1,9 @@
-<!-- TracePass code explanation: This template inherits the common TracePass layout from the base template. -->
 {% extends "base.html" %}
 {% block title %}TracePass | Every Product. One Verifiable Story.{% endblock %}
-<!-- TracePass code explanation: This block supplies the page-specific content rendered inside the common layout. -->
 {% block content %}
 <div class="tp-wow">
+  <header class="tp-public-nav"><div class="container"><a href="{{ url_for('main.index') }}" class="tp-public-brand">TRACE<span>PASS</span></a><nav><a href="#platform">Platform</a><a href="#contact">Contact Us</a><a href="{{ url_for('tracepass.verify_scanner') }}">Verify</a><a class="tp-public-login" href="{{ url_for('auth.login') }}">Login</a></nav></div></header>
+
   <div class="tp-noise"></div>
   <div class="tp-grid-bg"></div>
 
@@ -58,7 +58,6 @@
         <p>TracePass is a configurable product intelligence layer for <strong>any product</strong> — connecting identity, evidence, traceability and compliance without being tied to one industry.</p>
       </div>
       <div class="tp-industry-grid">
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         {% for industry in industries %}
         <div class="tp-industry-card has-image">
           <div class="tp-industry-image" style="background-image:url('{{ industry.image_url }}')"><div class="tp-industry-image-shade"></div><span class="tp-industry-index">{{ '%02d'|format(loop.index) }}</span></div>
@@ -92,13 +91,13 @@
     </div>
   </section>
 
+  <section class="tp-contact-cta" id="contact"><div class="container"><div><div class="tp-kicker">04 / CONTACT US</div><h2>Join the TracePass network.</h2><p>Manufacturers, suppliers, distributors, retailers and auditors can request organizational access. An administrator verifies the organization before activating the account.</p></div><a class="tp-btn tp-btn-primary" href="{{ url_for('main.contact') }}">Request an Account ↗</a></div></section>
   <section class="tp-final">
     <div class="tp-final-grid"></div>
     <div class="container tp-final-content"><div class="tp-kicker">TRACEPASS / DIGITAL PRODUCT PASSPORT</div><h2>The product is physical.<br><span>The trust is digital.</span></h2><p>Build, trace, prove and verify products with one connected digital passport.</p><div class="tp-hero-actions"><a class="tp-btn tp-btn-primary" href="{{ url_for('auth.login') }}">Enter TracePass ↗</a><a class="tp-btn tp-btn-ghost light" href="{{ url_for('tracepass.verify_scanner') }}">Verify a product</a></div></div>
   </section>
-  <footer class="tp-wow-footer"><div class="container"><div class="brand-mark light"><span>TP</span> TRACE<span>PASS</span></div><p>Digital Product Passport · Supply Chain · Compliance · Verification</p><small>Industry-independent product traceability and verification platform.</small></div></footer>
+  <footer class="tp-wow-footer"><div class="container"><div class="brand-mark light"><span>TP</span> TRACE<span>PASS</span></div><p>Digital Product Passport · Supply Chain · Compliance · Verification</p><small>Industry-independent product traceability and verification platform.</small><div class="mt-3"><a href="{{ url_for('main.contact') }}" style="color:inherit;text-decoration:none;font-weight:700;">Contact Us · Request an Account</a></div></div></footer>
 </div>
-<!-- TracePass code explanation: JavaScript below adds client-side interaction without replacing server-side validation. -->
 <script>
 (function(){
   const stage=document.getElementById('passportStage'), card=document.getElementById('passportCard');

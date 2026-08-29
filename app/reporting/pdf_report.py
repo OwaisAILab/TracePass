@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/reporting/pdf_report.py part of the application.
 import os
 from datetime import datetime, timezone
 from reportlab.lib.pagesizes import letter
@@ -8,7 +7,6 @@ from reportlab.lib import colors
 from reportlab.lib.units import inch
 
 
-# Code explanation: Implement the `build compliance report pdf` operation used by this part of TracePass.
 def build_compliance_report_pdf(product, certificates, checks, reviews, output_path):
     """Builds a compliance report PDF for a single product and writes it to output_path."""
     doc = SimpleDocTemplate(output_path, pagesize=letter, topMargin=0.75 * inch, bottomMargin=0.75 * inch)

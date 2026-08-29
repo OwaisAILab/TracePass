@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/9a1f3e7b6c21_phase_3_procurement_workflow.py part of the application.
 """Phase 3 procurement workflow: raw-material purchase orders and shipments.
 
 Revision ID: 9a1f3e7b6c21
@@ -13,7 +12,6 @@ branch_labels = None
 depends_on = None
 
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     # The procurement model was introduced in the application code, but the
     # previous Phase 3 package did not create the purchase_orders table.
@@ -64,7 +62,6 @@ def upgrade():
         batch_op.create_foreign_key("fk_shipments_material", "materials", ["material_id"], ["id"])
 
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     with op.batch_alter_table("shipments", schema=None) as batch_op:
         batch_op.drop_constraint("fk_shipments_material", type_="foreignkey")

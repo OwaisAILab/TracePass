@@ -1,7 +1,5 @@
-<!-- TracePass code explanation: HTML document declaration and page structure start. -->
 <!doctype html>
 <html lang="en">
-<!-- TracePass code explanation: The head contains metadata, page title, and CSS dependencies. -->
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -17,72 +15,54 @@
           {{ p.compliance_status | replace('_', ' ') }}
         </span>
       </div>
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if p.image_url %}<img src="{{ p.image_url }}" alt="{{ p.name }}" class="img-fluid rounded mb-3" style="max-height:280px;object-fit:contain">{% endif %}
       <p class="text-muted mb-3">Passport Code: <code>{{ p.passport_code }}</code></p>
 
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm mb-4">
         <tr><th style="width:35%">Industry</th><td>{{ p.industry or "General" }}</td></tr><tr><th>Category</th><td>{{ p.category or "—" }}</td></tr><tr><th>Passport Template</th><td>{{ p.template or "Standard" }}</td></tr>
         <tr><th>Brand</th><td>{{ p.brand or "—" }}</td></tr>
         <tr><th>Model</th><td>{{ p.model or "—" }}</td></tr>
         <tr><th>Manufacturer</th><td>{{ p.manufacturer_name or "—" }}</td></tr>
-        <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
         {% if p.description %}<tr><th>Description</th><td>{{ p.description }}</td></tr>{% endif %}
       </table>
 
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if p.sustainability_data %}
       <h6>Sustainability & Circularity</h6>
       <div class="alert alert-success-subtle border small" style="white-space:pre-wrap">{{ p.sustainability_data }}</div>
       {% endif %}
 
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if p.attributes %}
       <h6>Product Information</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm mb-4"><tbody>{% for key, value in p.attributes.items() %}<tr><th style="width:35%">{{ key|replace('_',' ')|title }}</th><td>{{ value }}</td></tr>{% endfor %}</tbody></table>
       {% endif %}
 
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if p.batches %}
       <h6>Manufacturing Batches</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm mb-4">
         <thead><tr><th>Batch</th><th>Manufactured</th><th>Production Location</th><th>Quantity</th></tr></thead>
-        <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
         <tbody>{% for b in p.batches %}<tr><td>{{ b.batch_no }}</td><td>{{ b.manufacture_date or "—" }}</td><td>{{ b.production_location or "—" }}</td><td>{{ b.quantity or "—" }}</td></tr>{% endfor %}</tbody>
       </table>
       {% endif %}
 
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if p.lifecycle_events %}
       <h6 class="mt-4">Product Lifecycle</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <div class="table-responsive"><table class="table table-sm mb-4"><thead><tr><th>Date</th><th>Event</th><th>Organization</th><th>Location</th></tr></thead><tbody>
-      <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
       {% for e in p.lifecycle_events %}<tr><td>{{ e.event_date.strftime('%Y-%m-%d') }}</td><td>{{ e.event_type|replace('_',' ')|title }}</td><td>{{ e.organization or '—' }}</td><td>{{ e.location or '—' }}</td></tr>{% endfor %}
       </tbody></table></div>
       {% endif %}
 
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if p.supply_chain_events %}
       <h6>Supply-Chain Traceability</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <div class="table-responsive"><table class="table table-sm mb-4"><thead><tr><th>Date</th><th>Event</th><th>Organization</th><th>Location</th></tr></thead><tbody>
-      <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
       {% for e in p.supply_chain_events %}<tr><td>{{ e.event_date.strftime('%Y-%m-%d') }}</td><td>{{ e.event_type|replace('_',' ')|title }}</td><td>{{ e.organization or '—' }}</td><td>{{ e.location or '—' }}</td></tr>{% endfor %}
       </tbody></table></div>
       {% endif %}
 
-      <!-- TracePass code explanation: Jinja condition controls whether this UI section is shown for the current state or role. -->
       {% if p.materials %}
       <h6>Materials & Origin</h6>
-      <!-- TracePass code explanation: This table presents database records in a structured administrative/reporting view. -->
       <table class="table table-sm mb-0">
         <thead><tr><th>Material</th><th>Origin</th><th>%</th></tr></thead>
         <tbody>
-          <!-- TracePass code explanation: Jinja loops through database/query results and renders one UI item per record. -->
           {% for m in p.materials %}
           <tr><td>{{ m.name }}</td><td>{{ m.origin_country or "—" }}</td><td>{{ m.percentage or "—" }}</td></tr>
           {% endfor %}

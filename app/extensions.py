@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the app/extensions.py part of the application.
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate

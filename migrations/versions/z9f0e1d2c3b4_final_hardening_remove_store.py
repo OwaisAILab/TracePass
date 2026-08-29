@@ -1,4 +1,3 @@
-# TracePass code note: This module implements the migrations/versions/z9f0e1d2c3b4_final_hardening_remove_store.py part of the application.
 """Final TracePass hardening: remove e-commerce schema and normalize DPP compliance categories/evidence reviews."""
 from alembic import op
 import sqlalchemy as sa
@@ -10,17 +9,14 @@ branch_labels = None
 depends_on = None
 
 
-# Code explanation: Implement the `has table` operation used by this part of TracePass.
 def _has_table(bind, name):
     return inspect(bind).has_table(name)
 
 
-# Code explanation: Implement the `has column` operation used by this part of TracePass.
 def _has_column(bind, table, column):
     return column in {c["name"] for c in inspect(bind).get_columns(table)}
 
 
-# Code explanation: Implement the `upgrade` operation used by this part of TracePass.
 def upgrade():
     bind = op.get_bind()
 
@@ -97,7 +93,6 @@ def upgrade():
         op.execute(text("UPDATE certificates SET review_status = 'pending' WHERE review_status IS NULL OR review_status = ''"))
 
 
-# Code explanation: Implement the `downgrade` operation used by this part of TracePass.
 def downgrade():
     # Deliberately do not recreate the removed e-commerce tables. This release
     # permanently excludes the online store/cart scope.
