@@ -17,6 +17,7 @@ from app.models.product_category import ProductCategory
 from app.models.industry import Industry
 from app.models.product_template import ProductTemplate, TemplateField
 from app.models.registration_request import RegistrationRequest, REQUEST_PENDING, REQUEST_APPROVED, REQUEST_REJECTED, REQUESTABLE_ROLES
+from app.models.registration_request_document import RegistrationRequestDocument
 from app.models.role import Role
 from app.models.notification import Notification
 from app.auth.forms import AdminCreateUserForm
@@ -117,6 +118,16 @@ def list_registration_requests():
     return render_template("admin/registration_requests.html", requests=requests)
 
 
+@admin_bp.route("/registration-requests/documents/<int:document_id>")
+@login_required
+@role_required(ROLE_ADMIN)
+def download_registration_request_document(document_id):
+    """Allow administrators to inspect submitted authenticity evidence."""
+    document = RegistrationRequestDocument.query.get_or_404(document_id)
+    upload_dir = current_app.config["UPLOAD_FOLDER"]
+    return send_from_directory(upload_dir, document.file_path, as_attachment=True, download_name=document.original_filename)
+
+
 @admin_bp.route("/registration-requests/<int:request_id>")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -136,6 +147,10 @@ def approve_registration_request(request_id):
     item = RegistrationRequest.query.get_or_404(request_id)
     if item.status != REQUEST_PENDING:
         flash("This registration request has already been reviewed.", "warning")
+        return redirect(url_for("admin.view_registration_request", request_id=item.id))
+
+    if not item.authenticity_documents:
+        flash("Approval is blocked because no authenticity documents were submitted.", "danger")
         return redirect(url_for("admin.view_registration_request", request_id=item.id))
 
     if User.query.filter_by(email=item.email).first():

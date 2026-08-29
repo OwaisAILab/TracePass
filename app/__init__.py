@@ -39,9 +39,10 @@ def create_app(config_name=None):
     from app.models.product_category import ProductCategory
     from app.models.lifecycle import LifecycleEvent
     from app.models.registration_request import RegistrationRequest
+    from app.models.registration_request_document import RegistrationRequestDocument
 
     register_audit_listeners([
-        User, Organization, Product, ProductBatch, Certificate, ComplianceReview, Recall, Incident, ProductCategory, LifecycleEvent, RegistrationRequest,
+        User, Organization, Product, ProductBatch, Certificate, ComplianceReview, Recall, Incident, ProductCategory, LifecycleEvent, RegistrationRequest, RegistrationRequestDocument,
     ])
 
     # --- register blueprints ---

@@ -31,3 +31,5 @@ from app.models.product_template import ProductTemplate, TemplateField  # noqa: 
 from app.models.lifecycle import LifecycleEvent  # noqa: F401
 from app.models.verification import VerificationLog  # noqa: F401
 from app.models.registration_request import RegistrationRequest  # noqa: F401
+
+from app.models.registration_request_document import RegistrationRequestDocument  # noqa: F401

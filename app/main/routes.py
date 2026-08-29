@@ -1,10 +1,18 @@
-from flask import Blueprint, render_template, redirect, url_for, flash
+from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
+from werkzeug.utils import secure_filename
+import os
+import uuid
 
 from app.models.industry import Industry
 from app.models.registration_request import RegistrationRequest, REQUEST_PENDING, REQUESTABLE_ROLES
 from app.admin.forms import RegistrationRequestForm
+from app.models.registration_request_document import RegistrationRequestDocument
+from app.uploads import validate_upload
 from app.extensions import db
+from app.models.product import Product, STATUS_PUBLISHED
+from app.models.organization import Organization
+from app.models.verification import VerificationLog
 
 main_bp = Blueprint("main", __name__)
 
@@ -12,7 +20,13 @@ main_bp = Blueprint("main", __name__)
 @main_bp.route("/")
 def index():
     industries = Industry.query.filter_by(is_active=True).order_by(Industry.name).all()
-    return render_template("main/landing.html", industries=industries)
+    stats = {
+        "products": Product.query.filter_by(status=STATUS_PUBLISHED).count(),
+        "organizations": Organization.query.count(),
+        "verifications": VerificationLog.query.count(),
+        "industries": len(industries),
+    }
+    return render_template("main/landing.html", industries=industries, stats=stats)
 
 
 @main_bp.route("/contact", methods=["GET", "POST"])
@@ -51,6 +65,31 @@ def contact():
         item.set_password(form.password.data)
         db.session.add(item)
         db.session.flush()
+
+        # Authenticity evidence is mandatory. The form displays a multi-file
+        # input, while Flask exposes the submitted files through getlist().
+        files = [f for f in request.files.getlist("authenticity_documents") if f and f.filename]
+        if not files:
+            db.session.rollback()
+            form.authenticity_documents.errors.append("At least one authenticity document is required.")
+            return render_template("main/contact.html", form=form)
+
+        document_dir = os.path.join(current_app.config["UPLOAD_FOLDER"], "registration_requests", str(item.id))
+        os.makedirs(document_dir, exist_ok=True)
+        allowed = {"pdf", "png", "jpg", "jpeg", "docx", "xlsx"}
+        for uploaded in files:
+            validate_upload(uploaded, allowed)
+            original = secure_filename(uploaded.filename) or "authenticity_document"
+            ext = os.path.splitext(original)[1].lower()
+            stored_name = f"{uuid.uuid4().hex}{ext}"
+            stored_path = os.path.join(document_dir, stored_name)
+            uploaded.save(stored_path)
+            db.session.add(RegistrationRequestDocument(
+                registration_request_id=item.id,
+                document_type="authenticity_evidence",
+                original_filename=original,
+                file_path=os.path.relpath(stored_path, current_app.config["UPLOAD_FOLDER"]).replace(os.sep, "/"),
+            ))
 
         # Notify every active administrator so the request is visible in the
         # existing TracePass notification center without requiring email.

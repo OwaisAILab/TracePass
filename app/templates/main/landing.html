@@ -19,6 +19,15 @@
           <a class="tp-btn tp-btn-primary" href="{{ url_for('tracepass.verify_scanner') }}"><span>⌁</span> Verify a Product</a>
           <a class="tp-btn tp-btn-ghost" href="{{ url_for('auth.login') }}">Login/Register <span>↗</span></a>
         </div>
+
+        <form id="tp-live-verify" class="tp-live-verify" autocomplete="off">
+          <span class="tp-live-verify-label">Try it now — enter a passport code</span>
+          <div class="tp-live-verify-row">
+            <input id="tp-live-verify-input" type="text" placeholder="e.g. TP-8F3K92A1" required>
+            <button type="submit">Verify <span>→</span></button>
+          </div>
+        </form>
+
         <div class="tp-mini-proof"><span>✓ Multi-industry</span><span>✓ Supply-chain traceability</span><span>✓ QR verification</span></div>
       </div>
 
@@ -48,6 +57,15 @@
     <div class="container tp-command-inner">
       <span class="tp-command-label">TRACEPASS ENGINE</span>
       <span>IDENTITY</span><b>→</b><span>MATERIALS</span><b>→</b><span>SUPPLY CHAIN</span><b>→</b><span>EVIDENCE</span><b>→</b><span>COMPLIANCE</span><b>→</b><span>VERIFICATION</span>
+    </div>
+  </section>
+
+  <section class="tp-stats">
+    <div class="container tp-stats-grid">
+      <div class="tp-stat"><b data-count="{{ stats.products }}">0</b><span>Published Passports</span></div>
+      <div class="tp-stat"><b data-count="{{ stats.organizations }}">0</b><span>Network Organizations</span></div>
+      <div class="tp-stat"><b data-count="{{ stats.verifications }}">0</b><span>Verifications Logged</span></div>
+      <div class="tp-stat"><b data-count="{{ stats.industries }}">0</b><span>Industries Live</span></div>
     </div>
   </section>
 
@@ -109,6 +127,34 @@
     const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('tp-visible')}),{threshold:.12});
     document.querySelectorAll('.tp-industry-card,.tp-thread-item').forEach(x=>obs.observe(x));
   } else { document.querySelectorAll('.tp-industry-card,.tp-thread-item').forEach(x=>x.classList.add('tp-visible')); }
+
+  const verifyForm=document.getElementById('tp-live-verify');
+  if(verifyForm){
+    verifyForm.addEventListener('submit',function(e){
+      e.preventDefault();
+      const code=document.getElementById('tp-live-verify-input').value.trim();
+      if(code) window.location.href='/verify/'+encodeURIComponent(code);
+    });
+  }
+
+  const statEls=document.querySelectorAll('.tp-stat b[data-count]');
+  if(statEls.length){
+    const animateCount=(el)=>{
+      const target=parseInt(el.getAttribute('data-count'),10)||0;
+      const duration=1200; const start=performance.now();
+      const step=(now)=>{
+        const progress=Math.min((now-start)/duration,1);
+        const eased=1-Math.pow(1-progress,3);
+        el.textContent=Math.floor(eased*target).toLocaleString();
+        if(progress<1) requestAnimationFrame(step); else el.textContent=target.toLocaleString();
+      };
+      requestAnimationFrame(step);
+    };
+    if('IntersectionObserver' in window){
+      const statsObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){animateCount(e.target);statsObs.unobserve(e.target);}}),{threshold:.4});
+      statEls.forEach(el=>statsObs.observe(el));
+    } else { statEls.forEach(animateCount); }
+  }
 })();
 </script>
 {% endblock %}
