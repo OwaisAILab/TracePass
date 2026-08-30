@@ -21,12 +21,15 @@
           <a class="tp-btn tp-btn-ghost" href="{{ url_for('auth.login') }}">Login/Register <span>↗</span></a>
         </div>
 
+<<<<<<< HEAD
         <!--
           Inline "live demo" verify box: lets a visitor type a real passport
           code and jump directly to its public verification page without
           leaving the landing page first. Submission is handled by the
           small script at the bottom of this template (id: tp-live-verify).
         -->
+=======
+>>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
         <form id="tp-live-verify" class="tp-live-verify" autocomplete="off">
           <span class="tp-live-verify-label">Try it now — enter a passport code</span>
           <div class="tp-live-verify-row">
@@ -35,7 +38,10 @@
           </div>
         </form>
 
+<<<<<<< HEAD
         <!-- Short trust badges reinforcing the platform's core capabilities -->
+=======
+>>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
         <div class="tp-mini-proof"><span>✓ Multi-industry</span><span>✓ Supply-chain traceability</span><span>✓ QR verification</span></div>
       </div>
 
@@ -68,6 +74,7 @@
     </div>
   </section>
 
+<<<<<<< HEAD
   <!--
     Live stats bar: shows real counts pulled from the database by the
     index() view (see app/main/routes.py). The <b data-count="..."> value
@@ -75,6 +82,8 @@
     starting point for the count-up animation in the script at the bottom
     of this page, which reads data-count and animates up to it.
   -->
+=======
+>>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
   <section class="tp-stats">
     <div class="container tp-stats-grid">
       <div class="tp-stat"><b data-count="{{ stats.products }}">0</b><span>Published Passports</span></div>
@@ -143,6 +152,7 @@
     document.querySelectorAll('.tp-industry-card,.tp-thread-item').forEach(x=>obs.observe(x));
   } else { document.querySelectorAll('.tp-industry-card,.tp-thread-item').forEach(x=>x.classList.add('tp-visible')); }
 
+<<<<<<< HEAD
   // --- Live verify box (hero): submitting the mini form takes the visitor
   // straight to the real public verification page for the code they typed,
   // instead of just showing marketing copy about the feature.
@@ -168,6 +178,25 @@
       const step=(now)=>{
         const progress=Math.min((now-start)/duration,1);        // 0 -> 1 over the animation
         const eased=1-Math.pow(1-progress,3);                    // ease-out cubic curve
+=======
+  const verifyForm=document.getElementById('tp-live-verify');
+  if(verifyForm){
+    verifyForm.addEventListener('submit',function(e){
+      e.preventDefault();
+      const code=document.getElementById('tp-live-verify-input').value.trim();
+      if(code) window.location.href='/verify/'+encodeURIComponent(code);
+    });
+  }
+
+  const statEls=document.querySelectorAll('.tp-stat b[data-count]');
+  if(statEls.length){
+    const animateCount=(el)=>{
+      const target=parseInt(el.getAttribute('data-count'),10)||0;
+      const duration=1200; const start=performance.now();
+      const step=(now)=>{
+        const progress=Math.min((now-start)/duration,1);
+        const eased=1-Math.pow(1-progress,3);
+>>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
         el.textContent=Math.floor(eased*target).toLocaleString();
         if(progress<1) requestAnimationFrame(step); else el.textContent=target.toLocaleString();
       };
