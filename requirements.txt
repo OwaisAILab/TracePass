@@ -1,14 +1,14 @@
-Flask==3.0.3
-Flask-SQLAlchemy==3.1.1
-Flask-Login==0.6.3
-Flask-WTF==1.2.1
-Flask-Migrate==4.0.7
-email-validator==2.2.0
-python-dotenv==1.0.1
-Werkzeug==3.0.3
-qrcode==7.4.2
-Pillow==10.4.0
-reportlab==4.2.2
-psycopg[binary]==3.2.1
-gunicorn==23.0.0
-pytest==8.3.3
+Flask==3.0.3 # The main Python web framework used to build TracePass and handle web pages, routes, and requests.
+Flask-SQLAlchemy==3.1.1 # Integration between Flask and SQLAlchemy for database management.
+Flask-Login==0.6.3 # User session management and authentication management for Flask applications.
+Flask-WTF==1.2.1 # Provides source Forms with validation and CSRF protection.
+Flask-Migrate==4.0.7 # Manages database schema changes through migration files without manually recreating the database.
+email-validator==2.2.0 # Email address validation library.
+python-dotenv==1.0.1 # Library for loading secret environment variables from a .env file.
+Werkzeug==3.0.3 # Provides important Flask utilities such as password hashing, security functions, and request/response handling.
+qrcode==7.4.2 # QR code generation library.
+Pillow==10.4.0 # Python Imaging Library for image processing.
+reportlab==4.2.2 # Library for generating PDF documents.
+psycopg[binary]==3.2.1 # Allows the application to connect to a PostgreSQL database.
+gunicorn==23.0.0 # WSGI HTTP server for serving Flask applications.
+pytest==8.3.3 # Used to automatically test the application's functions and make sure changes don't break existing features.

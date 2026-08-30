@@ -15,10 +15,27 @@
         <div class="tp-live-pill"><i></i> DIGITAL PRODUCT PASSPORT PLATFORM <span>LIVE</span></div>
         <h1>Every product.<br><span>One verifiable</span><br><strong>story.</strong></h1>
         <p class="tp-lead">TracePass transforms physical products into <b>trusted digital identities</b> — connecting materials, suppliers, manufacturing, certificates, compliance and lifecycle data in one intelligent passport.</p>
+        <!-- Primary CTAs: go straight to the full verify scanner page, or to login/register -->
         <div class="tp-hero-actions">
           <a class="tp-btn tp-btn-primary" href="{{ url_for('tracepass.verify_scanner') }}"><span>⌁</span> Verify a Product</a>
           <a class="tp-btn tp-btn-ghost" href="{{ url_for('auth.login') }}">Login/Register <span>↗</span></a>
         </div>
+
+        <!--
+          Inline "live demo" verify box: lets a visitor type a real passport
+          code and jump directly to its public verification page without
+          leaving the landing page first. Submission is handled by the
+          small script at the bottom of this template (id: tp-live-verify).
+        -->
+        <form id="tp-live-verify" class="tp-live-verify" autocomplete="off">
+          <span class="tp-live-verify-label">Try it now — enter a passport code</span>
+          <div class="tp-live-verify-row">
+            <input id="tp-live-verify-input" type="text" placeholder="e.g. TP-8F3K92A1" required>
+            <button type="submit">Verify <span>→</span></button>
+          </div>
+        </form>
+
+        <!-- Short trust badges reinforcing the platform's core capabilities -->
         <div class="tp-mini-proof"><span>✓ Multi-industry</span><span>✓ Supply-chain traceability</span><span>✓ QR verification</span></div>
       </div>
 
@@ -48,6 +65,22 @@
     <div class="container tp-command-inner">
       <span class="tp-command-label">TRACEPASS ENGINE</span>
       <span>IDENTITY</span><b>→</b><span>MATERIALS</span><b>→</b><span>SUPPLY CHAIN</span><b>→</b><span>EVIDENCE</span><b>→</b><span>COMPLIANCE</span><b>→</b><span>VERIFICATION</span>
+    </div>
+  </section>
+
+  <!--
+    Live stats bar: shows real counts pulled from the database by the
+    index() view (see app/main/routes.py). The <b data-count="..."> value
+    is the real number rendered by Jinja; the visible "0" is just the
+    starting point for the count-up animation in the script at the bottom
+    of this page, which reads data-count and animates up to it.
+  -->
+  <section class="tp-stats">
+    <div class="container tp-stats-grid">
+      <div class="tp-stat"><b data-count="{{ stats.products }}">0</b><span>Published Passports</span></div>
+      <div class="tp-stat"><b data-count="{{ stats.organizations }}">0</b><span>Network Organizations</span></div>
+      <div class="tp-stat"><b data-count="{{ stats.verifications }}">0</b><span>Verifications Logged</span></div>
+      <div class="tp-stat"><b data-count="{{ stats.industries }}">0</b><span>Industries Live</span></div>
     </div>
   </section>
 
@@ -109,6 +142,42 @@
     const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('tp-visible')}),{threshold:.12});
     document.querySelectorAll('.tp-industry-card,.tp-thread-item').forEach(x=>obs.observe(x));
   } else { document.querySelectorAll('.tp-industry-card,.tp-thread-item').forEach(x=>x.classList.add('tp-visible')); }
+
+  // --- Live verify box (hero): submitting the mini form takes the visitor
+  // straight to the real public verification page for the code they typed,
+  // instead of just showing marketing copy about the feature.
+  const verifyForm=document.getElementById('tp-live-verify');
+  if(verifyForm){
+    verifyForm.addEventListener('submit',function(e){
+      e.preventDefault(); // stop the normal page reload/GET submit
+      const code=document.getElementById('tp-live-verify-input').value.trim();
+      if(code) window.location.href='/verify/'+encodeURIComponent(code); // reuse the existing verify route
+    });
+  }
+
+  // --- Stats bar count-up animation: reads the real number Flask put in
+  // each data-count attribute and animates the on-screen "0" up to it,
+  // using an ease-out curve so it slows down near the final value. Runs
+  // once per element, only after it scrolls into view (IntersectionObserver),
+  // so the animation is visible instead of finishing off-screen.
+  const statEls=document.querySelectorAll('.tp-stat b[data-count]');
+  if(statEls.length){
+    const animateCount=(el)=>{
+      const target=parseInt(el.getAttribute('data-count'),10)||0; // real value from the server
+      const duration=1200; const start=performance.now();
+      const step=(now)=>{
+        const progress=Math.min((now-start)/duration,1);        // 0 -> 1 over the animation
+        const eased=1-Math.pow(1-progress,3);                    // ease-out cubic curve
+        el.textContent=Math.floor(eased*target).toLocaleString();
+        if(progress<1) requestAnimationFrame(step); else el.textContent=target.toLocaleString();
+      };
+      requestAnimationFrame(step);
+    };
+    if('IntersectionObserver' in window){
+      const statsObs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){animateCount(e.target);statsObs.unobserve(e.target);}}),{threshold:.4});
+      statEls.forEach(el=>statsObs.observe(el));
+    } else { statEls.forEach(animateCount); }
+  }
 })();
 </script>
 {% endblock %}

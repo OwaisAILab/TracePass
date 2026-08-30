@@ -17,7 +17,7 @@
       {% endwith %}
 
       <div class="card shadow-sm border-0 p-4">
-        <form method="POST" novalidate>
+        <form method="POST" enctype="multipart/form-data" novalidate>
           {{ form.hidden_tag() }}
           <h5 class="mb-3">Applicant</h5>
           <div class="row g-3">
@@ -43,6 +43,12 @@
             <div class="col-md-6">{{ form.password.label(class="form-label") }}{{ form.password(class="form-control", autocomplete="new-password") }}{% for e in form.password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
             <div class="col-md-6">{{ form.confirm_password.label(class="form-label") }}{{ form.confirm_password(class="form-control", autocomplete="new-password") }}{% for e in form.confirm_password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
             <div class="col-12">{{ form.reason.label(class="form-label") }}{{ form.reason(class="form-control", rows=4, placeholder="Tell us why your organization needs TracePass access.") }}</div>
+            <div class="col-12">
+              {{ form.authenticity_documents.label(class="form-label") }}
+              {{ form.authenticity_documents(class="form-control", multiple=true, accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx") }}
+              <div class="form-text">Required: upload at least one official authenticity document, such as company registration, trade/license certificate, tax registration, professional certification, or other proof of organizational identity. Multiple documents may be selected.</div>
+              {% for e in form.authenticity_documents.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
           </div>
 
           <div class="alert alert-info mt-4 mb-4">Submitting this form does not immediately create an account. An administrator will review the request and verify the organization first.</div>

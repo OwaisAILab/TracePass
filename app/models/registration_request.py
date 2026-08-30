@@ -55,6 +55,7 @@ class RegistrationRequest(db.Model):
     reviewed_by = db.relationship("User", foreign_keys=[reviewed_by_id])
     created_user = db.relationship("User", foreign_keys=[created_user_id])
     organization = db.relationship("Organization", foreign_keys=[organization_id])
+    authenticity_documents = db.relationship("RegistrationRequestDocument", back_populates="registration_request", cascade="all, delete-orphan", order_by="RegistrationRequestDocument.uploaded_at")
 
     def set_password(self, password: str) -> None:
         """Hash the requested password; never store the plaintext password."""

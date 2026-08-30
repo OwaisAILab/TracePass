@@ -113,6 +113,11 @@ class RegistrationRequestForm(FlaskForm):
         validators=[DataRequired(), EqualTo("password", message="Passwords must match.")],
     )
     reason = TextAreaField("Reason for joining TracePass", validators=[Optional()])
+    authenticity_documents = FileField(
+        "Authenticity / Registration Documents",
+        validators=[FileRequired("At least one authenticity document is required."), FileAllowed(["pdf", "png", "jpg", "jpeg", "docx", "xlsx"], "PDF, image, DOCX or XLSX only.")],
+        description="Upload at least one official registration, license, tax, certification or other authenticity document. You may select multiple files.",
+    )
     submit = SubmitField("Submit Account Request")
 
     def validate_email(self, field):

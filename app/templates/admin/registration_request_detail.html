@@ -10,6 +10,18 @@
       <hr><h5>Organization</h5>
       <div class="row"><div class="col-md-6"><strong>Name</strong><p>{{ item.organization_name }}</p></div><div class="col-md-6"><strong>Registration No.</strong><p>{{ item.registration_no or '—' }}</p></div><div class="col-md-6"><strong>Email</strong><p>{{ item.organization_email or '—' }}</p></div><div class="col-md-6"><strong>Phone</strong><p>{{ item.organization_phone or '—' }}</p></div><div class="col-12"><strong>Address</strong><p>{{ item.address or '—' }}</p></div></div>
       <hr><h5>Reason</h5><p class="mb-0">{{ item.reason or 'No reason supplied.' }}</p>
+      <hr><h5>Authenticity Documents</h5>
+      <p class="text-muted">These documents are supplied by the applicant for organizational verification before account approval.</p>
+      {% if item.authenticity_documents %}
+        <div class="list-group">
+        {% for doc in item.authenticity_documents %}
+          <div class="list-group-item d-flex justify-content-between align-items-center">
+            <div><strong>{{ doc.original_filename }}</strong><br><small class="text-muted">Submitted {{ doc.uploaded_at.strftime('%d %b %Y %H:%M') }}</small></div>
+            <a class="btn btn-sm btn-outline-primary" href="{{ url_for('admin.download_registration_request_document', document_id=doc.id) }}">Open / Download</a>
+          </div>
+        {% endfor %}
+        </div>
+      {% else %}<div class="alert alert-warning">No authenticity evidence was submitted.</div>{% endif %}
     </div>
 
     {% if item.status == 'pending' %}
