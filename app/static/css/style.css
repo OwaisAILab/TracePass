@@ -1394,11 +1394,9 @@ html {
 .tp-mini-proof{display:flex;gap:20px;flex-wrap:wrap;color:#70788c;font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
 .tp-mini-proof span:first-child{color:#9cfbff}
 
-<<<<<<< HEAD
 /* Inline hero "live demo" verify box — input + button that submits via the
    JS handler in landing.html and redirects to the real /verify/<code> route */
-=======
->>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
+
 .tp-live-verify{margin:0 0 26px;max-width:440px;padding:16px 18px;border-radius:14px;background:rgba(88,246,255,.05);border:1px solid rgba(88,246,255,.18);backdrop-filter:blur(6px)}
 .tp-live-verify-label{display:block;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#9cfbff;margin-bottom:10px}
 .tp-live-verify-row{display:flex;gap:8px}
@@ -1408,21 +1406,18 @@ html {
 .tp-live-verify-row button{display:flex;align-items:center;gap:6px;background:linear-gradient(135deg,#58f6ff,#4f7cff);color:#04060c;border:none;border-radius:9px;padding:0 18px;font-weight:800;font-size:13px;letter-spacing:.02em;cursor:pointer;transition:transform .2s,box-shadow .2s;white-space:nowrap}
 .tp-live-verify-row button:hover{transform:translateY(-1px);box-shadow:0 6px 18px rgba(88,246,255,.35)}
 
-<<<<<<< HEAD
 /* Live stats bar — grid of 4 counters fed by real numbers from index()
    in app/main/routes.py; the numbers themselves animate via JS, this
    block only handles layout/colour of the section and each stat cell */
-=======
->>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
+
 .tp-stats{background:#080b16;border-top:1px solid rgba(255,255,255,.06);border-bottom:1px solid rgba(255,255,255,.06);padding:48px 0}
 .tp-stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center}
 .tp-stat b{display:block;font-size:44px;font-weight:800;background:linear-gradient(135deg,#58f6ff,#8b5cf6);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;letter-spacing:-.01em}
 .tp-stat span{display:block;margin-top:8px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#70788c}
-<<<<<<< HEAD
 @media(max-width:768px){.tp-stats-grid{grid-template-columns:repeat(2,1fr);gap:32px}} /* 2x2 layout on small screens */
-=======
+
 @media(max-width:768px){.tp-stats-grid{grid-template-columns:repeat(2,1fr);gap:32px}}
->>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
+
 
 .tp-hero-stage{height:620px;position:relative;perspective:1000px}
 .tp-passport{position:absolute;width:330px;height:455px;left:50%;top:50%;transform:translate(-50%,-50%);border-radius:22px;padding:25px;background:linear-gradient(145deg,#10172b,#070a14 65%);border:1px solid rgba(130,190,255,.25);box-shadow:0 45px 100px rgba(0,0,0,.55),0 0 60px rgba(79,124,255,.14),inset 0 0 50px rgba(88,246,255,.025);transition:transform .12s ease-out;transform-style:preserve-3d;z-index:4}

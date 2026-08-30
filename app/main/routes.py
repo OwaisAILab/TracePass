@@ -28,23 +28,14 @@ def index():
     """
     industries = Industry.query.filter_by(is_active=True).order_by(Industry.name).all()
     stats = {
-<<<<<<< HEAD
-<<<<<<< HEAD
         "products": Product.query.filter_by(status=STATUS_PUBLISHED).count(),        # only published passports count as "live"
         "organizations": Organization.query.count(),                                  # total organizations on the network
         "verifications": VerificationLog.query.count(),                               # total verification scans ever logged
         "industries": len(industries),                                                # number of active industries shown above
-=======
-=======
->>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
         "products": Product.query.filter_by(status=STATUS_PUBLISHED).count(),
         "organizations": Organization.query.count(),
         "verifications": VerificationLog.query.count(),
         "industries": len(industries),
-<<<<<<< HEAD
->>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
-=======
->>>>>>> b277ae14ac72d7ae23cdd09d309d60db7b253ae1
     }
     return render_template("main/landing.html", industries=industries, stats=stats)
 
