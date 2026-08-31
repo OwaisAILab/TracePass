@@ -130,11 +130,7 @@ See `docs/PHASE6.md` for API and deployment details.
 9. Export the reporting summary CSV.
 10. Open the public passport through the QR/public verification link.
 
-## Final Release Scope
 
-TracePass is a general Digital Product Passport platform. The online storefront, shopping cart, checkout and customer e-commerce order modules are intentionally removed from this release. Procurement purchase orders between supply-chain organizations remain because they are part of traceability and sourcing workflows.
-
-Core verification flow: product → evidence → review → compliance → publish → QR scan → public passport.
 
 ## Presentation demo dataset
 

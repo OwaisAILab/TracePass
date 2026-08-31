@@ -15,18 +15,10 @@
         <div class="tp-live-pill"><i></i> DIGITAL PRODUCT PASSPORT PLATFORM <span>LIVE</span></div>
         <h1>Every product.<br><span>One verifiable</span><br><strong>story.</strong></h1>
         <p class="tp-lead">TracePass transforms physical products into <b>trusted digital identities</b> — connecting materials, suppliers, manufacturing, certificates, compliance and lifecycle data in one intelligent passport.</p>
-        <!-- Primary CTAs: go straight to the full verify scanner page, or to login/register -->
         <div class="tp-hero-actions">
           <a class="tp-btn tp-btn-primary" href="{{ url_for('tracepass.verify_scanner') }}"><span>⌁</span> Verify a Product</a>
           <a class="tp-btn tp-btn-ghost" href="{{ url_for('auth.login') }}">Login/Register <span>↗</span></a>
         </div>
-
-        <!--
-          Inline "live demo" verify box: lets a visitor type a real passport
-          code and jump directly to its public verification page without
-          leaving the landing page first. Submission is handled by the
-          small script at the bottom of this template (id: tp-live-verify).
-        -->
         <form id="tp-live-verify" class="tp-live-verify" autocomplete="off">
           <span class="tp-live-verify-label">Try it now — enter a passport code</span>
           <div class="tp-live-verify-row">
@@ -34,8 +26,6 @@
             <button type="submit">Verify <span>→</span></button>
           </div>
         </form>
-
-        <!-- Short trust badges reinforcing the platform's core capabilities -->
         <div class="tp-mini-proof"><span>✓ Multi-industry</span><span>✓ Supply-chain traceability</span><span>✓ QR verification</span></div>
       </div>
 
@@ -68,13 +58,6 @@
     </div>
   </section>
 
-  <!--
-    Live stats bar: shows real counts pulled from the database by the
-    index() view (see app/main/routes.py). The <b data-count="..."> value
-    is the real number rendered by Jinja; the visible "0" is just the
-    starting point for the count-up animation in the script at the bottom
-    of this page, which reads data-count and animates up to it.
-  -->
   <section class="tp-stats">
     <div class="container tp-stats-grid">
       <div class="tp-stat"><b data-count="{{ stats.products }}">0</b><span>Published Passports</span></div>
@@ -84,23 +67,35 @@
     </div>
   </section>
 
+  <!-- ============================================================ -->
+  <!-- REPLACED: tp-platform section with tp-at-industries structure -->
+  <!-- ============================================================ -->
   <section class="tp-platform" id="platform">
     <div class="container">
       <div class="tp-section-head">
-        <div><div class="tp-kicker">01 / THE PLATFORM</div><h2>One passport.<br><em>Every industry.</em></h2></div>
-        <p>TracePass is a configurable product intelligence layer for <strong>any product</strong> — connecting identity, evidence, traceability and compliance without being tied to one industry.</p>
+        <div><div class="tp-kicker">01 / INDUSTRIES</div><h2>Built for<br><em>every industry.</em></h2></div>
+        <p>Different products need different passport attributes. TracePass keeps the core identity consistent while industries, categories and templates define what matters.</p>
       </div>
-      <div class="tp-industry-grid">
+
+      <!-- Industry cards now use the full-width grid layout from the second file -->
+      <div class="tp-industry-stage">
         {% for industry in industries %}
-        <div class="tp-industry-card has-image">
-          <div class="tp-industry-image" style="background-image:url('{{ industry.image_url }}')"><div class="tp-industry-image-shade"></div><span class="tp-industry-index">{{ '%02d'|format(loop.index) }}</span></div>
-          <div class="tp-industry-body"><h3>{{ industry.name }}</h3><p>{{ industry.description or 'Identity · traceability · compliance' }}</p></div><div class="tp-line"></div>
-        </div>
+        <article class="tp-industry-card tp-card-expanded" data-index="{{ '%02d'|format(loop.index) }}">
+          <div class="tp-industry-image" style="background-image:url('{{ industry.image_url }}')"></div>
+          <div class="tp-industry-overlay"></div>
+          <div class="tp-industry-number">{{ '%02d'|format(loop.index) }}</div>
+          <div class="tp-industry-copy"><span>TRACEABLE INDUSTRY</span><h3>{{ industry.name }}</h3><p>{{ industry.description or 'Product identity · evidence · compliance · lifecycle' }}</p><b>OPEN PASSPORT MODEL ↗</b></div>
+        </article>
+        {% else %}
+        <div class="tp-empty-industry">No industries are configured yet. Add industries from Administration and they will appear here automatically.</div>
         {% endfor %}
-        <div class="tp-industry-card tp-add-card"><span class="tp-index">∞</span><div class="tp-industry-icon">+</div><h3>Your Industry</h3><p>Configurable categories and product templates</p><div class="tp-line"></div></div>
       </div>
+      <div class="tp-industry-note"><span>∞</span> INDUSTRY CONFIGURATION IS ADMIN CONTROLLED — NEW INDUSTRIES CAN BE ADDED WITHOUT CHANGING THE CORE PASSPORT ENGINE.</div>
     </div>
   </section>
+  <!-- ============================================================ -->
+  <!-- END OF REPLACED SECTION -->
+  <!-- ============================================================ -->
 
   <section class="tp-story">
     <div class="container">
@@ -125,12 +120,15 @@
   </section>
 
   <section class="tp-contact-cta" id="contact"><div class="container"><div><div class="tp-kicker">04 / CONTACT US</div><h2>Join the TracePass network.</h2><p>Manufacturers, suppliers, distributors, retailers and auditors can request organizational access. An administrator verifies the organization before activating the account.</p></div><a class="tp-btn tp-btn-primary" href="{{ url_for('main.contact') }}">Request an Account ↗</a></div></section>
+
   <section class="tp-final">
     <div class="tp-final-grid"></div>
     <div class="container tp-final-content"><div class="tp-kicker">TRACEPASS / DIGITAL PRODUCT PASSPORT</div><h2>The product is physical.<br><span>The trust is digital.</span></h2><p>Build, trace, prove and verify products with one connected digital passport.</p><div class="tp-hero-actions"><a class="tp-btn tp-btn-primary" href="{{ url_for('auth.login') }}">Enter TracePass ↗</a><a class="tp-btn tp-btn-ghost light" href="{{ url_for('tracepass.verify_scanner') }}">Verify a product</a></div></div>
   </section>
+
   <footer class="tp-wow-footer"><div class="container"><div class="brand-mark light"><span>TP</span> TRACE<span>PASS</span></div><p>Digital Product Passport · Supply Chain · Compliance · Verification</p><small>Industry-independent product traceability and verification platform.</small><div class="mt-3"><a href="{{ url_for('main.contact') }}" style="color:inherit;text-decoration:none;font-weight:700;">Contact Us · Request an Account</a></div></div></footer>
 </div>
+
 <script>
 (function(){
   const stage=document.getElementById('passportStage'), card=document.getElementById('passportCard');
@@ -140,34 +138,26 @@
   }
   if('IntersectionObserver' in window){
     const obs=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)e.target.classList.add('tp-visible')}),{threshold:.12});
-    document.querySelectorAll('.tp-industry-card,.tp-thread-item').forEach(x=>obs.observe(x));
-  } else { document.querySelectorAll('.tp-industry-card,.tp-thread-item').forEach(x=>x.classList.add('tp-visible')); }
+    document.querySelectorAll('.tp-industry-card, .tp-industry-card-expanded, .tp-thread-item').forEach(x=>obs.observe(x));
+  } else { document.querySelectorAll('.tp-industry-card, .tp-industry-card-expanded, .tp-thread-item').forEach(x=>x.classList.add('tp-visible')); }
 
-  // --- Live verify box (hero): submitting the mini form takes the visitor
-  // straight to the real public verification page for the code they typed,
-  // instead of just showing marketing copy about the feature.
   const verifyForm=document.getElementById('tp-live-verify');
   if(verifyForm){
     verifyForm.addEventListener('submit',function(e){
-      e.preventDefault(); // stop the normal page reload/GET submit
+      e.preventDefault();
       const code=document.getElementById('tp-live-verify-input').value.trim();
-      if(code) window.location.href='/verify/'+encodeURIComponent(code); // reuse the existing verify route
+      if(code) window.location.href='/verify/'+encodeURIComponent(code);
     });
   }
 
-  // --- Stats bar count-up animation: reads the real number Flask put in
-  // each data-count attribute and animates the on-screen "0" up to it,
-  // using an ease-out curve so it slows down near the final value. Runs
-  // once per element, only after it scrolls into view (IntersectionObserver),
-  // so the animation is visible instead of finishing off-screen.
   const statEls=document.querySelectorAll('.tp-stat b[data-count]');
   if(statEls.length){
     const animateCount=(el)=>{
-      const target=parseInt(el.getAttribute('data-count'),10)||0; // real value from the server
+      const target=parseInt(el.getAttribute('data-count'),10)||0;
       const duration=1200; const start=performance.now();
       const step=(now)=>{
-        const progress=Math.min((now-start)/duration,1);        // 0 -> 1 over the animation
-        const eased=1-Math.pow(1-progress,3);                    // ease-out cubic curve
+        const progress=Math.min((now-start)/duration,1);
+        const eased=1-Math.pow(1-progress,3);
         el.textContent=Math.floor(eased*target).toLocaleString();
         if(progress<1) requestAnimationFrame(step); else el.textContent=target.toLocaleString();
       };
