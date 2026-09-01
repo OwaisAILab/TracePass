@@ -1704,7 +1704,8 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 
 .tp-sidebar-close { border:0; background:transparent; color:#d1d5db; font-size:27px; line-height:1; cursor:pointer; padding:4px 8px; border-radius:8px; }
 .tp-sidebar-close:hover { background:rgba(255,255,255,.08); color:#fff; }
-.tp-content { padding-bottom:40px; }
+.tp-content { padding:28px 32px 48px; max-width:1440px; margin:0 auto; }
+@media (max-width:768px){ .tp-content { padding:18px 16px 32px; } }
 
 /* Overlay appears on desktop and mobile. */
 .tp-sidebar-backdrop {
@@ -1734,3 +1735,620 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 
 /* Public landing-page navigation and Contact Us call-to-action. */
 .tp-public-nav{position:absolute;top:0;left:0;right:0;z-index:20;padding:22px 0;color:#fff}.tp-public-nav .container{display:flex;align-items:center;justify-content:space-between}.tp-public-brand{font-weight:900;letter-spacing:.12em;color:#fff;text-decoration:none}.tp-public-brand span{opacity:.65}.tp-public-nav nav{display:flex;align-items:center;gap:24px}.tp-public-nav nav a{color:rgba(255,255,255,.82);text-decoration:none;font-size:12px;font-weight:700}.tp-public-nav nav a:hover{color:#fff}.tp-public-login{padding:9px 16px;border:1px solid rgba(255,255,255,.25);border-radius:999px}.tp-contact-cta{padding:85px 0;background:#f6f7fb}.tp-contact-cta .container{display:flex;align-items:center;justify-content:space-between;gap:40px}.tp-contact-cta h2{font-size:clamp(32px,4vw,54px);margin:8px 0 12px}.tp-contact-cta p{max-width:720px;color:#5b6472;margin:0}.tp-contact-cta .tp-btn{flex:0 0 auto}@media(max-width:768px){.tp-public-nav nav{gap:10px}.tp-public-nav nav a:not(.tp-public-login){display:none}.tp-contact-cta .container{flex-direction:column;align-items:flex-start}}
+
+/* ============================================================
+   Public Product Passport (QR /verify result)
+   ============================================================ */
+.pp-body {
+  margin: 0;
+  min-height: 100vh;
+  font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
+  background: linear-gradient(160deg, #f5f7fa 0%, #e8ecf1 55%, #eef1f6 100%);
+  color: #1f2937;
+  -webkit-font-smoothing: antialiased;
+}
+
+.pp-shell {
+  max-width: 720px;
+  margin: 0 auto;
+  padding: 28px 20px 48px;
+}
+
+.pp-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 22px;
+}
+
+.pp-brand {
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.12em;
+  text-decoration: none;
+  color: #1a1a2e;
+}
+.pp-brand span {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.pp-verified-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 999px;
+  background: rgba(16, 185, 129, 0.1);
+  color: #047857;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.pp-verified-pill i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+}
+
+/* Hero card */
+.pp-hero {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 22px;
+  background: #fff;
+  border-radius: 20px;
+  padding: 22px;
+  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
+  border: 1px solid rgba(15, 23, 42, 0.04);
+  margin-bottom: 18px;
+}
+
+.pp-hero-media {
+  border-radius: 14px;
+  overflow: hidden;
+  background: linear-gradient(145deg, #eef2ff, #f8fafc);
+  min-height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pp-hero-media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+.pp-hero-placeholder {
+  width: 100%;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.14em;
+  color: #64748b;
+}
+
+.pp-meta-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 10px;
+}
+.pp-chip {
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.pp-title {
+  margin: 0 0 12px;
+  font-size: clamp(1.4rem, 2.5vw, 1.85rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+  color: #0f172a;
+}
+
+.pp-code-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+.pp-code-label {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+.pp-code {
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #4338ca;
+  background: #eef2ff;
+  padding: 4px 10px;
+  border-radius: 8px;
+}
+
+.pp-badge {
+  display: inline-block;
+  padding: 5px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 14px;
+}
+.pp-badge-compliant {
+  background: rgba(16, 185, 129, 0.12);
+  color: #047857;
+}
+.pp-badge-non_compliant {
+  background: rgba(239, 68, 68, 0.12);
+  color: #b91c1c;
+}
+.pp-badge-pending {
+  background: rgba(245, 158, 11, 0.15);
+  color: #b45309;
+}
+
+.pp-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 16px;
+  margin: 0 0 12px;
+}
+.pp-facts dt {
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin: 0;
+}
+.pp-facts dd {
+  margin: 2px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: #1e293b;
+}
+
+.pp-desc {
+  margin: 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #64748b;
+}
+
+/* Sections */
+.pp-section {
+  background: #fff;
+  border-radius: 18px;
+  padding: 20px 22px;
+  margin-bottom: 14px;
+  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.05);
+  border: 1px solid rgba(15, 23, 42, 0.04);
+}
+
+.pp-section-title {
+  margin: 0 0 16px;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #64748b;
+}
+
+.pp-kv-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+.pp-kv {
+  padding: 12px 14px;
+  background: #f8fafc;
+  border-radius: 12px;
+}
+.pp-kv-key {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  margin-bottom: 4px;
+}
+.pp-kv-val {
+  font-size: 14px;
+  font-weight: 600;
+  color: #0f172a;
+}
+
+/* Materials */
+.pp-materials { display: flex; flex-direction: column; gap: 14px; }
+.pp-material-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.pp-material-head strong { color: #0f172a; }
+.pp-material-head span { color: #64748b; font-size: 12px; font-weight: 600; }
+.pp-bar-track {
+  height: 8px;
+  border-radius: 999px;
+  background: #e2e8f0;
+  overflow: hidden;
+}
+.pp-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #667eea, #764ba2);
+}
+.pp-material-pct {
+  margin-top: 4px;
+  font-size: 12px;
+  font-weight: 700;
+  color: #4338ca;
+  text-align: right;
+}
+
+/* Tables */
+.pp-table-wrap { overflow-x: auto; }
+.pp-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+}
+.pp-table th {
+  text-align: left;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  padding: 0 10px 10px 0;
+  border-bottom: 1px solid #e2e8f0;
+}
+.pp-table td {
+  padding: 12px 10px 12px 0;
+  border-bottom: 1px solid #f1f5f9;
+  color: #334155;
+  vertical-align: top;
+}
+.pp-table tr:last-child td { border-bottom: none; }
+
+/* Timeline */
+.pp-timeline {
+  list-style: none;
+  margin: 0;
+  padding: 0 0 0 6px;
+}
+.pp-timeline-item {
+  position: relative;
+  padding: 0 0 18px 22px;
+  border-left: 2px solid #e2e8f0;
+}
+.pp-timeline-item:last-child {
+  padding-bottom: 0;
+  border-left-color: transparent;
+}
+.pp-timeline-dot {
+  position: absolute;
+  left: -6px;
+  top: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+}
+.pp-dot-life {
+  background: linear-gradient(135deg, #10b981, #059669);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+}
+.pp-timeline-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 4px;
+}
+.pp-timeline-top strong {
+  font-size: 14px;
+  color: #0f172a;
+}
+.pp-timeline-top time {
+  font-size: 12px;
+  font-weight: 600;
+  color: #94a3b8;
+}
+.pp-timeline-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 14px;
+  font-size: 12px;
+  color: #64748b;
+  font-weight: 500;
+}
+.pp-timeline-notes {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #64748b;
+  line-height: 1.45;
+}
+
+.pp-sustain {
+  white-space: pre-wrap;
+  font-size: 13px;
+  line-height: 1.55;
+  color: #334155;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 12px;
+  padding: 14px 16px;
+}
+.pp-sustain-notes { margin-top: 14px; display:flex; flex-direction:column; gap:8px; }
+.pp-sustain-notes p { margin:0; font-size:13px; line-height:1.6; color:#475569; }
+.pp-sustain-notes strong { color:#0f172a; }
+
+.pp-foot {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 12px;
+  color: #94a3b8;
+  font-weight: 500;
+}
+
+@media (max-width: 640px) {
+  .pp-hero { grid-template-columns: 1fr; }
+  .pp-hero-media { min-height: 180px; }
+  .pp-facts,
+  .pp-kv-grid { grid-template-columns: 1fr; }
+  .pp-shell { padding: 18px 14px 36px; }
+}
+/* ============================================================
+   Interactive 3D product stage (public passport)
+   ============================================================ */
+.pp-hero-media {
+  perspective: 900px;
+  background: transparent;
+  min-height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 14px;
+  overflow: visible;
+}
+
+.pp-stage {
+  position: relative;
+  width: 100%;
+  height: 260px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: none;
+}
+.pp-stage.is-dragging { cursor: grabbing; }
+
+.pp-stage-glow {
+  position: absolute;
+  width: 70%;
+  height: 40%;
+  bottom: 18%;
+  left: 15%;
+  background: radial-gradient(ellipse, rgba(102,126,234,.35), transparent 70%);
+  filter: blur(18px);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.pp-product-3d {
+  position: relative;
+  width: 170px;
+  height: 210px;
+  transform-style: preserve-3d;
+  transition: transform 0.08s ease-out;
+  z-index: 1;
+}
+
+.pp-product-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #fff;
+  box-shadow:
+    0 20px 50px rgba(15, 23, 42, 0.25),
+    0 0 0 1px rgba(15, 23, 42, 0.06);
+}
+.pp-product-face img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  pointer-events: none;
+}
+
+.pp-product-face-back {
+  transform: rotateY(180deg);
+  background: linear-gradient(145deg, #10172b, #1a1a2e 70%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.pp-back-panel {
+  text-align: center;
+  color: #fff;
+  padding: 16px;
+}
+.pp-back-brand {
+  display: block;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: #8b9cf8;
+  margin-bottom: 14px;
+}
+.pp-back-panel code {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  color: #e0e7ff;
+  background: rgba(255,255,255,0.08);
+  padding: 8px 10px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+.pp-back-panel small {
+  font-size: 9px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #94a3b8;
+}
+
+.pp-stage-hint {
+  position: absolute;
+  bottom: 6px;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #94a3b8;
+  pointer-events: none;
+  z-index: 2;
+}
+
+@media (max-width: 640px) {
+  .pp-stage { height: 240px; }
+  .pp-product-3d { width: 150px; height: 190px; }
+}
+/* ================================================================
+   ACTIVE-THEORY-STYLE INTERACTION LAYER
+   Custom cursor, magnetic buttons (existing JS, styling added here),
+   kinetic hero headline, infinite marquee, and a hover-reveal
+   treatment for the industry/case-study grid.
+   ================================================================ */
+
+/* --- Custom cursor: small ring that follows the pointer (see JS lerp
+   loop), grows and shows a label over interactive elements. Hidden
+   entirely on touch devices — see the @media guard further below,
+   which also restores the native cursor there. */
+.tp-cursor{
+  position:fixed; top:0; left:0; width:30px; height:30px; margin:-15px 0 0 -15px;
+  border-radius:50%; border:1px solid rgba(88,246,255,.6);
+  display:flex; align-items:center; justify-content:center; gap:6px;
+  pointer-events:none; z-index:9999; mix-blend-mode:difference;
+  transition:width .28s cubic-bezier(.16,1,.3,1), height .28s cubic-bezier(.16,1,.3,1),
+             margin .28s cubic-bezier(.16,1,.3,1), background .28s, border-color .28s;
+  will-change:transform;
+}
+.tp-cursor::before{content:'';position:absolute;width:4px;height:4px;border-radius:50%;background:#58f6ff;transition:opacity .2s}
+.tp-cursor-hover{width:88px;height:88px;margin:-44px 0 0 -44px;background:rgba(88,246,255,.06);border-color:rgba(88,246,255,.9)}
+.tp-cursor-hover::before{opacity:0}
+.tp-cursor-label{font-size:9px;font-weight:800;letter-spacing:.12em;color:#eafeff;text-transform:uppercase;opacity:0;transition:opacity .2s .05s;text-align:center}
+.tp-cursor-hover .tp-cursor-label{opacity:1}
+/* Only takes over on real pointer devices — touch screens keep their native cursor/scrolling untouched. */
+@media (hover:hover) and (pointer:fine){
+  .tp-wow, .tp-wow a, .tp-wow button, .tp-wow input, .tp-wow .tp-industry-card{ cursor:none; }
+}
+
+/* --- Kinetic hero headline: each word is clipped by its outer .tp-kw
+   span and starts pushed down + rotated; JS adds .tp-kw-in shortly
+   after load, in a staggered sequence, to animate each word up into
+   place instead of the whole headline just appearing at once. */
+.tp-kw{display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.08em;margin-bottom:-.08em}
+.tp-kw span{display:inline-block;transform:translateY(115%) rotate(3deg);opacity:0;transition:transform .95s cubic-bezier(.16,1,.3,1), opacity .7s ease}
+.tp-kw-in span{transform:translateY(0) rotate(0);opacity:1}
+/* Override the older single-span outline/gradient rules now that every
+   word shares the same .tp-kw wrapper — plain solid white by default... */
+.tp-hero-copy h1 .tp-kw span{color:#fff;-webkit-text-stroke:0}
+/* ...except the final accent word ("story."), which gets the brand gradient fill. */
+.tp-hero-copy h1 .tp-kw-accent span{background:linear-gradient(90deg,var(--cyan),#fff 55%,var(--violet));-webkit-background-clip:text;background-clip:text;color:transparent}
+
+/* --- Infinite marquee ticker: the track's content is duplicated once
+   in the HTML, so animating exactly -50% loops seamlessly with no
+   visible seam or jump. Pauses on hover so it doesn't distract from
+   reading if someone parks their cursor there. */
+.tp-marquee-wrap{background:#04060c;border-top:1px solid rgba(255,255,255,.07);border-bottom:1px solid rgba(255,255,255,.07);overflow:hidden;padding:20px 0;position:relative;z-index:2}
+.tp-marquee{overflow:hidden;width:100%}
+.tp-marquee-track{display:inline-flex;align-items:center;white-space:nowrap;animation:tp-marquee-scroll 24s linear infinite;will-change:transform}
+.tp-marquee-wrap:hover .tp-marquee-track{animation-play-state:paused}
+.tp-marquee-item{font-size:16px;font-weight:800;letter-spacing:.05em;color:#4e5870;padding:0 22px;text-transform:uppercase;transition:color .25s}
+.tp-marquee-wrap:hover .tp-marquee-item:hover{color:#eafeff}
+.tp-marquee-dot{color:var(--cyan);font-size:9px;opacity:.65}
+@keyframes tp-marquee-scroll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){.tp-marquee-track{animation:none}}
+
+/* --- Hover-reveal industry/case-study cards: a "VIEW CATEGORY" tag
+   slides up from the bottom on hover (image already zooms via the
+   existing .has-image:hover rule above); JS adds a small mouse-based
+   tilt for extra depth on non-touch devices. */
+.tp-industry-card.has-image{transition:transform .4s cubic-bezier(.16,1,.3,1), opacity .6s, background .3s}
+.tp-industry-reveal{
+  position:absolute; left:20px; right:20px; bottom:14px; z-index:3;
+  display:flex; align-items:center; justify-content:space-between;
+  font-size:9px; font-weight:800; letter-spacing:.12em; text-transform:uppercase; color:#9cfbff;
+  opacity:0; transform:translateY(10px);
+  transition:opacity .35s cubic-bezier(.16,1,.3,1), transform .35s cubic-bezier(.16,1,.3,1);
+  pointer-events:none;
+}
+.tp-industry-card.has-image:hover .tp-industry-reveal{opacity:1;transform:translateY(0)}
+.tp-industry-card.has-image:hover .tp-line{opacity:0}
+.tp-industry-reveal i{font-style:normal;transition:transform .3s}
+.tp-industry-card.has-image:hover .tp-industry-reveal i{transform:translateX(4px)}
+
+/* --- Industry detail modal: opened when an industry card is clicked (see
+   JS), so the "VIEW" cursor label on those cards corresponds to a real
+   action instead of just decoration. */
+.tp-modal{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.tp-modal-open{opacity:1;pointer-events:auto}
+.tp-modal-backdrop{position:absolute;inset:0;background:rgba(4,6,12,.72);backdrop-filter:blur(6px)}
+.tp-modal-panel{
+  position:relative; width:min(480px, calc(100% - 48px)); background:#0a0d1b;
+  border:1px solid rgba(88,246,255,.18); border-radius:18px; padding:34px 32px;
+  transform:translateY(16px) scale(.97); transition:transform .35s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 30px 80px rgba(0,0,0,.5);
+}
+.tp-modal-open .tp-modal-panel{transform:translateY(0) scale(1)}
+.tp-modal-panel h3{font-size:26px;color:#fff;margin:6px 0 14px;letter-spacing:-.02em}
+.tp-modal-panel p{color:#9aa5bd;font-size:14px;line-height:1.7;margin:0 0 26px}
+.tp-modal-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03);color:#cfd6e8;font-size:20px;line-height:1;cursor:pointer;transition:background .2s,color .2s}
+.tp-modal-close:hover{background:rgba(255,255,255,.1);color:#fff}
+.tp-modal-actions .tp-btn{width:100%;justify-content:center}
+
+/* ── Three.js / WebGL Digital Product Passport hero ─────────────────────── */
+.tp-webgl-passport{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;display:block;filter:drop-shadow(0 30px 80px rgba(50,90,255,.18));}
+.tp-hero-stage .tp-passport{z-index:4;opacity:.72;backdrop-filter:blur(1px);}
+.tp-webgl-label{position:absolute;z-index:6;font-size:8px;letter-spacing:.16em;color:#7e8ba7;border:1px solid rgba(126,139,167,.22);background:rgba(5,7,17,.62);backdrop-filter:blur(10px);padding:8px 10px;border-radius:999px;box-shadow:0 10px 30px rgba(0,0,0,.2);animation:tpWebglFloat 4s ease-in-out infinite;}
+.tp-webgl-label b{margin-left:6px;color:#c7ff4a;font-weight:800;}
+.webgl-label-a{left:3%;top:16%;}.webgl-label-b{right:1%;top:35%;animation-delay:-1.3s;}.webgl-label-c{left:4%;bottom:18%;animation-delay:-2.4s;}
+@keyframes tpWebglFloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-8px,0)}}
+@media(max-width:1000px){.tp-webgl-label{display:none}.tp-hero-stage .tp-passport{opacity:.86;}}
+@media(prefers-reduced-motion:reduce){.tp-webgl-label{animation:none}}

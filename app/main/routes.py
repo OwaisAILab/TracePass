@@ -32,10 +32,6 @@ def index():
         "organizations": Organization.query.count(),                                  # total organizations on the network
         "verifications": VerificationLog.query.count(),                               # total verification scans ever logged
         "industries": len(industries),                                                # number of active industries shown above
-        "products": Product.query.filter_by(status=STATUS_PUBLISHED).count(),
-        "organizations": Organization.query.count(),
-        "verifications": VerificationLog.query.count(),
-        "industries": len(industries),
     }
     return render_template("main/landing.html", industries=industries, stats=stats)
 
@@ -87,7 +83,7 @@ def contact():
 
         document_dir = os.path.join(current_app.config["UPLOAD_FOLDER"], "registration_requests", str(item.id))
         os.makedirs(document_dir, exist_ok=True)
-        allowed = {"pdf", "png", "jpg", "jpeg", "docx", "xlsx"}
+        allowed = {"pdf", "png", "jpg", "jpeg", "avif", "docx", "xlsx"}
         for uploaded in files:
             validate_upload(uploaded, allowed)
             original = secure_filename(uploaded.filename) or "authenticity_document"

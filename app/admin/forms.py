@@ -47,7 +47,7 @@ class IndustryForm(FlaskForm):
         "Industry Image",
         validators=[
             FileRequired("An industry image is required."),
-            FileAllowed(["jpg", "jpeg", "png", "webp"], "Images only: JPG, JPEG, PNG, or WEBP."),
+            FileAllowed(["jpg", "jpeg", "png", "webp", "avif"], "Images only: JPG, JPEG, PNG, WEBP, or AVIF."),
         ],
     )
     is_active = BooleanField("Active", default=True)
@@ -61,7 +61,7 @@ class EditIndustryForm(FlaskForm):
         "Replace Industry Image",
         validators=[
             Optional(),
-            FileAllowed(["jpg", "jpeg", "png", "webp"], "Images only: JPG, JPEG, PNG, or WEBP."),
+            FileAllowed(["jpg", "jpeg", "png", "webp", "avif"], "Images only: JPG, JPEG, PNG, WEBP, or AVIF."),
         ],
     )
     is_active = BooleanField("Active", default=True)
@@ -115,7 +115,7 @@ class RegistrationRequestForm(FlaskForm):
     reason = TextAreaField("Reason for joining TracePass", validators=[Optional()])
     authenticity_documents = FileField(
         "Authenticity / Registration Documents",
-        validators=[FileRequired("At least one authenticity document is required."), FileAllowed(["pdf", "png", "jpg", "jpeg", "docx", "xlsx"], "PDF, image, DOCX or XLSX only.")],
+        validators=[FileRequired("At least one authenticity document is required."), FileAllowed(["pdf", "png", "jpg", "jpeg", "avif", "docx", "xlsx"], "PDF, image, DOCX or XLSX only.")],
         description="Upload at least one official registration, license, tax, certification or other authenticity document. You may select multiple files.",
     )
     submit = SubmitField("Submit Account Request")

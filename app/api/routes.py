@@ -15,6 +15,7 @@ from app.models.compliance import ComplianceReview, ComplianceCheck
 from app.models.recall_incident import Recall, Incident
 from app.models.lifecycle import LifecycleEvent
 from app.models.shipment import Shipment
+from app.models.verification import VerificationLog
 
 
 def json_error(message, status=400, details=None):
@@ -138,6 +139,19 @@ def public_passport(passport_code):
     item = Product.query.filter_by(passport_code=passport_code, status=STATUS_PUBLISHED).first()
     if not item:
         return json_error('Published passport not found', 404)
+
+    # Record this as an actual verification event (same log the public HTML
+    # scanner writes to) instead of just stamping the current request time —
+    # 'verified_at' below is now the real timestamp of a stored event, not a
+    # freshly-generated clock value with no record behind it.
+    log = VerificationLog(
+        product_id=item.id, passport_code=item.passport_code, result="verified",
+        ip_address=request.remote_addr,
+        user_agent=(request.user_agent.string[:500] if request.user_agent else None),
+    )
+    db.session.add(log)
+    db.session.commit()
+
     return jsonify({
         'passport_code': item.passport_code,
         'name': item.name,
@@ -147,7 +161,7 @@ def public_passport(passport_code):
         'description': item.description,
         'compliance_status': item.compliance_status,
         'manufacturer': item.manufacturer.name if item.manufacturer else None,
-        'verified_at': datetime.now(timezone.utc).isoformat(),
+        'verified_at': log.verified_at.isoformat(),
         'public_view': True,
         'sustainability_data': item.sustainability_data,
         'attributes': item.get_attribute_values(),
@@ -155,9 +169,9 @@ def public_passport(passport_code):
                      'production_location': b.production_location, 'quantity': b.quantity} for b in item.batches],
         'materials': [{'name': m.material.name, 'origin_country': m.material.origin_country, 'percentage': m.percentage} for m in item.materials],
         'lifecycle_events': [{'event_type': e.event_type, 'event_date': e.event_date.isoformat() if e.event_date else None,
-                              'organization': e.organization.name if e.organization else None, 'location': e.location} for e in sorted(item.lifecycle_events.all(), key=lambda x: x.event_date, reverse=True)],
+                              'organization': e.organization.name if e.organization else None, 'location': e.location} for e in sorted(item.lifecycle_events.all(), key=lambda x: x.event_date)],
         'supply_chain_events': [{'event_type': e.event_type, 'event_date': e.event_date.isoformat() if e.event_date else None,
-                                'organization': e.organization.name if e.organization else None, 'location': e.location} for e in sorted(item.supply_chain_events.all(), key=lambda x: x.event_date, reverse=True)],
+                                'organization': e.organization.name if e.organization else None, 'location': e.location} for e in sorted(item.supply_chain_events.all(), key=lambda x: x.event_date)],
     })
 
 

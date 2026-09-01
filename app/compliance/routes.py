@@ -13,6 +13,10 @@ from app.models.compliance import ComplianceRule, ComplianceRequirement, Complia
 from app.compliance.forms import CertificateForm, CertificateReviewForm, DocumentForm, ComplianceRuleForm, ComplianceRequirementForm, ReviewForm
 from app.compliance.engine import evaluate_product_compliance
 from app.uploads import validate_upload
+# Shared ownership check: role_required() only confirms the user's role can
+# manage evidence somewhere — this additionally confirms they're allowed to
+# manage evidence for THIS product (admins/auditors are unrestricted by it).
+from app.tracepass.routes import _authorize_product_access
 
 compliance_bp = Blueprint("compliance", __name__, template_folder="../templates/compliance")
 
@@ -40,12 +44,13 @@ def _save_upload(file_storage):
 @role_required(*CAN_MANAGE_EVIDENCE)
 def add_certificate(product_id):
     product = Product.query.get_or_404(product_id)
+    _authorize_product_access(product)
     form = CertificateForm()
 
     if form.validate_on_submit():
         file_path = None
         if form.file.data:
-            validate_upload(form.file.data, {"pdf", "png", "jpg", "jpeg"})
+            validate_upload(form.file.data, {"pdf", "png", "jpg", "jpeg"," avif"})
             file_path = _save_upload(form.file.data)
 
         cert = Certificate(
@@ -78,10 +83,11 @@ def add_certificate(product_id):
 @role_required(*CAN_MANAGE_EVIDENCE)
 def add_document(product_id):
     product = Product.query.get_or_404(product_id)
+    _authorize_product_access(product)
     form = DocumentForm()
 
     if form.validate_on_submit():
-        validate_upload(form.file.data, {"pdf", "png", "jpg", "jpeg", "docx", "xlsx"})
+        validate_upload(form.file.data, {"pdf", "png", "jpg", "jpeg", "avif", "docx", "xlsx"})
         file_path = _save_upload(form.file.data)
         doc = Document(
             product_id=product.id,
@@ -132,6 +138,12 @@ def download_document(doc_id):
 @role_required(*CAN_REVIEW)
 def review_certificate(cert_id):
     cert = Certificate.query.get_or_404(cert_id)
+    # Product-scoped certificates get the same ownership check as other
+    # product-mutating routes; org-scoped certificates (cert.product_id is
+    # None) have no single product to check against. Reviewers are
+    # admin/auditor only, so this is a no-op for them in practice.
+    if cert.product_id:
+        _authorize_product_access(Product.query.get_or_404(cert.product_id))
     form = CertificateReviewForm()
     if form.validate_on_submit():
         cert.review_status = form.decision.data
@@ -163,6 +175,7 @@ def review_certificate(cert_id):
 @role_required(ROLE_ADMIN, ROLE_MANUFACTURER, ROLE_AUDITOR)
 def run_compliance_check(product_id):
     product = Product.query.get_or_404(product_id)
+    _authorize_product_access(product)
     summary = evaluate_product_compliance(product)
 
     if summary["rules_checked"] == 0:
@@ -183,6 +196,11 @@ def run_compliance_check(product_id):
 @role_required(*CAN_REVIEW)
 def submit_review(product_id):
     product = Product.query.get_or_404(product_id)
+    # Reviewers here are admin/auditor only (CAN_REVIEW) — _authorize_product_access
+    # is effectively a no-op for them (auditor access is intentionally broad),
+    # but keeping the call here makes every product-touching route uniformly
+    # defended and easy to reason about during review.
+    _authorize_product_access(product)
     form = ReviewForm()
 
     if form.validate_on_submit():

@@ -17,7 +17,7 @@ class ProductForm(FlaskForm):
     description = TextAreaField("Description", validators=[Optional()])
     sustainability_data = TextAreaField("Sustainability / Circularity Data", validators=[Optional()], render_kw={"placeholder": "e.g. recycled content, carbon footprint, repairability, recyclability"})
     manufacturer_org_id = SelectField("Manufacturer Organization", coerce=int, validators=[DataRequired()])
-    image = FileField("Product Image", validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "webp"], "Images only: JPG, JPEG, PNG, or WEBP.")])
+    image = FileField("Product Image", validators=[Optional(), FileAllowed(["jpg", "jpeg", "png", "webp", "avif"], "Images only: JPG, JPEG, PNG, WEBP, or AVIF.")])
     submit = SubmitField("Create Passport")
 
 

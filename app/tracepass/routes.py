@@ -89,9 +89,37 @@ def _manufacturer_choices():
 @login_required
 def list_products():
     query = Product.query
-    # Manufacturers only see their own org's products; admins see everything.
-    if current_user.has_role(ROLE_MANUFACTURER) and current_user.organization_id:
-        query = query.filter_by(manufacturer_org_id=current_user.organization_id)
+    org_id = current_user.organization_id
+    # Scope the list to what each partner organization is actually entitled to
+    # see, at the query level — matching the same relationships enforced by
+    # _authorize_product_access() for individual product pages. This avoids
+    # showing a user records they couldn't open anyway (information-security
+    # best practice: don't list what you'd 403 on if they clicked it).
+    if current_user.has_role(ROLE_ADMIN, ROLE_AUDITOR):
+        pass  # unrestricted — admins/auditors see the whole catalog
+    elif current_user.has_role(ROLE_MANUFACTURER) and org_id:
+        query = query.filter_by(manufacturer_org_id=org_id)
+    elif current_user.has_role(ROLE_SUPPLIER) and org_id:
+        supplied_product_ids = db.session.query(ProductMaterial.product_id).join(
+            Supplier, ProductMaterial.supplier_id == Supplier.id
+        ).filter(Supplier.organization_id == org_id)
+        query = query.filter(Product.id.in_(supplied_product_ids))
+    elif current_user.has_role(ROLE_DISTRIBUTOR, ROLE_RETAILER) and org_id:
+        shipped_product_ids = db.session.query(ProductBatch.product_id).join(
+            Shipment, Shipment.batch_id == ProductBatch.id
+        ).filter(db.or_(Shipment.from_org_id == org_id, Shipment.to_org_id == org_id))
+        ordered_product_ids = db.session.query(PurchaseOrder.product_id).filter(
+            PurchaseOrder.product_id.isnot(None),
+            db.or_(PurchaseOrder.from_org_id == org_id, PurchaseOrder.to_org_id == org_id),
+        )
+        query = query.filter(db.or_(
+            Product.id.in_(shipped_product_ids),
+            Product.id.in_(ordered_product_ids),
+        ))
+    elif org_id:
+        # Any other authenticated-but-unrecognized role: show nothing rather
+        # than defaulting open.
+        query = query.filter(db.false())
 
     # --- search: passport code, name, brand ---
     search = request.args.get("q", "").strip()
@@ -211,7 +239,7 @@ def new_product():
                 categories_by_industry=categories_by_industry,
             )
         if form.image.data:
-            validate_upload(form.image.data, {"jpg", "jpeg", "png", "webp"})
+            validate_upload(form.image.data, {"jpg", "jpeg", "png", "webp", "avif"})
         product = Product(
             name=form.name.data.strip(),
             category_id=category_obj.id,
@@ -262,7 +290,7 @@ def edit_product(product_id):
         if current_user.has_role(ROLE_MANUFACTURER) and form.manufacturer_org_id.data != current_user.organization_id:
             abort(403)
         if form.image.data:
-            validate_upload(form.image.data, {"jpg", "jpeg", "png", "webp"})
+            validate_upload(form.image.data, {"jpg", "jpeg", "png", "webp", "avif"})
         category = ProductCategory.query.get(form.category_id.data)
         if category is None or not category.is_active:
             flash("Please select an active product category.", "danger")
@@ -409,6 +437,10 @@ def _authorize_product_access(product):
 @role_required(*CAN_MANAGE_PASSPORTS)
 def add_batch(product_id):
     product = Product.query.get_or_404(product_id)
+    # Role check above only confirms the user CAN manage passports somewhere;
+    # this confirms they own THIS specific product (prevents editing another
+    # manufacturer's product by guessing/changing the product_id in the URL).
+    _authorize_product_access(product)
     form = BatchForm()
     if form.validate_on_submit():
         batch = ProductBatch(
@@ -435,6 +467,8 @@ def add_batch(product_id):
 @role_required(*CAN_MANAGE_PASSPORTS)
 def link_material(product_id):
     product = Product.query.get_or_404(product_id)
+    # Ownership check — see comment in add_batch() above.
+    _authorize_product_access(product)
     form = MaterialLinkForm()
     form.material_id.choices = [(m.id, m.name) for m in Material.query.all()]
     form.supplier_id.choices = [(0, "— None —")] + [
@@ -623,6 +657,8 @@ def supply_chain_dashboard():
 @role_required(*CAN_MANAGE_PASSPORTS)
 def publish_product(product_id):
     product = Product.query.get_or_404(product_id)
+    # Ownership check — see comment in add_batch() above.
+    _authorize_product_access(product)
 
     missing = product.missing_required_fields()
     if missing:
@@ -648,6 +684,8 @@ def publish_product(product_id):
 @role_required(*CAN_MANAGE_PASSPORTS)
 def archive_product(product_id):
     product = Product.query.get_or_404(product_id)
+    # Ownership check — see comment in add_batch() above.
+    _authorize_product_access(product)
     product.status = STATUS_ARCHIVED
     db.session.commit()
     flash("Passport archived.", "info")
@@ -680,6 +718,17 @@ def verify_passport(passport_code):
                                    ip_address=request.remote_addr, user_agent=request.user_agent.string[:500]))
     db.session.commit()
 
+    # sustainability_data is stored as a raw JSON string (see demo_seed.py);
+    # parse it into a dict so the template can render readable labels
+    # instead of dumping the JSON text itself onto the page. Falls back to
+    # the raw text if it isn't valid JSON, so nothing silently disappears.
+    sustainability_parsed = None
+    if product.sustainability_data:
+        try:
+            sustainability_parsed = json.loads(product.sustainability_data)
+        except (ValueError, TypeError):
+            sustainability_parsed = None
+
     public_data = {
         "passport_code": product.passport_code, "name": product.name,
         "industry": product.category_ref.industry.name if product.category_ref and product.category_ref.industry else None,
@@ -693,10 +742,11 @@ def verify_passport(passport_code):
         "materials": [{"name": m.material.name, "origin_country": m.material.origin_country, "percentage": m.percentage} for m in product.materials],
         "compliance_status": product.compliance_status,
         "sustainability_data": product.sustainability_data,
+        "sustainability": sustainability_parsed,
         "lifecycle_events": [{"event_type": e.event_type, "event_date": e.event_date, "organization": e.organization.name if e.organization else None,
-                              "location": e.location, "notes": e.notes} for e in sorted(product.lifecycle_events.all(), key=lambda x: x.event_date, reverse=True)],
+                              "location": e.location, "notes": e.notes} for e in sorted(product.lifecycle_events.all(), key=lambda x: x.event_date)],
         "supply_chain_events": [{"event_type": e.event_type, "event_date": e.event_date, "organization": e.organization.name if e.organization else None,
-                                 "location": e.location, "notes": e.notes} for e in sorted(product.supply_chain_events.all(), key=lambda x: x.event_date, reverse=True)],
+                                 "location": e.location, "notes": e.notes} for e in sorted(product.supply_chain_events.all(), key=lambda x: x.event_date)],
     }
     return render_template("tracepass/public/passport.html", p=public_data)
 

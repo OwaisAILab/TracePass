@@ -45,7 +45,7 @@
             <div class="col-12">{{ form.reason.label(class="form-label") }}{{ form.reason(class="form-control", rows=4, placeholder="Tell us why your organization needs TracePass access.") }}</div>
             <div class="col-12">
               {{ form.authenticity_documents.label(class="form-label") }}
-              {{ form.authenticity_documents(class="form-control", multiple=true, accept=".pdf,.png,.jpg,.jpeg,.docx,.xlsx") }}
+              {{ form.authenticity_documents(class="form-control", multiple=true, accept=".pdf,.png,.jpg,.jpeg,.avif,.docx,.xlsx") }}
               <div class="form-text">Required: upload at least one official authenticity document, such as company registration, trade/license certificate, tax registration, professional certification, or other proof of organizational identity. Multiple documents may be selected.</div>
               {% for e in form.authenticity_documents.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
             </div>

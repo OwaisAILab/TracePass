@@ -42,7 +42,7 @@
   </div>
 </div>
 <div class="mb-3">{{ form.description.label(class="form-label") }}{{ form.description(class="form-control", rows=4) }}</div>
-<div class="mb-3">{{ form.image.label(class="form-label") }}{{ form.image(class="form-control", accept="image/*") }}<div class="form-text">Upload from your computer. JPG, PNG and WEBP are supported.</div></div>
+<div class="mb-3">{{ form.image.label(class="form-label") }}{{ form.image(class="form-control", accept="image/*") }}<div class="form-text">Upload from your computer. JPG, PNG, AVIF and WEBP are supported.</div></div>
 
 <div class="border rounded p-3 bg-light mb-3">
   <div class="d-flex justify-content-between align-items-center"><h5 class="mb-0">Category-specific passport data</h5><span class="badge text-bg-dark">{{ selected_category.template.name if selected_category and selected_category.template else 'General Product' }}</span></div>

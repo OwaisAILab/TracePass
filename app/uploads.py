@@ -15,6 +15,7 @@ ALLOWED_MIME_BY_EXT = {
     "jpg": {"image/jpeg"},
     "jpeg": {"image/jpeg"},
     "webp": {"image/webp"},
+    "avif": {"image/avif"},
     "docx": {"application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/zip"},
     "xlsx": {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/zip"},
 }
@@ -48,6 +49,12 @@ def validate_upload(file_storage, allowed_extensions):
             abort(400, description="The uploaded file is not a valid image.")
         finally:
             stream.seek(0)
+    elif ext == "avif":
+        # Pillow 10.x commonly cannot decode AVIF because AVIF support depends
+        # on how Pillow/libavif was built. Validate the ISO-BMFF AVIF signature
+        # instead of rejecting a perfectly valid browser-supported AVIF image.
+        if len(header) < 12 or header[4:8] != b"ftyp" or header[8:12] not in {b"avif", b"avis"}:
+            abort(400, description="The uploaded file is not a valid AVIF image.")
     if ext in {"docx", "xlsx"} and not header.startswith(b"PK"):
         abort(400, description="The uploaded Office document is invalid.")
     return True

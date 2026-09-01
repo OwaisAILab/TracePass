@@ -359,7 +359,7 @@ def new_industry():
             form.name.errors.append("Industry already exists.")
         else:
             try:
-                validate_upload(form.image.data, {"jpg", "jpeg", "png", "webp"})
+                validate_upload(form.image.data, {"jpg", "jpeg", "png", "webp", "avif"})
             except HTTPException as e:
                 form.image.errors.append(e.description or "That file couldn't be uploaded. Try a different image.")
             else:

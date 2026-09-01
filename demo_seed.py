@@ -234,7 +234,7 @@ with app.app_context():
     def add_cert(cert_type, number, path, issuing):
         cert = Certificate.query.filter_by(cert_number=number).first()
         if cert is None:
-            cert = Certificate(product_id=product.id, organization_id=None, cert_type=cert_type, issuing_body=issuing, cert_number=number, issue_date=date(2026,1,1), expiry_date=date(2027,12,31), file_path=str(path.relative_to(Path(app.config["UPLOAD_FOLDER"])).replace(os.sep,"/")) if path else None, uploaded_by_user_id=mfg_user.id, review_status="approved", reviewed_by_user_id=aud_user.id, reviewed_at=datetime.now(timezone.utc), review_comments="Demo evidence reviewed and approved.")
+            cert = Certificate(product_id=product.id, organization_id=None, cert_type=cert_type, issuing_body=issuing, cert_number=number, issue_date=date(2026,1,1), expiry_date=date(2027,12,31), file_path=str(path.relative_to(Path(app.config["UPLOAD_FOLDER"]))).replace(os.sep, "/") if path else None, uploaded_by_user_id=mfg_user.id, review_status="approved", reviewed_by_user_id=aud_user.id, reviewed_at=datetime.now(timezone.utc), review_comments="Demo evidence reviewed and approved.")
             db.session.add(cert)
         return cert
     if iso and oeko:
@@ -242,7 +242,7 @@ with app.app_context():
         add_cert("OEKO-TEX Standard 100", "TP-DEMO-OEKO-001", oeko, "Demo Textile Certification Body")
         db.session.flush()
         if not Document.query.filter_by(product_id=product.id, doc_type="test_report").first():
-            db.session.add(Document(product_id=product.id, doc_type="test_report", file_path=str(test.relative_to(Path(app.config["UPLOAD_FOLDER"])).replace(os.sep,"/")), uploaded_by_user_id=mfg_user.id))
+            db.session.add(Document(product_id=product.id, doc_type="test_report", file_path=str(test.relative_to(Path(app.config["UPLOAD_FOLDER"]))).replace(os.sep, "/"), uploaded_by_user_id=mfg_user.id))
     db.session.commit()
 
     # Rebuild compliance evidence history for this demo product if necessary.
@@ -288,7 +288,7 @@ with app.app_context():
             ]:
                 path = req_dir / filename
                 c = canvas.Canvas(str(path)); c.setFont("Helvetica-Bold", 16); c.drawString(50, 790, title); c.setFont("Helvetica", 11); c.drawString(50, 755, body); c.drawString(50, 730, "STATUS: DEMONSTRATION DOCUMENT"); c.save()
-                db.session.add(RegistrationRequestDocument(registration_request_id=demo_request.id, document_type="authenticity_evidence", original_filename=filename, file_path=str(path.relative_to(Path(app.config["UPLOAD_FOLDER"])).replace(os.sep, "/"))))
+                db.session.add(RegistrationRequestDocument(registration_request_id=demo_request.id, document_type="authenticity_evidence", original_filename=filename, file_path=str(path.relative_to(Path(app.config["UPLOAD_FOLDER"]))).replace(os.sep, "/")))
         except ImportError:
             pass
         db.session.commit()

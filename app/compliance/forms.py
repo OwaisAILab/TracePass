@@ -13,7 +13,7 @@ class CertificateForm(FlaskForm):
     issue_date = DateField("Issue Date", validators=[Optional()])
     expiry_date = DateField("Expiry Date", validators=[Optional()])
     scope = SelectField("Applies To", choices=[("product", "This product only"), ("organization", "Whole organization")])
-    file = FileField("Certificate Evidence File", validators=[DataRequired(), FileAllowed(["pdf", "png", "jpg", "jpeg"], "PDF or image only")])
+    file = FileField("Certificate Evidence File", validators=[DataRequired(), FileAllowed(["pdf", "png", "jpg", "jpeg", "avif"], "PDF or image only")])
     submit = SubmitField("Add Certificate")
 
 
@@ -25,7 +25,7 @@ class CertificateReviewForm(FlaskForm):
 
 class DocumentForm(FlaskForm):
     doc_type = StringField("Document Type", validators=[DataRequired(), Length(max=100)])
-    file = FileField("File", validators=[DataRequired(), FileAllowed(["pdf", "png", "jpg", "jpeg", "docx", "xlsx"], "Unsupported file type")])
+    file = FileField("File", validators=[DataRequired(), FileAllowed(["pdf", "png", "jpg", "jpeg", "avif", "docx", "xlsx"], "Unsupported file type")])
     submit = SubmitField("Upload Document")
 
 

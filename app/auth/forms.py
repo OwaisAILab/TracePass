@@ -7,7 +7,7 @@ from app.models.role import ALL_ROLES, ROLE_ADMIN, ROLE_CUSTOMER
 from app.models.organization import Organization
 
 
-def _validate_password_strength(field):
+def _validate_password_strength(form, field):
     value = field.data or ""
     if len(value) < 8 or not any(c.isupper() for c in value) or not any(c.islower() for c in value) or not any(c.isdigit() for c in value):
         raise ValidationError("Password must be at least 8 characters and include uppercase, lowercase and a number.")
