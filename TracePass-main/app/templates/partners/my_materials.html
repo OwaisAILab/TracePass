@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}My Raw Materials · TracePass{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <div><h3 class="mb-1">My Raw Materials</h3><div class="text-muted small">Tell manufacturers which raw materials your organization trades. Price is negotiated per purchase transaction and is not stored here.</div></div>
+</div>
+<div class="row g-4">
+  <div class="col-lg-5">
+    <div class="card p-4">
+      <h5>Add / Update Material</h5>
+      <form method="POST">{{ form.hidden_tag() }}
+        {% for f in [form.material_id, form.unit, form.minimum_order_qty, form.lead_time_days, form.is_active] %}
+        <div class="mb-3">{{ f.label(class="form-label") }}{{ f(class="form-select" if f.type=='SelectField' else 'form-control') }}{% for e in f.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+        {% endfor %}
+        <div class="form-text mb-3">If you add the same material again, the existing offering is updated.</div>
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
+    </div>
+  </div>
+  <div class="col-lg-7">
+    <div class="card p-4">
+      <h5>Materials You Trade</h5>
+      <div class="table-responsive"><table class="table table-sm align-middle">
+        <thead><tr><th>Material</th><th>Unit</th><th>MOQ</th><th>Lead Time</th><th>Status</th><th></th></tr></thead>
+        <tbody>
+        {% for o in offerings %}
+        <tr>
+          <td><strong>{{ o.material.name }}</strong><br><span class="small text-muted">{{ o.material.category or 'Material' }}</span></td>
+          <td>{{ o.unit }}</td><td>{{ o.minimum_order_qty if o.minimum_order_qty is not none else '—' }}</td><td>{{ o.lead_time_days ~ ' days' if o.lead_time_days is not none else '—' }}</td>
+          <td><span class="badge bg-{{ 'success' if o.is_active else 'secondary' }}">{{ 'Available' if o.is_active else 'Inactive' }}</span></td>
+          <td><form method="POST" action="{{ url_for('partners.toggle_material_offering', offering_id=o.id) }}">{{ form.hidden_tag() }}<button class="btn btn-sm btn-outline-secondary">{{ 'Disable' if o.is_active else 'Enable' }}</button></form></td>
+        </tr>
+        {% else %}<tr><td colspan="6" class="text-center text-muted">You have not listed any materials yet.</td></tr>{% endfor %}
+        </tbody></table></div>
+    </div>
+  </div>
+</div>
+{% endblock %}

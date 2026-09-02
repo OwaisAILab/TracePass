@@ -1,0 +1,89 @@
+{% extends "base.html" %}
+{% block title %}Product Category · TracePass{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-7">
+    <div class="card p-4">
+      <h4>New Product Category</h4>
+      <form method="POST" id="category-form">
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          {{ form.name.label(class="form-label") }}
+          {{ form.name(class="form-control") }}
+          {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="mb-3">
+          {{ form.description.label(class="form-label") }}
+          {{ form.description(class="form-control", rows=3) }}
+          {% for e in form.description.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="mb-3">
+          {{ form.industry_id.label(class="form-label") }}
+          {{ form.industry_id(class="form-select", id="industry_id") }}
+          {% for e in form.industry_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          <div class="form-text">Parent categories are filtered to the selected industry.</div>
+        </div>
+        <div class="mb-3">
+          {{ form.parent_id.label(class="form-label") }}
+          {{ form.parent_id(class="form-select", id="parent_id") }}
+          {% for e in form.parent_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="form-check mb-3">
+          {{ form.is_active(class="form-check-input", id="is_active") }}
+          {{ form.is_active.label(class="form-check-label", for="is_active") }}
+        </div>
+        {{ form.submit(class="btn btn-primary") }}
+      </form>
+    </div>
+  </div>
+</div>
+<script>
+(function () {
+  // categoriesByIndustry: { industryId: [{id, name}, ...], "0": all top-level options }
+  var byIndustry = {{ categories_by_industry | tojson }};
+  var industrySelect = document.getElementById('industry_id');
+  var parentSelect = document.getElementById('parent_id');
+  if (!industrySelect || !parentSelect) return;
+
+  var currentParent = parentSelect.value;
+
+  function rebuildParents() {
+    var industryId = industrySelect.value || '0';
+    var list = byIndustry[industryId] || byIndustry['0'] || [];
+    // Always allow "top-level"
+    parentSelect.innerHTML = '';
+    var top = document.createElement('option');
+    top.value = '0';
+    top.textContent = '— Top-level category —';
+    parentSelect.appendChild(top);
+
+    list.forEach(function (c) {
+      var opt = document.createElement('option');
+      opt.value = String(c.id);
+      opt.textContent = c.name;
+      if (String(c.id) === String(currentParent)) opt.selected = true;
+      parentSelect.appendChild(opt);
+    });
+
+    // If previous parent is not in the filtered list, reset to top-level
+    var stillValid = Array.prototype.some.call(parentSelect.options, function (o) {
+      return o.value === String(currentParent);
+    });
+    if (!stillValid) {
+      parentSelect.value = '0';
+      currentParent = '0';
+    }
+  }
+
+  industrySelect.addEventListener('change', function () {
+    currentParent = '0';
+    rebuildParents();
+  });
+  parentSelect.addEventListener('change', function () {
+    currentParent = parentSelect.value;
+  });
+
+  rebuildParents();
+})();
+</script>
+{% endblock %}

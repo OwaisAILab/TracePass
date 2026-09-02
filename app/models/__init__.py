@@ -32,3 +32,5 @@ from app.models.verification import VerificationLog  # noqa: F401
 from app.models.registration_request import RegistrationRequest  # noqa: F401
 
 from app.models.registration_request_document import RegistrationRequestDocument  # noqa: F401
+
+from app.models.email_verification import EmailVerification  # noqa: F401

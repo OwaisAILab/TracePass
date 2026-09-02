@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% block title %}Organizations · TracePass{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">Organizations</h4>
+  <a href="{{ url_for('admin.new_organization') }}" class="btn btn-primary btn-sm">+ New Organization</a>
+</div>
+<div class="card p-3">
+  <table class="table table-hover mb-0">
+    <thead>
+      <tr><th>Name</th><th>Type</th><th>Contact</th><th>Verified</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for org in organizations %}
+      <tr>
+        <td>{{ org.name }}</td>
+        <td><span class="badge bg-secondary">{{ org.type }}</span></td>
+        <td>{{ org.contact_email or "—" }}</td>
+        <td>
+          {% if org.is_verified %}
+            <span class="badge bg-success">Verified</span>
+          {% else %}
+            <span class="badge bg-warning text-dark">Pending</span>
+          {% endif %}
+        </td>
+        <td>
+          {% if not org.is_verified %}
+          <form method="POST" action="{{ url_for('admin.verify_organization', org_id=org.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm btn-outline-success" type="submit">Verify</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

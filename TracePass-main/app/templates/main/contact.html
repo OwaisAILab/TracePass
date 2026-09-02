@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% block title %}Contact Us · TracePass{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-xl-9">
+      <div class="mb-4">
+        <div class="text-uppercase small fw-bold text-primary">TracePass / Contact Us</div>
+        <h1 class="mt-2">Request an Organizational Account</h1>
+        <p class="text-muted mb-0">Customers can self-register. Supply-chain organizations and auditors submit a request so an administrator can verify the organization before granting access.</p>
+      </div>
+
+      {% with messages = get_flashed_messages(with_categories=true) %}
+        {% for category, message in messages %}
+          <div class="alert alert-{{ 'danger' if category == 'danger' else category }}">{{ message }}</div>
+        {% endfor %}
+      {% endwith %}
+
+      <div class="card shadow-sm border-0 p-4">
+        <form method="POST" enctype="multipart/form-data" novalidate>
+          {{ form.hidden_tag() }}
+          <h5 class="mb-3">Applicant</h5>
+          <div class="row g-3">
+            <div class="col-md-6">{{ form.name.label(class="form-label") }}{{ form.name(class="form-control") }}{% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+            <div class="col-md-6">{{ form.email.label(class="form-label") }}{{ form.email(class="form-control") }}{% for e in form.email.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+            <div class="col-md-6">{{ form.phone.label(class="form-label") }}{{ form.phone(class="form-control") }}</div>
+            <div class="col-md-6">{{ form.requested_role.label(class="form-label") }}{{ form.requested_role(class="form-select") }}{% for e in form.requested_role.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+          </div>
+
+          <hr class="my-4">
+          <h5 class="mb-3">Organization</h5>
+          <div class="row g-3">
+            <div class="col-md-6">{{ form.organization_name.label(class="form-label") }}{{ form.organization_name(class="form-control") }}{% for e in form.organization_name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+            <div class="col-md-6">{{ form.registration_no.label(class="form-label") }}{{ form.registration_no(class="form-control") }}</div>
+            <div class="col-md-6">{{ form.organization_email.label(class="form-label") }}{{ form.organization_email(class="form-control") }}</div>
+            <div class="col-md-6">{{ form.organization_phone.label(class="form-label") }}{{ form.organization_phone(class="form-control") }}</div>
+            <div class="col-12">{{ form.address.label(class="form-label") }}{{ form.address(class="form-control", rows=3) }}</div>
+          </div>
+
+          <hr class="my-4">
+          <h5 class="mb-3">Access Request</h5>
+          <div class="row g-3">
+            <div class="col-md-6">{{ form.password.label(class="form-label") }}{{ form.password(class="form-control", autocomplete="new-password") }}{% for e in form.password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+            <div class="col-md-6">{{ form.confirm_password.label(class="form-label") }}{{ form.confirm_password(class="form-control", autocomplete="new-password") }}{% for e in form.confirm_password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+            <div class="col-12">{{ form.reason.label(class="form-label") }}{{ form.reason(class="form-control", rows=4, placeholder="Tell us why your organization needs TracePass access.") }}</div>
+            <div class="col-12">
+              {{ form.authenticity_documents.label(class="form-label") }}
+              {{ form.authenticity_documents(class="form-control", multiple=true, accept=".pdf,.png,.jpg,.jpeg,.avif,.docx,.xlsx") }}
+              <div class="form-text">Required: upload at least one official authenticity document, such as company registration, trade/license certificate, tax registration, professional certification, or other proof of organizational identity. Multiple documents may be selected.</div>
+              {% for e in form.authenticity_documents.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            </div>
+          </div>
+
+          <div class="alert alert-info mt-4 mb-4">Submitting this form does not immediately create an account. An administrator will review the request and verify the organization first.</div>
+          {{ form.submit(class="btn btn-primary px-4") }}
+          <a href="{{ url_for('main.index') }}" class="btn btn-outline-secondary ms-2">Back to TracePass</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

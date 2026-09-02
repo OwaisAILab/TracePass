@@ -82,3 +82,9 @@ class AdminCreateUserForm(FlaskForm):
                     f"'{org.name}' is not yet verified. Verify the organization "
                     "before creating accounts under it."
                 )
+
+
+class EmailOTPForm(FlaskForm):
+    """Six-digit OTP form used to verify ownership of an email address."""
+    otp = StringField("Email OTP", validators=[DataRequired(), Length(min=6, max=6)])
+    submit = SubmitField("Verify Email")

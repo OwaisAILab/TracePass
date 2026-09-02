@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% block title %}Manage Users · TracePass{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">Users</h4>
+  <a href="{{ url_for('admin.new_user') }}" class="btn btn-primary btn-sm">+ New User</a>
+</div>
+<div class="card p-3">
+  <table class="table table-hover mb-0">
+    <thead>
+      <tr><th>Name</th><th>Email</th><th>Role</th><th>Organization</th><th>Status</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for user in users %}
+      <tr>
+        <td>{{ user.name }}</td>
+        <td>{{ user.email }}</td>
+        <td><span class="badge bg-secondary">{{ user.role.name }}</span></td>
+        <td>{{ user.organization.name if user.organization else "—" }}</td>
+        <td>
+          {% if user.is_active %}
+            <span class="badge bg-success">Active</span>
+          {% else %}
+            <span class="badge bg-danger">Deactivated</span>
+          {% endif %}
+        </td>
+        <td class="text-nowrap">
+          <form method="POST" action="{{ url_for('admin.toggle_user_active', user_id=user.id) }}" class="d-inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm btn-outline-secondary" type="submit">
+              {{ "Deactivate" if user.is_active else "Activate" }}
+            </button>
+          </form>
+          {% if not user.is_active and user.id != current_user.id %}
+          <form method="POST" action="{{ url_for('admin.delete_user', user_id=user.id) }}" class="d-inline"
+                onsubmit="return confirm('Permanently delete {{ user.email }}? This cannot be undone.');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

@@ -1,0 +1,118 @@
+{% extends "base.html" %}
+{% block title %}{{ 'Edit' if editing else 'Create' }} Product Passport · TracePass{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-lg-9">
+<div class="card p-4 shadow-sm">
+<h3>{{ 'Edit' if editing else 'Create' }} Digital Product Passport</h3>
+<p class="text-muted">Choose an industry (optional) then a product category. TracePass will apply that category's product template so the passport can work across industries.</p>
+<form method="POST" enctype="multipart/form-data" id="product-form">
+{{ form.hidden_tag() }}
+<div class="row">
+  <div class="col-md-6 mb-3">
+    {{ form.name.label(class="form-label") }}
+    {{ form.name(class="form-control") }}
+    {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+  </div>
+  {% if form.industry_id is defined %}
+  <div class="col-md-6 mb-3">
+    {{ form.industry_id.label(class="form-label") }}
+    {{ form.industry_id(class="form-select", id="industry_id") }}
+    {% for e in form.industry_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+  </div>
+  {% endif %}
+  <div class="col-md-6 mb-3">
+    {{ form.category_id.label(class="form-label") }}
+    {{ form.category_id(class="form-select", id="category_id") }}
+    {% for e in form.category_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+  </div>
+  <div class="col-md-6 mb-3">
+    {{ form.brand.label(class="form-label") }}
+    {{ form.brand(class="form-control") }}
+    {% for e in form.brand.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+  </div>
+  <div class="col-md-6 mb-3">
+    {{ form.model.label(class="form-label") }}
+    {{ form.model(class="form-control") }}
+    {% for e in form.model.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+  </div>
+  <div class="col-md-6 mb-3">
+    {{ form.manufacturer_org_id.label(class="form-label") }}
+    {{ form.manufacturer_org_id(class="form-select") }}
+    {% for e in form.manufacturer_org_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+  </div>
+</div>
+<div class="mb-3">{{ form.description.label(class="form-label") }}{{ form.description(class="form-control", rows=4) }}</div>
+<div class="mb-3">{{ form.image.label(class="form-label") }}{{ form.image(class="form-control", accept="image/*") }}<div class="form-text">Upload from your computer. JPG, PNG, AVIF and WEBP are supported.</div></div>
+
+<div class="border rounded p-3 bg-light mb-3">
+  <div class="d-flex justify-content-between align-items-center"><h5 class="mb-0">Category-specific passport data</h5><span class="badge text-bg-dark">{{ selected_category.template.name if selected_category and selected_category.template else 'General Product' }}</span></div>
+  <p class="small text-muted mt-2">These fields come from the selected product template. Required fields must be completed before the passport can be created/published.</p>
+  {% if template_fields %}
+  <div class="row">
+  {% for f in template_fields %}
+    <div class="col-md-6 mb-3">
+      <label class="form-label">{{ f.label }}{% if f.required %} <span class="text-danger">*</span>{% endif %}</label>
+      {% set val = existing_attributes.get(f.key, '') if existing_attributes else '' %}
+      {% if f.field_type == 'textarea' %}<textarea class="form-control" name="attr_{{ f.id }}" rows="3" {% if f.required %}required{% endif %}>{{ val }}</textarea>
+      {% elif f.field_type == 'number' %}<input class="form-control" type="number" step="any" name="attr_{{ f.id }}" value="{{ val }}" {% if f.required %}required{% endif %}>
+      {% elif f.field_type == 'date' %}<input class="form-control" type="date" name="attr_{{ f.id }}" value="{{ val }}" {% if f.required %}required{% endif %}>
+      {% else %}<input class="form-control" type="text" name="attr_{{ f.id }}" value="{{ val }}" {% if f.required %}required{% endif %}>{% endif %}
+      {% if f.help_text %}<div class="form-text">{{ f.help_text }}</div>{% endif %}
+    </div>
+  {% endfor %}
+  </div>
+  {% else %}<div class="alert alert-info mb-0">No category-specific fields are configured. The standard passport fields will still apply.</div>{% endif %}
+</div>
+<div class="mb-3">{{ form.sustainability_data.label(class="form-label") }}{{ form.sustainability_data(class="form-control", rows="3") }}</div>
+{{ form.submit(class="btn btn-primary") }} <a class="btn btn-outline-secondary" href="{{ url_for('tracepass.list_products') }}">Cancel</a>
+</form></div></div></div>
+{% if categories_by_industry is defined %}
+<script>
+(function () {
+  var byIndustry = {{ categories_by_industry | tojson }};
+  var industrySelect = document.getElementById('industry_id');
+  var categorySelect = document.getElementById('category_id');
+  if (!industrySelect || !categorySelect) return;
+
+  var currentCategory = categorySelect.value;
+
+  function rebuildCategories() {
+    var industryId = industrySelect.value || '0';
+    var list = byIndustry[industryId] || byIndustry['0'] || [];
+    categorySelect.innerHTML = '';
+    if (!list.length) {
+      var empty = document.createElement('option');
+      empty.value = '';
+      empty.textContent = '— No categories for this industry —';
+      categorySelect.appendChild(empty);
+      return;
+    }
+    list.forEach(function (c) {
+      var opt = document.createElement('option');
+      opt.value = String(c.id);
+      opt.textContent = c.name;
+      if (String(c.id) === String(currentCategory)) opt.selected = true;
+      categorySelect.appendChild(opt);
+    });
+    var stillValid = Array.prototype.some.call(categorySelect.options, function (o) {
+      return o.value === String(currentCategory);
+    });
+    if (!stillValid && categorySelect.options.length) {
+      categorySelect.selectedIndex = 0;
+      currentCategory = categorySelect.value;
+    }
+  }
+
+  industrySelect.addEventListener('change', function () {
+    currentCategory = '';
+    rebuildCategories();
+  });
+  categorySelect.addEventListener('change', function () {
+    currentCategory = categorySelect.value;
+  });
+
+  rebuildCategories();
+})();
+</script>
+{% endif %}
+{% endblock %}

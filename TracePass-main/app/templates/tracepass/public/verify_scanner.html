@@ -1,0 +1,210 @@
+{% extends "base.html" %}
+{% block title %}Verify Product · TracePass{% endblock %}
+{% block content %}
+<div class="row justify-content-center py-4">
+  <div class="col-lg-9">
+    <div class="card p-4 p-md-5 shadow-sm">
+      <div class="text-center mb-4">
+        <div class="text-uppercase small text-primary fw-bold">TRACEPASS VERIFICATION</div>
+        <h2 class="fw-bold">Scan a Product Passport</h2>
+        <p class="text-muted mb-0">Use your device camera to scan the TracePass QR code, or enter the passport code manually.</p>
+      </div>
+
+      <div class="row g-4 align-items-center">
+        <div class="col-lg-7">
+          <div id="scanner-panel" class="border rounded-4 p-3 bg-light">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <strong>QR Camera Scanner</strong>
+              <span id="scanner-state" class="badge text-bg-secondary">Ready</span>
+            </div>
+
+            <div id="native-scanner" class="d-none">
+              <video id="qr-video" playsinline muted style="width:100%;max-height:420px;object-fit:cover;border-radius:12px;background:#080b12;"></video>
+              <canvas id="qr-canvas" class="d-none"></canvas>
+            </div>
+
+            <div id="html5-reader" class="mx-auto" style="max-width:520px;"></div>
+
+            <div id="scan-status" class="text-center small text-muted mt-3">
+              Press <strong>Start Camera</strong> and allow camera access when your browser asks.
+            </div>
+
+            <div class="d-flex justify-content-center gap-2 mt-3">
+              <button id="start-camera" class="btn btn-primary" type="button">Start Camera</button>
+              <button id="stop-camera" class="btn btn-outline-secondary" type="button" disabled>Stop Camera</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-lg-5">
+          <div class="p-4 border rounded-4 h-100">
+            <div class="text-uppercase small text-muted fw-bold mb-2">Manual verification</div>
+            <h5 class="fw-bold">Enter Passport Code</h5>
+            <p class="small text-muted">Use this if the camera is unavailable or the QR code cannot be scanned.</p>
+            <form id="manual-form" method="GET" action="{{ url_for('tracepass.verify_scanner') }}">
+              <div class="input-group">
+                <input id="passport-code" name="code" class="form-control" placeholder="e.g. TP-8F3K92A1" autocomplete="off" required>
+                <button class="btn btn-dark" type="submit">Verify</button>
+              </div>
+            </form>
+            <div class="small text-muted mt-3">Every verification attempt is recorded in TracePass Verification History.</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="alert alert-light border mt-4 mb-0 small">
+        <strong>What TracePass verifies:</strong> passport identity, publication status and the controlled public product story. Internal records and restricted evidence remain protected.
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+(function () {
+  const startBtn = document.getElementById('start-camera');
+  const stopBtn = document.getElementById('stop-camera');
+  const status = document.getElementById('scan-status');
+  const state = document.getElementById('scanner-state');
+  const video = document.getElementById('qr-video');
+  const canvas = document.getElementById('qr-canvas');
+  const nativePanel = document.getElementById('native-scanner');
+  const html5Reader = document.getElementById('html5-reader');
+  const manualForm = document.getElementById('manual-form');
+
+  let stream = null;
+  let timer = null;
+  let html5Scanner = null;
+  let stopped = false;
+  let detected = false;
+
+  function setState(text, cls) {
+    state.textContent = text;
+    state.className = 'badge text-bg-' + cls;
+  }
+
+  function passportUrlFromScan(value) {
+    try {
+      const url = new URL(value, window.location.origin);
+      if (url.origin !== window.location.origin) return null;
+      if (!url.pathname.startsWith('/verify/')) return null;
+      return url.href;
+    } catch (e) {
+      return null;
+    }
+  }
+
+  function handleDetected(value) {
+    if (detected) return;
+    const url = passportUrlFromScan(value);
+    if (!url) {
+      status.textContent = 'QR detected, but it is not a valid TracePass passport QR code.';
+      setState('Invalid QR', 'danger');
+      return;
+    }
+    detected = true;
+    status.textContent = 'QR detected — opening passport…';
+    setState('Verified', 'success');
+    stopCamera();
+    window.location.href = url;
+  }
+
+  async function startNative() {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+      return false;
+    }
+    if (!('BarcodeDetector' in window)) return false;
+
+    try {
+      const detector = new BarcodeDetector({ formats: ['qr_code'] });
+      stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' } }, audio: false });
+      nativePanel.classList.remove('d-none');
+      html5Reader.classList.add('d-none');
+      video.srcObject = stream;
+      await video.play();
+      stopped = false;
+      stopBtn.disabled = false;
+      startBtn.disabled = true;
+      setState('Scanning', 'primary');
+      status.textContent = 'Point the camera at a TracePass QR code.';
+
+      const scan = async () => {
+        if (stopped || detected) return;
+        try {
+          const codes = await detector.detect(video);
+          if (codes.length) handleDetected(codes[0].rawValue);
+        } catch (e) {}
+        if (!stopped && !detected) timer = setTimeout(scan, 250);
+      };
+      scan();
+      return true;
+    } catch (err) {
+      status.textContent = 'Camera access was denied or unavailable. Trying the alternate QR scanner…';
+      return false;
+    }
+  }
+
+  function loadHtml5Fallback() {
+    if (html5Scanner) return;
+    nativePanel.classList.add('d-none');
+    html5Reader.classList.remove('d-none');
+    status.textContent = 'Starting the alternate QR scanner…';
+    const script = document.createElement('script');
+    script.src = 'https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js';
+    script.onload = function () {
+      if (!window.Html5QrcodeScanner) {
+        status.textContent = 'QR scanner library could not be loaded. Use the passport code field instead.';
+        setState('Manual', 'warning');
+        return;
+      }
+      html5Scanner = new Html5QrcodeScanner('html5-reader', { fps: 10, qrbox: { width: 260, height: 260 } }, false);
+      html5Scanner.render(function (decodedText) {
+        handleDetected(decodedText);
+      }, function () {});
+      stopBtn.disabled = false;
+      startBtn.disabled = true;
+      setState('Scanning', 'primary');
+      status.textContent = 'Point the camera at a TracePass QR code.';
+    };
+    script.onerror = function () {
+      status.textContent = 'Could not load the QR scanner library. Use the passport code field instead.';
+      setState('Manual', 'warning');
+    };
+    document.head.appendChild(script);
+  }
+
+  async function startCamera() {
+    detected = false;
+    const nativeStarted = await startNative();
+    if (!nativeStarted) loadHtml5Fallback();
+  }
+
+  function stopCamera() {
+    stopped = true;
+    if (timer) clearTimeout(timer);
+    timer = null;
+    if (stream) {
+      stream.getTracks().forEach(track => track.stop());
+      stream = null;
+    }
+    if (video) video.srcObject = null;
+    if (html5Scanner) {
+      html5Scanner.clear().catch(function () {});
+      html5Scanner = null;
+    }
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+    setState('Ready', 'secondary');
+    if (!detected) status.textContent = 'Scanner stopped. Press Start Camera to scan again.';
+  }
+
+  manualForm.addEventListener('submit', function (e) {
+    e.preventDefault();
+    const code = document.getElementById('passport-code').value.trim();
+    if (code) window.location.href = '/verify/' + encodeURIComponent(code);
+  });
+
+  startBtn.addEventListener('click', startCamera);
+  stopBtn.addEventListener('click', stopCamera);
+})();
+</script>
+{% endblock %}

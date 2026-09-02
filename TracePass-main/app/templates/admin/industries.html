@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+{% block title %}Industries · TracePass{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between mb-3">
+  <h4>Industries</h4>
+  <a class="btn btn-primary" href="{{ url_for('admin.new_industry') }}">+ New Industry</a>
+</div>
+<div class="card p-3">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Image</th>
+        <th>Name</th>
+        <th>Categories</th>
+        <th>Templates</th>
+        <th>Status</th>
+        <th>Description</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for i in industries %}
+      <tr>
+        <td>
+          {% if i.image_url %}
+          <img src="{{ i.image_url }}" alt="{{ i.name }}" style="width:56px;height:56px;object-fit:cover;border-radius:6px;">
+          {% else %}—{% endif %}
+        </td>
+        <td>{{ i.name }}</td>
+        <td>{{ i.categories|length }}</td>
+        <td>{{ i.templates|length }}</td>
+        <td>{{ 'Active' if i.is_active else 'Inactive' }}</td>
+        <td>{{ i.description or '—' }}</td>
+        <td class="text-nowrap">
+          <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('admin.edit_industry', industry_id=i.id) }}">Edit</a>
+          {% if i.categories|length == 0 and i.templates|length == 0 %}
+          <form method="POST" action="{{ url_for('admin.delete_industry', industry_id=i.id) }}" class="d-inline"
+                onsubmit="return confirm('Delete industry {{ i.name }}? This cannot be undone.');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm btn-outline-danger" type="submit">Delete</button>
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7">No industries yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

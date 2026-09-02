@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · TracePass{% endblock %}
+{% block content %}
+<div class="card p-4">
+  <h4>Welcome, {{ user.name }}</h4>
+  <p class="text-muted mb-0">Role: {{ user.role.name }}{% if user.organization %} · Organization: {{ user.organization.name }}{% endif %}</p>
+  <hr>
+  <p class="mb-0">Phase 1 complete: authentication, roles, and organizations are working.
+  Product passports, supply-chain events, and compliance widgets will appear here in later phases.</p>
+</div>
+{% endblock %}

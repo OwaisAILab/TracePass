@@ -13,6 +13,16 @@ class Config:
     MAX_CONTENT_LENGTH = 10 * 1024 * 1024  # 10 MB upload cap
     PERMANENT_SESSION_LIFETIME = timedelta(hours=8)
     WTF_CSRF_ENABLED = True
+    # SMTP settings for mandatory email OTP verification.
+    MAIL_SERVER = os.environ.get("MAIL_SERVER")
+    MAIL_PORT = int(os.environ.get("MAIL_PORT", "587"))
+    MAIL_USE_TLS = os.environ.get("MAIL_USE_TLS", "true").lower() == "true"
+    MAIL_USE_SSL = os.environ.get("MAIL_USE_SSL", "false").lower() == "true"
+    MAIL_USERNAME = os.environ.get("MAIL_USERNAME")
+    MAIL_PASSWORD = os.environ.get("MAIL_PASSWORD")
+    MAIL_DEFAULT_SENDER = os.environ.get("MAIL_DEFAULT_SENDER", os.environ.get("MAIL_USERNAME"))
+    EMAIL_OTP_EXPIRY_MINUTES = int(os.environ.get("EMAIL_OTP_EXPIRY_MINUTES", "10"))
+    EMAIL_OTP_MAX_ATTEMPTS = int(os.environ.get("EMAIL_OTP_MAX_ATTEMPTS", "5"))
 
 
 class DevelopmentConfig(Config):

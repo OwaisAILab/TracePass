@@ -1739,12 +1739,14 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 /* ============================================================
    Public Product Passport (QR /verify result)
    ============================================================ */
+/* ── Recolored to the TracePass dark cyan/violet identity — same
+   structure and layout as the original light version, palette only. ── */
 .pp-body {
   margin: 0;
   min-height: 100vh;
   font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, sans-serif;
-  background: linear-gradient(160deg, #f5f7fa 0%, #e8ecf1 55%, #eef1f6 100%);
-  color: #1f2937;
+  background: linear-gradient(160deg, #05070f 0%, #0a0d1b 55%, #0c1020 100%);
+  color: #e7ebf7;
   -webkit-font-smoothing: antialiased;
 }
 
@@ -1767,10 +1769,10 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   font-size: 15px;
   letter-spacing: 0.12em;
   text-decoration: none;
-  color: #1a1a2e;
+  color: #fff;
 }
 .pp-brand span {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #58f6ff 0%, #8b5cf6 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -1782,8 +1784,8 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   gap: 8px;
   padding: 6px 12px;
   border-radius: 999px;
-  background: rgba(16, 185, 129, 0.1);
-  color: #047857;
+  background: rgba(16, 185, 129, 0.14);
+  color: #6ee7b7;
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
@@ -1794,7 +1796,7 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   height: 7px;
   border-radius: 50%;
   background: #10b981;
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3);
 }
 
 /* Hero card */
@@ -1802,18 +1804,18 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   display: grid;
   grid-template-columns: 200px 1fr;
   gap: 22px;
-  background: #fff;
+  background: #0f1322;
   border-radius: 20px;
   padding: 22px;
-  box-shadow: 0 10px 40px rgba(15, 23, 42, 0.08);
-  border: 1px solid rgba(15, 23, 42, 0.04);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.08);
   margin-bottom: 18px;
 }
 
 .pp-hero-media {
   border-radius: 14px;
   overflow: hidden;
-  background: linear-gradient(145deg, #eef2ff, #f8fafc);
+  background: linear-gradient(145deg, #131a30, #0e1424);
   min-height: 200px;
   display: flex;
   align-items: center;
@@ -1834,7 +1836,7 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0.14em;
-  color: #64748b;
+  color: #8891a8;
 }
 
 .pp-meta-row {
@@ -1846,8 +1848,8 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 .pp-chip {
   padding: 4px 10px;
   border-radius: 999px;
-  background: #f1f5f9;
-  color: #475569;
+  background: rgba(255, 255, 255, 0.06);
+  color: #b7c0d8;
   font-size: 11px;
   font-weight: 700;
 }
@@ -1858,7 +1860,7 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.15;
-  color: #0f172a;
+  color: #fff;
 }
 
 .pp-code-row {
@@ -1872,14 +1874,14 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: #8891a8;
 }
 .pp-code {
   font-size: 15px;
   font-weight: 700;
   letter-spacing: 0.06em;
-  color: #4338ca;
-  background: #eef2ff;
+  color: #9cfbff;
+  background: rgba(88, 246, 255, 0.1);
   padding: 4px 10px;
   border-radius: 8px;
 }
@@ -1895,16 +1897,16 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   margin-bottom: 14px;
 }
 .pp-badge-compliant {
-  background: rgba(16, 185, 129, 0.12);
-  color: #047857;
+  background: rgba(16, 185, 129, 0.16);
+  color: #6ee7b7;
 }
 .pp-badge-non_compliant {
-  background: rgba(239, 68, 68, 0.12);
-  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.16);
+  color: #fca5a5;
 }
 .pp-badge-pending {
-  background: rgba(245, 158, 11, 0.15);
-  color: #b45309;
+  background: rgba(245, 158, 11, 0.18);
+  color: #fcd34d;
 }
 
 .pp-facts {
@@ -1918,31 +1920,31 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: #8891a8;
   margin: 0;
 }
 .pp-facts dd {
   margin: 2px 0 0;
   font-size: 13px;
   font-weight: 600;
-  color: #1e293b;
+  color: #e7ebf7;
 }
 
 .pp-desc {
   margin: 0;
   font-size: 13px;
   line-height: 1.55;
-  color: #64748b;
+  color: #9aa5bd;
 }
 
 /* Sections */
 .pp-section {
-  background: #fff;
+  background: #0f1322;
   border-radius: 18px;
   padding: 20px 22px;
   margin-bottom: 14px;
-  box-shadow: 0 6px 24px rgba(15, 23, 42, 0.05);
-  border: 1px solid rgba(15, 23, 42, 0.04);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.08);
 }
 
 .pp-section-title {
@@ -1951,7 +1953,7 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #64748b;
+  color: #9aa5bd;
 }
 
 .pp-kv-grid {
@@ -1961,7 +1963,7 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 }
 .pp-kv {
   padding: 12px 14px;
-  background: #f8fafc;
+  background: rgba(255, 255, 255, 0.04);
   border-radius: 12px;
 }
 .pp-kv-key {
@@ -1970,13 +1972,13 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: #8891a8;
   margin-bottom: 4px;
 }
 .pp-kv-val {
   font-size: 14px;
   font-weight: 600;
-  color: #0f172a;
+  color: #fff;
 }
 
 /* Materials */
@@ -1988,24 +1990,24 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   font-size: 14px;
   margin-bottom: 6px;
 }
-.pp-material-head strong { color: #0f172a; }
-.pp-material-head span { color: #64748b; font-size: 12px; font-weight: 600; }
+.pp-material-head strong { color: #fff; }
+.pp-material-head span { color: #9aa5bd; font-size: 12px; font-weight: 600; }
 .pp-bar-track {
   height: 8px;
   border-radius: 999px;
-  background: #e2e8f0;
+  background: rgba(255, 255, 255, 0.08);
   overflow: hidden;
 }
 .pp-bar-fill {
   height: 100%;
   border-radius: 999px;
-  background: linear-gradient(90deg, #667eea, #764ba2);
+  background: linear-gradient(90deg, #58f6ff, #8b5cf6);
 }
 .pp-material-pct {
   margin-top: 4px;
   font-size: 12px;
   font-weight: 700;
-  color: #4338ca;
+  color: #9cfbff;
   text-align: right;
 }
 
@@ -2022,14 +2024,14 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   font-weight: 800;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: #94a3b8;
+  color: #8891a8;
   padding: 0 10px 10px 0;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 .pp-table td {
   padding: 12px 10px 12px 0;
-  border-bottom: 1px solid #f1f5f9;
-  color: #334155;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  color: #c7cede;
   vertical-align: top;
 }
 .pp-table tr:last-child td { border-bottom: none; }
@@ -2043,7 +2045,7 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 .pp-timeline-item {
   position: relative;
   padding: 0 0 18px 22px;
-  border-left: 2px solid #e2e8f0;
+  border-left: 2px solid rgba(255, 255, 255, 0.12);
 }
 .pp-timeline-item:last-child {
   padding-bottom: 0;
@@ -2056,12 +2058,12 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+  background: linear-gradient(135deg, #58f6ff, #8b5cf6);
+  box-shadow: 0 0 0 3px rgba(88, 246, 255, 0.22);
 }
 .pp-dot-life {
   background: linear-gradient(135deg, #10b981, #059669);
-  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.22);
 }
 .pp-timeline-top {
   display: flex;
@@ -2072,25 +2074,25 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 }
 .pp-timeline-top strong {
   font-size: 14px;
-  color: #0f172a;
+  color: #fff;
 }
 .pp-timeline-top time {
   font-size: 12px;
   font-weight: 600;
-  color: #94a3b8;
+  color: #8891a8;
 }
 .pp-timeline-meta {
   display: flex;
   flex-wrap: wrap;
   gap: 8px 14px;
   font-size: 12px;
-  color: #64748b;
+  color: #9aa5bd;
   font-weight: 500;
 }
 .pp-timeline-notes {
   margin: 6px 0 0;
   font-size: 12px;
-  color: #64748b;
+  color: #9aa5bd;
   line-height: 1.45;
 }
 
@@ -2098,21 +2100,21 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   white-space: pre-wrap;
   font-size: 13px;
   line-height: 1.55;
-  color: #334155;
-  background: #f0fdf4;
-  border: 1px solid #bbf7d0;
+  color: #bcf5d6;
+  background: rgba(16, 185, 129, 0.08);
+  border: 1px solid rgba(16, 185, 129, 0.25);
   border-radius: 12px;
   padding: 14px 16px;
 }
 .pp-sustain-notes { margin-top: 14px; display:flex; flex-direction:column; gap:8px; }
-.pp-sustain-notes p { margin:0; font-size:13px; line-height:1.6; color:#475569; }
-.pp-sustain-notes strong { color:#0f172a; }
+.pp-sustain-notes p { margin:0; font-size:13px; line-height:1.6; color:#9aa5bd; }
+.pp-sustain-notes strong { color:#fff; }
 
 .pp-foot {
   text-align: center;
   margin-top: 20px;
   font-size: 12px;
-  color: #94a3b8;
+  color: #8891a8;
   font-weight: 500;
 }
 
@@ -2157,7 +2159,7 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   height: 40%;
   bottom: 18%;
   left: 15%;
-  background: radial-gradient(ellipse, rgba(102,126,234,.35), transparent 70%);
+  background: radial-gradient(ellipse, rgba(88,246,255,.32), transparent 70%);
   filter: blur(18px);
   pointer-events: none;
   z-index: 0;
@@ -2352,3 +2354,63 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 @keyframes tpWebglFloat{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-8px,0)}}
 @media(max-width:1000px){.tp-webgl-label{display:none}.tp-hero-stage .tp-passport{opacity:.86;}}
 @media(prefers-reduced-motion:reduce){.tp-webgl-label{animation:none}}
+
+/* ================================================================
+   PUBLIC PAGE DARK SHELL
+   Pages like the QR scanner are reachable both logged-in (inside
+   .tp-app, already dark via the theme above) and logged-out (no
+   .tp-app wrapper at all, since base.html only renders the sidebar
+   shell for authenticated users). .tp-public-page gives the
+   logged-out case the same dark brand identity independent of
+   authentication state, by reskinning the same Bootstrap classes
+   already used in the template.
+   ================================================================ */
+.tp-public-page{ min-height:60vh; }
+body:not(:has(.tp-app)) .tp-public-page{
+  min-height:100vh; background:linear-gradient(160deg,#05070f 0%,#0a0d1b 55%,#0c1020 100%); margin:-1rem -12px 0; padding:32px 12px 56px;
+}
+.tp-public-page-brand{
+  display:block; text-align:center; font-weight:800; font-size:15px; letter-spacing:.12em; text-decoration:none; color:#fff; margin-bottom:24px;
+}
+.tp-public-page-brand span{ background:linear-gradient(135deg,#58f6ff,#8b5cf6); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+
+body:not(:has(.tp-app)) .tp-public-page .card{ background:#0f1322; border:1px solid rgba(255,255,255,.08); color:#e7ebf7; }
+body:not(:has(.tp-app)) .tp-public-page .text-primary{ color:#9cfbff !important; }
+body:not(:has(.tp-app)) .tp-public-page h2, body:not(:has(.tp-app)) .tp-public-page h5{ color:#fff; }
+body:not(:has(.tp-app)) .tp-public-page .text-muted{ color:#9aa5bd !important; }
+body:not(:has(.tp-app)) .tp-public-page .border{ border-color:rgba(255,255,255,.1) !important; }
+body:not(:has(.tp-app)) .tp-public-page .bg-light{ background:rgba(255,255,255,.04) !important; }
+body:not(:has(.tp-app)) .tp-public-page .form-control{ background:#0a0d1b; border-color:rgba(255,255,255,.1); color:#e7ebf7; }
+body:not(:has(.tp-app)) .tp-public-page .form-control:focus{ background:#0a0d1b; border-color:#58f6ff; color:#e7ebf7; box-shadow:0 0 0 .2rem rgba(88,246,255,.18); }
+body:not(:has(.tp-app)) .tp-public-page .form-control::placeholder{ color:#5b6480; }
+body:not(:has(.tp-app)) .tp-public-page .btn-primary{ background:linear-gradient(135deg,#58f6ff,#8b5cf6); border:none; color:#04060c; font-weight:700; }
+body:not(:has(.tp-app)) .tp-public-page .btn-outline-secondary{ color:#9aa5bd; border-color:rgba(255,255,255,.18); }
+body:not(:has(.tp-app)) .tp-public-page .btn-outline-secondary:hover{ background:rgba(255,255,255,.06); color:#fff; }
+body:not(:has(.tp-app)) .tp-public-page .btn-dark{ background:linear-gradient(135deg,#8b5cf6,#58f6ff); border:none; color:#04060c; font-weight:700; }
+body:not(:has(.tp-app)) .tp-public-page .alert-light{ background:rgba(255,255,255,.04); border-color:rgba(255,255,255,.1) !important; color:#c7cede; }
+body:not(:has(.tp-app)) .tp-public-page .badge.text-bg-secondary{ background:rgba(255,255,255,.08) !important; color:#c7cede; }
+
+/* ================================================================
+   AUTH PAGES (login, register, email-OTP verification)
+   Same reasoning as the public-page shell above — these render with
+   no .tp-app wrapper (nobody is logged in yet), so they need their
+   own dark treatment rather than inheriting it from the app theme.
+   ================================================================ */
+body:has(.auth-wrapper){ background:linear-gradient(160deg,#05070f 0%,#0a0d1b 55%,#0c1020 100%); }
+.auth-card{ background:#0f1322; border-color:rgba(255,255,255,.08); box-shadow:0 20px 60px rgba(0,0,0,.45); }
+.auth-card h2{ color:#fff; }
+.auth-card .auth-subtitle{ color:#9aa5bd; }
+.auth-card .form-label, .auth-card .form-check-label{ color:#c7cede; }
+.auth-card .form-control, .auth-card .form-select{ background:#0a0d1b; border-color:rgba(255,255,255,.12); color:#e7ebf7; }
+.auth-card .form-control:focus, .auth-card .form-select:focus{ background:#0a0d1b; border-color:#58f6ff; box-shadow:0 0 0 4px rgba(88,246,255,.15); color:#e7ebf7; }
+.auth-card .form-control::placeholder{ color:#5b6480; }
+.auth-card .form-check-input{ background-color:#0a0d1b; border-color:rgba(255,255,255,.2); }
+.auth-card .form-check-input:checked{ background-color:#58f6ff; border-color:#58f6ff; }
+.auth-card .auth-divider{ color:#5b6480; }
+.auth-card .auth-divider::before, .auth-card .auth-divider::after{ background:rgba(255,255,255,.1); }
+.auth-card .auth-footer{ color:#9aa5bd; }
+.auth-card .auth-footer a{ color:#9cfbff; }
+.auth-card .btn-primary{ background:linear-gradient(135deg,#58f6ff,#8b5cf6); border:none; color:#04060c; font-weight:700; }
+.auth-card .btn-outline-secondary{ color:#9aa5bd; border-color:rgba(255,255,255,.18); }
+.auth-card .btn-outline-secondary:hover{ background:rgba(255,255,255,.06); color:#fff; }
+.auth-card .text-danger{ color:#fca5a5 !important; }

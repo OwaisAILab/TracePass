@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Compliance Rules · TracePass{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+  <h4 class="mb-0">Compliance Rules</h4>
+  <a href="{{ url_for('compliance.new_rule') }}" class="btn btn-primary btn-sm">+ New Rule</a>
+</div>
+<div class="card p-3">
+  <table class="table table-hover mb-0">
+    <thead><tr><th>Name</th><th>Category</th><th>Requirements</th><th>Status</th></tr></thead>
+    <tbody>
+      {% for rule in rules %}
+      <tr style="cursor:pointer" onclick="window.location='{{ url_for('compliance.view_rule', rule_id=rule.id) }}'">
+        <td>{{ rule.name }}</td>
+        <td>{{ rule.category.name if rule.category else "All categories" }}</td>
+        <td>{{ rule.requirements | length }}</td>
+        <td><span class="badge bg-{{ 'success' if rule.is_active else 'secondary' }}">{{ "Active" if rule.is_active else "Inactive" }}</span></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-center text-muted py-3">No compliance rules defined yet.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

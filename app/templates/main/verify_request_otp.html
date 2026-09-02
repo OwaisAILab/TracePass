@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+{% block title %}Verify Organization Request Email · TracePass{% endblock %}
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+      <div class="card shadow-sm border-0 p-4 text-center">
+        <div class="mb-3">
+          <div style="width: 68px; height: 68px; background: rgba(16, 185, 129, 0.1); color: #10b981; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; font-size: 30px;">
+            🛡️
+          </div>
+        </div>
+
+        <h3 class="mb-2">Verify Your Email Address</h3>
+        <p class="text-muted mb-3">
+          To protect supply-chain authenticity, we require email validation before forwarding your organization's request to the administrator.
+        </p>
+
+        <div class="bg-light p-3 rounded mb-4 text-start small">
+          <div class="row g-2">
+            <div class="col-sm-6"><strong>Applicant:</strong> {{ item.name }}</div>
+            <div class="col-sm-6"><strong>Role:</strong> <span class="badge bg-secondary">{{ item.requested_role|title }}</span></div>
+            <div class="col-12"><strong>Organization:</strong> {{ item.organization_name }}</div>
+            <div class="col-12"><strong>Email:</strong> <span class="text-primary fw-semibold">{{ email }}</span></div>
+          </div>
+        </div>
+
+        {% if dev_otp %}
+        <div class="alert alert-warning text-start mb-4" style="font-size: 13px; border-left: 4px solid #f59e0b;">
+          <div class="d-flex justify-content-between align-items-center">
+            <div>
+              <strong>Demo / Development Mode:</strong><br>
+              Verification Code: <span class="badge bg-dark fs-6" id="dev-otp-code">{{ dev_otp }}</span>
+            </div>
+            <button type="button" class="btn btn-sm btn-outline-dark" onclick="fillOtp('{{ dev_otp }}')">Auto-fill</button>
+          </div>
+        </div>
+        {% endif %}
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% for category, message in messages %}
+            <div class="alert alert-{{ 'danger' if category == 'danger' else category }} text-start small mb-3">
+              {{ message }}
+            </div>
+          {% endfor %}
+        {% endwith %}
+
+        <form method="POST" novalidate id="otp-form">
+          {{ form.hidden_tag() }}
+          <div class="mb-4">
+            {{ form.otp_code.label(class="form-label visually-hidden") }}
+            {{ form.otp_code(
+              class="form-control form-control-lg text-center fw-bold fs-3",
+              placeholder="••••••",
+              maxlength="6",
+              pattern="[0-9]{6}",
+              inputmode="numeric",
+              autocomplete="one-time-code",
+              autofocus=true,
+              id="otp-input",
+              style="letter-spacing: 12px; font-family: monospace;"
+            ) }}
+            {% for error in form.otp_code.errors %}
+              <div class="text-danger small mt-2 text-start">{{ error }}</div>
+            {% endfor %}
+            <div class="form-text mt-2 text-muted small">Enter the 6-digit code sent to {{ email }}. Valid for 10 minutes.</div>
+          </div>
+
+          {{ form.submit(class="btn btn-primary w-100 py-2 fs-6 fw-semibold mb-3", value="Validate Email & Forward Request to Admin") }}
+        </form>
+
+        <div class="d-flex justify-content-center align-items-center gap-2 mt-3 pt-3 border-top">
+          <span class="text-muted small">Didn't receive the email?</span>
+          <form method="POST" action="{{ url_for('main.resend_request_otp') }}" class="d-inline">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button type="submit" class="btn btn-link btn-sm p-0 text-decoration-none fw-semibold">
+              Resend Verification Code
+            </button>
+          </form>
+        </div>
+
+        <div class="mt-4 pt-2">
+          <a href="{{ url_for('main.contact') }}" class="text-muted small text-decoration-none">
+            &larr; Start New Request
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function fillOtp(code) {
+  var input = document.getElementById('otp-input');
+  if (input) {
+    input.value = code;
+    input.focus();
+  }
+}
+
+document.getElementById('otp-input')?.addEventListener('input', function(e) {
+  this.value = this.value.replace(/[^0-9]/g, '').slice(0, 6);
+});
+</script>
+{% endblock %}

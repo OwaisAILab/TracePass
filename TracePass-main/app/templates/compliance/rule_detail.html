@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ rule.name }} · TracePass{% endblock %}
+{% block content %}
+<h4 class="mb-1">{{ rule.name }}</h4>
+<p class="text-muted small">Applies to: {{ rule.category or "All categories" }} · <span class="badge bg-{{ 'success' if rule.is_active else 'secondary' }}">{{ "Active" if rule.is_active else "Inactive" }}</span></p>
+{% if rule.description %}<p>{{ rule.description }}</p>{% endif %}
+
+<div class="card p-3 mb-3">
+  <h6>Requirements</h6>
+  <table class="table table-sm">
+    <thead><tr><th>Type</th><th>Required Value</th><th>Mandatory</th><th>Description</th></tr></thead>
+    <tbody>
+      {% for req in rule.requirements %}
+      <tr>
+        <td>{{ req.requirement_type.capitalize() }}</td>
+        <td><code>{{ req.required_value }}</code></td>
+        <td>{{ "Yes" if req.is_mandatory else "No" }}</td>
+        <td class="small text-muted">{{ req.description or "—" }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="4" class="text-muted text-center">No requirements yet — add one below.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <form method="POST" action="{{ url_for('compliance.add_requirement', rule_id=rule.id) }}" class="row g-2 mt-2 border-top pt-3">
+    {{ req_form.hidden_tag() }}
+    <div class="col-md-2">{{ req_form.requirement_type(class="form-select form-select-sm") }}</div>
+    <div class="col-md-3">{{ req_form.required_value(class="form-control form-control-sm", placeholder="e.g. Fair Trade") }}</div>
+    <div class="col-md-3">{{ req_form.description(class="form-control form-control-sm", placeholder="Description (optional)") }}</div>
+    <div class="col-md-2 form-check pt-2">
+      {{ req_form.is_mandatory(class="form-check-input") }}
+      {{ req_form.is_mandatory.label(class="form-check-label small") }}
+    </div>
+    <div class="col-md-2">{{ req_form.submit(class="btn btn-sm btn-outline-primary w-100") }}</div>
+  </form>
+</div>
+{% endblock %}
