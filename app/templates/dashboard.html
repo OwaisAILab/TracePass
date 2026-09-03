@@ -1,11 +1,159 @@
 {% extends "base.html" %}
 {% block title %}Dashboard · TracePass{% endblock %}
+{% block page_title %}Control Center{% endblock %}
 {% block content %}
-<div class="card p-4">
-  <h4>Welcome, {{ user.name }}</h4>
-  <p class="text-muted mb-0">Role: {{ user.role.name }}{% if user.organization %} · Organization: {{ user.organization.name }}{% endif %}</p>
-  <hr>
-  <p class="mb-0">Phase 1 complete: authentication, roles, and organizations are working.
-  Product passports, supply-chain events, and compliance widgets will appear here in later phases.</p>
+<div class="dashboard-header">
+  <div class="dashboard-title">
+    <h4>TracePass Control Center</h4>
+    <p>Compliance, traceability and risk monitoring — live.</p>
+  </div>
+  <div class="dashboard-actions">
+    <a class="btn btn-outline-secondary" href="{{ url_for('reporting.notifications') }}">
+      🔔 Notification Center
+    </a>
+    <a class="btn btn-outline-secondary" href="{{ url_for('reporting.export_summary_csv') }}">
+      📊 Export Summary
+    </a>
+  </div>
 </div>
+
+<div class="kpi-grid">
+  <div class="kpi-card neutral">
+    <div class="kpi-icon neutral">📦</div>
+    <div class="kpi-label">Total Products</div>
+    <div class="kpi-value neutral">{{ kpis.total_products }}</div>
+  </div>
+  <div class="kpi-card success">
+    <div class="kpi-icon success">✓</div>
+    <div class="kpi-label">% Compliant</div>
+    <div class="kpi-value success">{{ kpis.pct_compliant }}%</div>
+  </div>
+  <div class="kpi-card warning">
+    <div class="kpi-icon warning">⚠</div>
+    <div class="kpi-label">Expiring/Expired Certs</div>
+    <div class="kpi-value warning">{{ kpis.expiring_certs + kpis.expired_certs }}</div>
+  </div>
+  <div class="kpi-card danger">
+    <div class="kpi-icon danger">🚨</div>
+    <div class="kpi-label">Open Recalls</div>
+    <div class="kpi-value danger">{{ kpis.open_recalls }}</div>
+  </div>
+  <div class="kpi-card primary">
+    <div class="kpi-icon primary">📋</div>
+    <div class="kpi-label">Open Incidents</div>
+    <div class="kpi-value primary">{{ kpis.open_incidents }}</div>
+  </div>
+</div>
+
+<div class="dashboard-grid">
+  <div>
+    <div class="dashboard-card">
+      <h6>📈 Compliance Breakdown</h6>
+      <canvas id="complianceChart" height="200"></canvas>
+    </div>
+    <div class="dashboard-card">
+      <h6>🔔 Notifications</h6>
+      {% if notifications %}
+      <div>
+        {% for n in notifications %}
+        <div class="notif-item">
+          <div class="notif-content">
+            <span class="badge bg-{{ 'danger' if n.notif_type in ('recall_issued','check_failed') else 'warning text-dark' }}">{{ n.notif_type.replace('_',' ') }}</span>
+            {{ n.message }}
+          </div>
+          <form method="POST" action="{{ url_for('reporting.mark_notification_read', notif_id=n.id) }}">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm btn-link p-0" type="submit" title="Dismiss">✕</button>
+          </form>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-muted small mb-0 text-center py-4">✨ No unread notifications. Everything looks good!</p>
+      {% endif %}
+    </div>
+  </div>
+
+  <div>
+    <div class="dashboard-card">
+      <h6>🔴 Recent Recalls</h6>
+      {% if recent_recalls %}
+      <div>
+        {% for r in recent_recalls %}
+        <div class="notif-item">
+          <div class="notif-content">
+            <span class="badge bg-{{ 'danger' if r.status == 'open' else ('warning text-dark' if r.status == 'in_progress' else 'secondary') }}">{{ r.status.replace('_',' ') }}</span>
+            <strong>{{ r.product.name }}</strong> — {{ r.reason[:120] }}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-muted small mb-0 text-center py-4">✅ No recalls issued. Great work!</p>
+      {% endif %}
+    </div>
+    <div class="dashboard-card">
+      <h6>⚡ Recent Incidents</h6>
+      {% if recent_incidents %}
+      <div>
+        {% for i in recent_incidents %}
+        <div class="notif-item">
+          <div class="notif-content">
+            <span class="badge bg-{{ 'danger' if i.status == 'open' else ('warning text-dark' if i.status == 'investigating' else 'success') }}">{{ i.status }}</span>
+            <strong>{{ i.product.name }}</strong> — {{ i.description[:120] }}
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="text-muted small mb-0 text-center py-4">🎉 No incidents reported. Everything is under control.</p>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  new Chart(document.getElementById('complianceChart'), {
+    type: 'doughnut',
+    data: {
+      labels: ['Compliant', 'Non-Compliant', 'Pending'],
+      datasets: [{
+        data: [{{ kpis.compliant }}, {{ kpis.non_compliant }}, {{ kpis.pending }}],
+        backgroundColor: [
+          'rgba(52, 211, 153, 0.85)',
+          'rgba(244, 63, 94, 0.85)',
+          'rgba(251, 191, 36, 0.85)'
+        ],
+        borderColor: [
+          'rgba(52, 211, 153, 1)',
+          'rgba(244, 63, 94, 1)',
+          'rgba(251, 191, 36, 1)'
+        ],
+        borderWidth: 2,
+        hoverOffset: 8
+      }]
+    },
+    options: {
+      cutout: '65%',
+      responsive: true,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: {
+            padding: 20,
+            usePointStyle: true,
+            pointStyle: 'circle',
+            color: '#e8eefc',
+            font: { family: 'Inter', weight: 600 }
+          }
+        }
+      },
+      animation: {
+        animateRotate: true,
+        animateScale: true
+      }
+    }
+  });
+</script>
 {% endblock %}
