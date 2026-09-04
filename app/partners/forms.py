@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from flask_wtf import FlaskForm
 from wtforms import SelectField, IntegerField, FloatField, StringField, TextAreaField, SubmitField, DateField, BooleanField
 from wtforms.validators import DataRequired, Optional, NumberRange, Length
@@ -5,6 +6,7 @@ from wtforms.validators import DataRequired, Optional, NumberRange, Length
 from app.models.purchase_order import PO_STATUSES
 
 
+# What this code does: Defines the PurchaseOrderForm class, grouping related data and behavior used by this part of the application.
 class PurchaseOrderForm(FlaskForm):
     product_id = SelectField("Product / Passport", coerce=int, validators=[DataRequired()])
     material_id = SelectField("Raw Material", coerce=int, validators=[Optional()])
@@ -15,6 +17,7 @@ class PurchaseOrderForm(FlaskForm):
     submit = SubmitField("Submit Purchase Order")
 
 
+# What this code does: Defines the PurchaseOrderResponseForm class, grouping related data and behavior used by this part of the application.
 class PurchaseOrderResponseForm(FlaskForm):
     action = SelectField("Supplier Response", choices=[
         ("confirm", "Accept / Confirm"),
@@ -28,11 +31,13 @@ class PurchaseOrderResponseForm(FlaskForm):
     submit = SubmitField("Send Response")
 
 
+# What this code does: Defines the PurchaseOrderStatusForm class, grouping related data and behavior used by this part of the application.
 class PurchaseOrderStatusForm(FlaskForm):
     status = SelectField("Status", choices=[(s, s.replace("_", " ").title()) for s in PO_STATUSES], validators=[DataRequired()])
     submit = SubmitField("Update Status")
 
 
+# What this code does: Defines the ShipmentFromPOForm class, grouping related data and behavior used by this part of the application.
 class ShipmentFromPOForm(FlaskForm):
     batch_id = SelectField("Manufacturing Batch (optional)", coerce=int, validators=[Optional()])
     tracking_no = TextAreaField("Tracking Number", validators=[Optional(), Length(max=100)])
@@ -41,6 +46,7 @@ class ShipmentFromPOForm(FlaskForm):
     submit = SubmitField("Dispatch Shipment")
 
 
+# What this code does: Defines the ConfirmReceiptForm class, grouping related data and behavior used by this part of the application.
 class ConfirmReceiptForm(FlaskForm):
     received_quantity = IntegerField("Received Quantity", validators=[DataRequired(), NumberRange(min=1)])
     received_date = DateField("Receipt Date", validators=[DataRequired()])
@@ -48,6 +54,7 @@ class ConfirmReceiptForm(FlaskForm):
     submit = SubmitField("Confirm Receipt")
 
 
+# What this code does: Defines the SupplierMaterialForm class, grouping related data and behavior used by this part of the application.
 class SupplierMaterialForm(FlaskForm):
     material_id = SelectField("Raw Material", coerce=int, validators=[DataRequired()])
     unit = StringField("Trading Unit", default="KG", validators=[DataRequired(), Length(max=30)])
@@ -57,6 +64,7 @@ class SupplierMaterialForm(FlaskForm):
     submit = SubmitField("Save Material Offering")
 
 
+# What this code does: Defines the PurchaseOrderOfferForm class, grouping related data and behavior used by this part of the application.
 class PurchaseOrderOfferForm(FlaskForm):
     unit_price = FloatField("Proposed Unit Price (PKR)", validators=[DataRequired(), NumberRange(min=0.01)])
     confirmed_supply_date = DateField("Proposed Supply Date", validators=[Optional()])

@@ -1,5 +1,7 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 import os
 import csv
+import json
 from io import StringIO
 from datetime import datetime, timezone
 from flask import Blueprint, render_template, redirect, url_for, flash, request, send_file, current_app, Response
@@ -27,6 +29,7 @@ CAN_REVIEW = (ROLE_ADMIN, ROLE_AUDITOR)
 
 # --- dashboard --------------------------------------------------------------
 
+# What this code does: Implements the dashboard logic used by this part of the TracePass application.
 @reporting_bp.route("/reports/dashboard")
 @login_required
 def dashboard():
@@ -61,6 +64,7 @@ def dashboard():
 
 # --- notifications -----------------------------------------------------------
 
+# What this code does: Implements the mark notification read logic used by this part of the TracePass application.
 @reporting_bp.route("/notifications/<int:notif_id>/read", methods=["POST"])
 @login_required
 def mark_notification_read(notif_id):
@@ -74,6 +78,7 @@ def mark_notification_read(notif_id):
 
 # --- notification center -------------------------------------------------------
 
+# What this code does: Implements the notifications logic used by this part of the TracePass application.
 @reporting_bp.route("/notifications")
 @login_required
 def notifications():
@@ -85,6 +90,7 @@ def notifications():
     return render_template("reporting/notifications.html", pagination=pagination, notifications=pagination.items)
 
 
+# What this code does: Implements the mark all notifications read logic used by this part of the TracePass application.
 @reporting_bp.route("/notifications/read-all", methods=["POST"])
 @login_required
 def mark_all_notifications_read():
@@ -96,6 +102,7 @@ def mark_all_notifications_read():
 
 # --- recalls -------------------------------------------------------------------
 
+# What this code does: Implements the issue recall logic used by this part of the TracePass application.
 @reporting_bp.route("/products/<int:product_id>/recalls", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -121,6 +128,7 @@ def issue_recall(product_id):
     return redirect(url_for("tracepass.view_product", product_id=product.id))
 
 
+# What this code does: Updates recall status using validated data and saves the change when appropriate.
 @reporting_bp.route("/recalls/<int:recall_id>/status", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -139,6 +147,7 @@ def update_recall_status(recall_id):
 
 # --- incidents -----------------------------------------------------------------
 
+# What this code does: Implements the report incident logic used by this part of the TracePass application.
 @reporting_bp.route("/products/<int:product_id>/incidents", methods=["POST"])
 @login_required
 def report_incident(product_id):
@@ -158,6 +167,7 @@ def report_incident(product_id):
     return redirect(url_for("tracepass.view_product", product_id=product.id))
 
 
+# What this code does: Updates incident status using validated data and saves the change when appropriate.
 @reporting_bp.route("/incidents/<int:incident_id>/status", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -175,8 +185,38 @@ def update_incident_status(incident_id):
     return redirect(url_for("tracepass.view_product", product_id=incident.product_id))
 
 
+# What this code does: Implements the  format audit details logic used by this part of the TracePass application.
+def _format_audit_details(raw_value):
+    """Convert audit JSON into a concise, human-readable summary for admins."""
+    if not raw_value:
+        return "—"
+    try:
+        data = json.loads(raw_value) if isinstance(raw_value, str) else raw_value
+    except (TypeError, ValueError):
+        return str(raw_value)
+    if not isinstance(data, dict):
+        return str(data)
+
+    # Internal primary keys are usually already shown in the Entity column.
+    hidden_keys = {"id"}
+    parts = []
+    for key, value in data.items():
+        if key in hidden_keys or value in (None, "", [], {}):
+            continue
+        label = key.replace("_", " ").title()
+        if isinstance(value, bool):
+            value = "Yes" if value else "No"
+        elif isinstance(value, (list, dict)):
+            value = ", ".join(map(str, value)) if isinstance(value, list) else "; ".join(
+                f"{k.replace('_', ' ').title()}: {v}" for k, v in value.items()
+            )
+        parts.append(f"{label}: {value}")
+    return " • ".join(parts) if parts else "No additional details"
+
+
 # --- audit log viewer (admin only) ----------------------------------------------
 
+# What this code does: Builds and returns a list of audit logs for the current feature.
 @reporting_bp.route("/admin/audit-logs")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -196,9 +236,11 @@ def list_audit_logs():
     pagination = query.order_by(AuditLog.created_at.desc()).paginate(page=page, per_page=25, error_out=False)
     entity_types = [row[0] for row in db.session.query(AuditLog.entity_type).distinct().order_by(AuditLog.entity_type).all()]
     return render_template("reporting/audit_logs.html", pagination=pagination, logs=pagination.items,
-                           action=action, entity_type=entity_type, search=search, entity_types=entity_types)
+                           action=action, entity_type=entity_type, search=search, entity_types=entity_types,
+                           format_audit_details=_format_audit_details)
 
 
+# What this code does: Implements the export summary csv logic used by this part of the TracePass application.
 @reporting_bp.route("/reports/summary.csv")
 @login_required
 def export_summary_csv():
@@ -217,6 +259,7 @@ def export_summary_csv():
 
 # --- PDF export ------------------------------------------------------------------
 
+# What this code does: Implements the export compliance report logic used by this part of the TracePass application.
 @reporting_bp.route("/products/<int:product_id>/report.pdf")
 @login_required
 def export_compliance_report(product_id):

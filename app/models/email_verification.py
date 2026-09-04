@@ -1,8 +1,10 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 
 from app.extensions import db
 
 
+# What this code does: Defines the EmailVerification class, grouping related data and behavior used by this part of the application.
 class EmailVerification(db.Model):
     """One-time email verification challenge used before registration is accepted.
 
@@ -23,6 +25,7 @@ class EmailVerification(db.Model):
     verified_at = db.Column(db.DateTime, nullable=True)
     created_at = db.Column(db.DateTime, nullable=False, default=lambda: datetime.now(timezone.utc))
 
+    # What this code does: Checks a condition and returns a boolean result used by the application logic.
     def is_expired(self):
         now = datetime.now(timezone.utc)
         expires = self.expires_at

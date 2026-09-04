@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 """Phase 3 procurement workflow: raw-material purchase orders and shipments.
 
 Revision ID: 9a1f3e7b6c21
@@ -12,6 +13,7 @@ branch_labels = None
 depends_on = None
 
 
+# What this code does: Applies this database migration by creating or changing the required database structures.
 def upgrade():
     # The procurement model was introduced in the application code, but the
     # previous Phase 3 package did not create the purchase_orders table.
@@ -62,6 +64,7 @@ def upgrade():
         batch_op.create_foreign_key("fk_shipments_material", "materials", ["material_id"], ["id"])
 
 
+# What this code does: Reverses this database migration to return the schema to the previous version.
 def downgrade():
     with op.batch_alter_table("shipments", schema=None) as batch_op:
         batch_op.drop_constraint("fk_shipments_material", type_="foreignkey")

@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 """
 Automatic audit logging.
 
@@ -29,6 +30,7 @@ SENSITIVE_COLUMNS = {"password_hash"}
 _listeners_registered = False
 
 
+# What this code does: Implements the  current user id logic used by this part of the TracePass application.
 def _current_user_id():
     if not has_request_context():
         return None
@@ -40,6 +42,7 @@ def _current_user_id():
     return None
 
 
+# What this code does: Implements the  safe snapshot logic used by this part of the TracePass application.
 def _safe_snapshot(target):
     """Serializes a model instance's plain columns (not relationships) to a dict."""
     mapper = sa_inspect(target).mapper
@@ -51,6 +54,7 @@ def _safe_snapshot(target):
     return json.dumps(data, default=str)
 
 
+# What this code does: Implements the  write log logic used by this part of the TracePass application.
 def _write_log(connection, target, action):
     connection.execute(
         AuditLog.__table__.insert(),
@@ -66,6 +70,7 @@ def _write_log(connection, target, action):
     )
 
 
+# What this code does: Registers database event listeners that automatically record important changes in the audit log.
 def register_audit_listeners(models_to_audit):
     """
     Call once at app startup with the list of model CLASSES to audit.

@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -22,6 +23,7 @@ EVENT_TYPES = [
 ]
 
 
+# What this code does: Defines the SupplyChainEvent class, grouping related data and behavior used by this part of the application.
 class SupplyChainEvent(db.Model):
     __tablename__ = "supply_chain_events"
 
@@ -41,5 +43,6 @@ class SupplyChainEvent(db.Model):
     organization = db.relationship("Organization")
     recorded_by = db.relationship("User")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<SupplyChainEvent {self.event_type} product={self.product_id}>"

@@ -1,8 +1,10 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 
 from app.extensions import db
 
 
+# What this code does: Defines the RegistrationRequestDocument class, grouping related data and behavior used by this part of the application.
 class RegistrationRequestDocument(db.Model):
     """Authenticity evidence submitted with a public account request."""
 
@@ -20,5 +22,6 @@ class RegistrationRequestDocument(db.Model):
         back_populates="authenticity_documents",
     )
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<RegistrationRequestDocument {self.original_filename}>"

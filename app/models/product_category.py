@@ -1,7 +1,9 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 from app.extensions import db
 
 
+# What this code does: Defines the ProductCategory class, grouping related data and behavior used by this part of the application.
 class ProductCategory(db.Model):
     __tablename__ = "product_categories"
 
@@ -19,5 +21,6 @@ class ProductCategory(db.Model):
     template = db.relationship("ProductTemplate", back_populates="categories")
     products = db.relationship("Product", back_populates="category_ref", lazy="dynamic")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<ProductCategory {self.name}>"

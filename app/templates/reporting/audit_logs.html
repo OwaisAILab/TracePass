@@ -21,8 +21,8 @@
         <td class="small">{{ log.user.name if log.user else "System" }}</td>
         <td><span class="badge bg-{{ 'success' if log.action == 'create' else ('warning text-dark' if log.action == 'update' else 'danger') }}">{{ log.action }}</span></td>
         <td class="small">{{ log.entity_type }} #{{ log.entity_id or "—" }}</td>
-        <td class="small text-muted" style="max-width:300px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">
-          {{ (log.new_value or log.old_value or "") }}
+        <td class="small text-muted" style="max-width:420px; white-space:normal; line-height:1.45;">
+          {{ format_audit_details(log.new_value or log.old_value) }}
         </td>
       </tr>
       {% else %}

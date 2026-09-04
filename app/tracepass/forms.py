@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, TextAreaField, SelectField, DateField, DateTimeField, IntegerField, FloatField, SubmitField
@@ -8,6 +9,7 @@ from app.models.shipment import SHIPMENT_STATUSES
 from app.models.lifecycle import LIFECYCLE_EVENT_TYPES
 
 
+# What this code does: Defines the ProductForm class, grouping related data and behavior used by this part of the application.
 class ProductForm(FlaskForm):
     name = StringField("Product Name", validators=[DataRequired(), Length(max=150)])
     industry_id = SelectField("Industry", coerce=int, validators=[Optional()])
@@ -21,6 +23,7 @@ class ProductForm(FlaskForm):
     submit = SubmitField("Create Passport")
 
 
+# What this code does: Defines the BatchForm class, grouping related data and behavior used by this part of the application.
 class BatchForm(FlaskForm):
     batch_no = StringField("Batch/Lot Number", validators=[DataRequired(), Length(max=100)])
     manufacture_date = DateField("Manufacture Date", validators=[Optional()])
@@ -29,6 +32,7 @@ class BatchForm(FlaskForm):
     submit = SubmitField("Add Batch")
 
 
+# What this code does: Defines the MaterialLinkForm class, grouping related data and behavior used by this part of the application.
 class MaterialLinkForm(FlaskForm):
     material_id = SelectField("Material", coerce=int, validators=[DataRequired()])
     supplier_id = SelectField("Supplier", coerce=int, validators=[Optional()])
@@ -37,6 +41,7 @@ class MaterialLinkForm(FlaskForm):
     submit = SubmitField("Link Material")
 
 
+# What this code does: Defines the EventForm class, grouping related data and behavior used by this part of the application.
 class EventForm(FlaskForm):
     batch_id = SelectField("Batch (optional)", coerce=int, validators=[Optional()])
     event_type = SelectField("Event Type", choices=[(t, t.replace("_", " ").title()) for t in EVENT_TYPES], validators=[DataRequired()])
@@ -46,6 +51,7 @@ class EventForm(FlaskForm):
     submit = SubmitField("Log Event")
 
 
+# What this code does: Defines the ShipmentForm class, grouping related data and behavior used by this part of the application.
 class ShipmentForm(FlaskForm):
     from_org_id = SelectField("From Organization", coerce=int, validators=[Optional()])
     to_org_id = SelectField("To Organization", coerce=int, validators=[Optional()])
@@ -57,6 +63,7 @@ class ShipmentForm(FlaskForm):
     submit = SubmitField("Save Shipment")
 
 
+# What this code does: Defines the LifecycleEventForm class, grouping related data and behavior used by this part of the application.
 class LifecycleEventForm(FlaskForm):
     event_type = SelectField("Lifecycle Event", choices=[(t, t.replace("_", " ").title()) for t in LIFECYCLE_EVENT_TYPES], validators=[DataRequired()])
     event_date = DateTimeField("Event Date/Time", format="%Y-%m-%dT%H:%M", validators=[DataRequired()], render_kw={"type": "datetime-local"})

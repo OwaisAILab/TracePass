@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 import os
 from flask import Flask, render_template
 
@@ -5,6 +6,7 @@ from config import config
 from app.extensions import db, login_manager, migrate, csrf
 
 
+# What this code does: Creates and configures the Flask application, initializes extensions, registers blueprints, and prepares the project to run.
 def create_app(config_name=None):
     config_name = config_name or os.environ.get("FLASK_ENV", "default")
 
@@ -25,6 +27,7 @@ def create_app(config_name=None):
 
     from app.models.user import User
 
+    # What this code does: Reloads the authenticated user from the database using the ID stored in the Flask-Login session.
     @login_manager.user_loader
     def load_user(user_id):
         return User.query.get(int(user_id))
@@ -65,6 +68,7 @@ def create_app(config_name=None):
     app.register_blueprint(api_bp)
 
     # --- baseline security headers ---
+    # What this code does: Adds security headers to the relevant application or database context.
     @app.after_request
     def add_security_headers(response):
         response.headers.setdefault("X-Content-Type-Options", "nosniff")
@@ -75,14 +79,17 @@ def create_app(config_name=None):
         return response
 
     # --- error handlers ---
+    # What this code does: Implements the forbidden logic used by this part of the TracePass application.
     @app.errorhandler(403)
     def forbidden(e):
         return render_template("errors/403.html"), 403
 
+    # What this code does: Implements the not found logic used by this part of the TracePass application.
     @app.errorhandler(404)
     def not_found(e):
         return render_template("errors/404.html"), 404
 
+    # What this code does: Implements the unauthorized logic used by this part of the TracePass application.
     @app.errorhandler(401)
     def unauthorized(e):
         return render_template("errors/401.html"), 401

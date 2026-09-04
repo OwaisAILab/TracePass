@@ -1662,6 +1662,15 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 /* Main content always uses the full viewport width. */
 .tp-main { min-height:100vh; margin-left:0; }
 
+/* Bootstrap's stepped .container breakpoints (540/720/960/1140/1320px) leave large
+   empty gutters on wide screens, making pages feel boxed-in compared to the full-width
+   landing page. Fill the screen instead, keeping only a small left/right margin. */
+.container, .container-sm, .container-md, .container-lg, .container-xl, .container-xxl {
+  max-width: calc(100% - 48px) !important;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .tp-topbar {
   height:72px;
   position:sticky;
@@ -1704,7 +1713,7 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
 
 .tp-sidebar-close { border:0; background:transparent; color:#d1d5db; font-size:27px; line-height:1; cursor:pointer; padding:4px 8px; border-radius:8px; }
 .tp-sidebar-close:hover { background:rgba(255,255,255,.08); color:#fff; }
-.tp-content { padding:28px 32px 48px; max-width:1440px; margin:0 auto; }
+.tp-content { padding:28px 32px 48px; max-width:100%; margin:0; }
 @media (max-width:768px){ .tp-content { padding:18px 16px 32px; } }
 
 /* Overlay appears on desktop and mobile. */
@@ -1748,6 +1757,15 @@ body:has(.tp-wow) { background:#05070b; overflow-x:hidden; }
   background: linear-gradient(160deg, #05070f 0%, #0a0d1b 55%, #0c1020 100%);
   color: #e7ebf7;
   -webkit-font-smoothing: antialiased;
+}
+
+/* Industry image only changes the page background. Passport cards keep their original size and layout. */
+.pp-body.pp-has-industry-bg {
+  background-image: linear-gradient(rgba(3,5,12,.68), rgba(3,5,12,.68)), var(--pp-industry-bg);
+  background-size: cover;
+  background-position: center;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 .pp-shell {

@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 import secrets
 from datetime import datetime, timedelta, timezone
 
@@ -15,6 +16,7 @@ from app.services.email import send_email
 auth_bp = Blueprint("auth", __name__, template_folder="../templates/auth")
 
 
+# What this code does: Creates a new otp challenge and performs the required validation or setup.
 def _create_otp_challenge(email, purpose, payload, file_paths=None):
     """Create a short-lived hashed OTP challenge and email the code."""
     # Remove previous active challenge for this email/purpose.
@@ -63,6 +65,7 @@ def _create_otp_challenge(email, purpose, payload, file_paths=None):
     return challenge
 
 
+# What this code does: Implements the  pending challenge logic used by this part of the TracePass application.
 def _pending_challenge(expected_purpose):
     challenge_id = session.get("email_verification_id")
     if not challenge_id or session.get("email_verification_purpose") != expected_purpose:
@@ -73,6 +76,7 @@ def _pending_challenge(expected_purpose):
     return challenge
 
 
+# What this code does: Processes account registration data and creates a new user after validation.
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
     if current_user.is_authenticated:
@@ -105,6 +109,7 @@ def register():
     return render_template("auth/register.html", form=form)
 
 
+# What this code does: Implements the verify email logic used by this part of the TracePass application.
 @auth_bp.route("/verify-email", methods=["GET", "POST"])
 def verify_email():
     purpose = session.get("email_verification_purpose")
@@ -235,6 +240,7 @@ def verify_email():
     return render_template("auth/verify_email.html", form=form, email=challenge.email)
 
 
+# What this code does: Implements the resend email otp logic used by this part of the TracePass application.
 @auth_bp.route("/verify-email/resend", methods=["POST"])
 def resend_email_otp():
     purpose = session.get("email_verification_purpose")
@@ -261,6 +267,7 @@ def resend_email_otp():
     return redirect(url_for("auth.verify_email"))
 
 
+# What this code does: Handles user authentication by validating credentials and creating a secure logged-in session.
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     if current_user.is_authenticated:
@@ -283,6 +290,7 @@ def login():
     return render_template("auth/login.html", form=form)
 
 
+# What this code does: Ends the current user session and redirects the user away from protected pages.
 @auth_bp.route("/logout")
 @login_required
 def logout():

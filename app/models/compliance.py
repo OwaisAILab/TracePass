@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -15,6 +16,7 @@ REVIEW_CORRECTIONS_REQUESTED = "corrections_requested"
 REVIEW_DECISIONS = [REVIEW_APPROVED, REVIEW_REJECTED, REVIEW_CORRECTIONS_REQUESTED]
 
 
+# What this code does: Defines the ComplianceRule class, grouping related data and behavior used by this part of the application.
 class ComplianceRule(db.Model):
     """
     A named policy, e.g. 'Apparel products must carry a Fair Trade certificate'.
@@ -33,10 +35,12 @@ class ComplianceRule(db.Model):
     category = db.relationship("ProductCategory", backref=db.backref("compliance_rules", lazy="dynamic"))
     requirements = db.relationship("ComplianceRequirement", back_populates="rule", cascade="all, delete-orphan")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<ComplianceRule {self.name}>"
 
 
+# What this code does: Defines the ComplianceRequirement class, grouping related data and behavior used by this part of the application.
 class ComplianceRequirement(db.Model):
     """
     A single checkable condition under a rule, e.g. 'must have a valid,
@@ -54,10 +58,12 @@ class ComplianceRequirement(db.Model):
 
     rule = db.relationship("ComplianceRule", back_populates="requirements")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<ComplianceRequirement {self.requirement_type}:{self.required_value}>"
 
 
+# What this code does: Defines the ComplianceCheck class, grouping related data and behavior used by this part of the application.
 class ComplianceCheck(db.Model):
     """
     Append-only record of a single requirement being evaluated against a product.
@@ -79,10 +85,12 @@ class ComplianceCheck(db.Model):
     rule = db.relationship("ComplianceRule")
     requirement = db.relationship("ComplianceRequirement")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<ComplianceCheck product={self.product_id} {self.result}>"
 
 
+# What this code does: Defines the ComplianceReview class, grouping related data and behavior used by this part of the application.
 class ComplianceReview(db.Model):
     """
     An auditor/officer's decision on a product's compliance status. Also
@@ -102,5 +110,6 @@ class ComplianceReview(db.Model):
     product = db.relationship("Product", backref=db.backref("compliance_reviews", lazy="dynamic"))
     reviewer = db.relationship("User")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<ComplianceReview product={self.product_id} {self.decision}>"

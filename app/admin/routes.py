@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 import os
 import uuid
 
@@ -27,6 +28,7 @@ from app.uploads import validate_upload
 admin_bp = Blueprint("admin", __name__, template_folder="../templates/admin", url_prefix="/admin")
 
 
+# What this code does: Implements the  save industry image logic used by this part of the TracePass application.
 def _save_industry_image(file_storage):
     """Save an uploaded industry image and return its browser-accessible URL."""
     upload_dir = os.path.join(current_app.config["UPLOAD_FOLDER"], "industry_images")
@@ -38,6 +40,7 @@ def _save_industry_image(file_storage):
     return url_for("admin.industry_image", filename=filename)
 
 
+# What this code does: Implements the industry image logic used by this part of the TracePass application.
 @admin_bp.route("/uploads/industry_images/<path:filename>")
 def industry_image(filename):
     """Serve uploaded industry images (used on the admin list and public landing page)."""
@@ -45,6 +48,7 @@ def industry_image(filename):
     return send_from_directory(upload_dir, filename)
 
 
+# What this code does: Builds and returns a list of users for the current feature.
 @admin_bp.route("/users")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -53,6 +57,7 @@ def list_users():
     return render_template("admin/users.html", users=users)
 
 
+# What this code does: Implements the new user logic used by this part of the TracePass application.
 @admin_bp.route("/users/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -77,6 +82,7 @@ def new_user():
     return render_template("admin/user_form.html", form=form)
 
 
+# What this code does: Implements the toggle user active logic used by this part of the TracePass application.
 @admin_bp.route("/users/<int:user_id>/toggle-active", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -88,6 +94,7 @@ def toggle_user_active(user_id):
     return redirect(url_for("admin.list_users"))
 
 
+# What this code does: Removes user after checking that the operation is allowed.
 @admin_bp.route("/users/<int:user_id>/delete", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -109,6 +116,7 @@ def delete_user(user_id):
     return redirect(url_for("admin.list_users"))
 
 
+# What this code does: Builds and returns a list of registration requests for the current feature.
 @admin_bp.route("/registration-requests")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -118,6 +126,7 @@ def list_registration_requests():
     return render_template("admin/registration_requests.html", requests=requests)
 
 
+# What this code does: Implements the download registration request document logic used by this part of the TracePass application.
 @admin_bp.route("/registration-requests/documents/<int:document_id>")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -128,6 +137,7 @@ def download_registration_request_document(document_id):
     return send_from_directory(upload_dir, document.file_path, as_attachment=True, download_name=document.original_filename)
 
 
+# What this code does: Implements the view registration request logic used by this part of the TracePass application.
 @admin_bp.route("/registration-requests/<int:request_id>")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -138,6 +148,7 @@ def view_registration_request(request_id):
     return render_template("admin/registration_request_detail.html", item=item, form=FlaskForm())
 
 
+# What this code does: Implements the approve registration request logic used by this part of the TracePass application.
 @admin_bp.route("/registration-requests/<int:request_id>/approve", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -216,6 +227,7 @@ def approve_registration_request(request_id):
     return redirect(url_for("admin.list_registration_requests"))
 
 
+# What this code does: Implements the reject registration request logic used by this part of the TracePass application.
 @admin_bp.route("/registration-requests/<int:request_id>/reject", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -239,6 +251,7 @@ def reject_registration_request(request_id):
     return redirect(url_for("admin.list_registration_requests"))
 
 
+# What this code does: Builds and returns a list of organizations for the current feature.
 @admin_bp.route("/organizations")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -247,6 +260,7 @@ def list_organizations():
     return render_template("admin/organizations.html", organizations=organizations)
 
 
+# What this code does: Implements the new organization logic used by this part of the TracePass application.
 @admin_bp.route("/organizations/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -271,6 +285,7 @@ def new_organization():
     return render_template("admin/organization_form.html", form=form)
 
 
+# What this code does: Implements the verify organization logic used by this part of the TracePass application.
 @admin_bp.route("/organizations/<int:org_id>/verify", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -282,6 +297,7 @@ def verify_organization(org_id):
     return redirect(url_for("admin.list_organizations"))
 
 
+# What this code does: Builds and returns a list of suppliers for the current feature.
 @admin_bp.route("/suppliers")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -290,6 +306,7 @@ def list_suppliers():
     return render_template("admin/suppliers.html", suppliers=suppliers)
 
 
+# What this code does: Implements the new supplier logic used by this part of the TracePass application.
 @admin_bp.route("/suppliers/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -310,6 +327,7 @@ def new_supplier():
     return render_template("admin/supplier_form.html", form=form)
 
 
+# What this code does: Builds and returns a list of materials for the current feature.
 @admin_bp.route("/materials")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -318,6 +336,7 @@ def list_materials():
     return render_template("admin/materials.html", materials=materials)
 
 
+# What this code does: Implements the new material logic used by this part of the TracePass application.
 @admin_bp.route("/materials/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -333,6 +352,7 @@ def new_material():
     return render_template("admin/material_form.html", form=form)
 
 
+# What this code does: Builds and returns a list of categories for the current feature.
 @admin_bp.route("/categories")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -341,6 +361,7 @@ def list_categories():
     return render_template("admin/categories.html", categories=categories)
 
 
+# What this code does: Builds and returns a list of industries for the current feature.
 @admin_bp.route("/industries")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -349,6 +370,7 @@ def list_industries():
     return render_template("admin/industries.html", industries=industries)
 
 
+# What this code does: Implements the new industry logic used by this part of the TracePass application.
 @admin_bp.route("/industries/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -376,6 +398,7 @@ def new_industry():
     return render_template("admin/industry_form.html", form=form)
 
 
+# What this code does: Removes industry image after checking that the operation is allowed.
 def _delete_industry_image(image_url):
     """Delete a locally uploaded industry image, but never delete bundled/static or external images."""
     prefix = "/admin/uploads/industry_images/"
@@ -390,6 +413,7 @@ def _delete_industry_image(image_url):
         pass
 
 
+# What this code does: Implements the edit industry logic used by this part of the TracePass application.
 @admin_bp.route("/industries/<int:industry_id>/edit", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -422,6 +446,7 @@ def edit_industry(industry_id):
     return render_template("admin/industry_form.html", form=form, industry=industry)
 
 
+# What this code does: Removes industry after checking that the operation is allowed.
 @admin_bp.route("/industries/<int:industry_id>/delete", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -445,6 +470,7 @@ def delete_industry(industry_id):
     return redirect(url_for("admin.list_industries"))
 
 
+# What this code does: Builds and returns a list of templates for the current feature.
 @admin_bp.route("/templates")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -453,6 +479,7 @@ def list_templates():
     return render_template("admin/templates.html", templates=templates)
 
 
+# What this code does: Implements the new template logic used by this part of the TracePass application.
 @admin_bp.route("/templates/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -486,6 +513,7 @@ def new_template():
     return render_template("admin/template_form.html", form=form)
 
 
+# What this code does: Implements the new category logic used by this part of the TracePass application.
 @admin_bp.route("/categories/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)

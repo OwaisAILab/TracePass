@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -10,6 +11,7 @@ ORG_TYPE_AUDITOR = "auditor"
 ORG_TYPES = [ORG_TYPE_SUPPLIER, ORG_TYPE_MANUFACTURER, ORG_TYPE_DISTRIBUTOR, ORG_TYPE_RETAILER, ORG_TYPE_AUDITOR]
 
 
+# What this code does: Defines the Organization class, grouping related data and behavior used by this part of the application.
 class Organization(db.Model):
     __tablename__ = "organizations"
 
@@ -25,5 +27,6 @@ class Organization(db.Model):
 
     users = db.relationship("User", back_populates="organization", lazy="dynamic")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<Organization {self.name} ({self.type})>"

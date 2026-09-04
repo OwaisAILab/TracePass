@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from flask_wtf import FlaskForm
 from wtforms import StringField, PasswordField, SelectField, BooleanField, SubmitField
 from wtforms.validators import DataRequired, Email, Length, EqualTo, ValidationError, Optional
@@ -7,12 +8,14 @@ from app.models.role import ALL_ROLES, ROLE_ADMIN, ROLE_CUSTOMER
 from app.models.organization import Organization
 
 
+# What this code does: Checks whether password strength satisfies the project rules before processing continues.
 def _validate_password_strength(form, field):
     value = field.data or ""
     if len(value) < 8 or not any(c.isupper() for c in value) or not any(c.islower() for c in value) or not any(c.isdigit() for c in value):
         raise ValidationError("Password must be at least 8 characters and include uppercase, lowercase and a number.")
 
 
+# What this code does: Defines the LoginForm class, grouping related data and behavior used by this part of the application.
 class LoginForm(FlaskForm):
     email = StringField("Email", validators=[DataRequired(), Email()])
     password = PasswordField("Password", validators=[DataRequired()])
@@ -20,6 +23,7 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Log In")
 
 
+# What this code does: Defines the RegistrationForm class, grouping related data and behavior used by this part of the application.
 class RegistrationForm(FlaskForm):
     """
     Public self-registration. Deliberately has NO role field — every
@@ -39,11 +43,13 @@ class RegistrationForm(FlaskForm):
     )
     submit = SubmitField("Register")
 
+    # What this code does: Checks whether email satisfies the project rules before processing continues.
     def validate_email(self, field):
         if User.query.filter_by(email=field.data.lower()).first():
             raise ValidationError("An account with this email already exists.")
 
 
+# What this code does: Defines the AdminCreateUserForm class, grouping related data and behavior used by this part of the application.
 class AdminCreateUserForm(FlaskForm):
     """Admin-only. Creates accounts for organizational / staff roles.
 
@@ -62,10 +68,12 @@ class AdminCreateUserForm(FlaskForm):
     password = PasswordField("Temporary Password", validators=[DataRequired(), Length(min=8), _validate_password_strength])
     submit = SubmitField("Create User")
 
+    # What this code does: Checks whether email satisfies the project rules before processing continues.
     def validate_email(self, field):
         if User.query.filter_by(email=field.data.lower()).first():
             raise ValidationError("An account with this email already exists.")
 
+    # What this code does: Checks whether organization id satisfies the project rules before processing continues.
     def validate_organization_id(self, field):
         # Organization is required for every role except customer/admin,
         # since a supplier/manufacturer/distributor/auditor account without
@@ -84,6 +92,7 @@ class AdminCreateUserForm(FlaskForm):
                 )
 
 
+# What this code does: Defines the EmailOTPForm class, grouping related data and behavior used by this part of the application.
 class EmailOTPForm(FlaskForm):
     """Six-digit OTP form used to verify ownership of an email address."""
     otp = StringField("Email OTP", validators=[DataRequired(), Length(min=6, max=6)])

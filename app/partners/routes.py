@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 import random
 import string
 import json
@@ -37,10 +38,12 @@ CAN_REQUEST_PO = (ROLE_ADMIN, ROLE_MANUFACTURER, ROLE_DISTRIBUTOR, ROLE_RETAILER
 CAN_FULFILL_PO = (ROLE_ADMIN, ROLE_SUPPLIER, ROLE_MANUFACTURER, ROLE_DISTRIBUTOR)
 
 
+# What this code does: Generates po number from the available project data.
 def _generate_po_number():
     return "PO-" + "".join(random.choices(string.ascii_uppercase + string.digits, k=8))
 
 
+# What this code does: Implements the  notify org logic used by this part of the TracePass application.
 def _notify_org(org_id, message, product_id=None):
     if not org_id:
         return
@@ -54,6 +57,7 @@ def _notify_org(org_id, message, product_id=None):
         ))
 
 
+# What this code does: Implements the  record po event logic used by this part of the TracePass application.
 def _record_po_event(po, event_type, user, note):
     if not po.product_id:
         return
@@ -67,6 +71,7 @@ def _record_po_event(po, event_type, user, note):
     ))
 
 
+# What this code does: Implements the  allowed fulfillers for buyer logic used by this part of the TracePass application.
 def _allowed_fulfillers_for_buyer():
     if current_user.has_role(ROLE_MANUFACTURER):
         # A manufacturer procures raw materials from suppliers.
@@ -83,6 +88,7 @@ def _allowed_fulfillers_for_buyer():
     return Organization.query.filter_by(is_verified=True).order_by(Organization.name).all()
 
 
+# What this code does: Implements the my materials logic used by this part of the TracePass application.
 @partners_bp.route("/partners/my-materials", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_SUPPLIER)
@@ -120,6 +126,7 @@ def my_materials():
     return render_template("partners/my_materials.html", form=form, supplier=supplier, offerings=supplier.material_offerings.order_by(SupplierMaterial.created_at.desc()).all())
 
 
+# What this code does: Implements the toggle material offering logic used by this part of the TracePass application.
 @partners_bp.route("/partners/my-materials/<int:offering_id>/toggle", methods=["POST"])
 @login_required
 @role_required(ROLE_SUPPLIER)
@@ -134,6 +141,7 @@ def toggle_material_offering(offering_id):
     return redirect(url_for("partners.my_materials"))
 
 
+# What this code does: Builds and returns a list of purchase orders for the current feature.
 @partners_bp.route("/partners/purchase-orders")
 @login_required
 @role_required(*CAN_VIEW_PO)
@@ -170,6 +178,7 @@ def list_purchase_orders():
     )
 
 
+# What this code does: Implements the partner operations logic used by this part of the TracePass application.
 @partners_bp.route("/partners/operations")
 @login_required
 @role_required(ROLE_ADMIN, ROLE_DISTRIBUTOR, ROLE_RETAILER)
@@ -186,6 +195,7 @@ def partner_operations():
     return render_template("partners/operations.html", incoming=incoming, outgoing=outgoing, receipt_forms=receipt_forms, org_id=org_id)
 
 
+# What this code does: Implements the new purchase order logic used by this part of the TracePass application.
 @partners_bp.route("/partners/purchase-orders/new", methods=["GET", "POST"])
 @login_required
 @role_required(*CAN_REQUEST_PO)
@@ -272,6 +282,7 @@ def new_purchase_order():
     return render_template("partners/purchase_order_form.html", form=form, raw_material_required=current_user.has_role(ROLE_MANUFACTURER), supplier_map=json.dumps(supplier_map))
 
 
+# What this code does: Implements the submit purchase order offer logic used by this part of the TracePass application.
 @partners_bp.route("/partners/purchase-orders/<int:po_id>/offer", methods=["POST"])
 @login_required
 @role_required(*CAN_FULFILL_PO, ROLE_MANUFACTURER, ROLE_DISTRIBUTOR, ROLE_RETAILER)
@@ -315,6 +326,7 @@ def submit_purchase_order_offer(po_id):
     return redirect(url_for("partners.list_purchase_orders"))
 
 
+# What this code does: Implements the accept purchase order offer logic used by this part of the TracePass application.
 @partners_bp.route("/partners/purchase-orders/<int:po_id>/offer/accept", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN, ROLE_MANUFACTURER, ROLE_SUPPLIER, ROLE_DISTRIBUTOR, ROLE_RETAILER)
@@ -351,6 +363,7 @@ def accept_purchase_order_offer(po_id):
     return redirect(url_for("partners.list_purchase_orders"))
 
 
+# What this code does: Implements the respond to purchase order logic used by this part of the TracePass application.
 @partners_bp.route("/partners/purchase-orders/<int:po_id>/respond", methods=["POST"])
 @login_required
 @role_required(*CAN_FULFILL_PO)
@@ -384,6 +397,7 @@ def respond_to_purchase_order(po_id):
     return redirect(url_for("partners.list_purchase_orders"))
 
 
+# What this code does: Implements the prepare purchase order logic used by this part of the TracePass application.
 @partners_bp.route("/partners/purchase-orders/<int:po_id>/preparing", methods=["POST"])
 @login_required
 @role_required(*CAN_FULFILL_PO)
@@ -400,6 +414,7 @@ def prepare_purchase_order(po_id):
     return redirect(url_for("partners.list_purchase_orders"))
 
 
+# What this code does: Implements the ready purchase order logic used by this part of the TracePass application.
 @partners_bp.route("/partners/purchase-orders/<int:po_id>/ready", methods=["POST"])
 @login_required
 @role_required(*CAN_FULFILL_PO)
@@ -416,6 +431,7 @@ def ready_purchase_order(po_id):
     return redirect(url_for("partners.list_purchase_orders"))
 
 
+# What this code does: Implements the dispatch purchase order logic used by this part of the TracePass application.
 @partners_bp.route("/partners/purchase-orders/<int:po_id>/dispatch", methods=["GET", "POST"])
 @login_required
 @role_required(*CAN_FULFILL_PO)
@@ -459,6 +475,7 @@ def dispatch_purchase_order(po_id):
     return render_template("partners/shipment_form.html", form=form, po=po)
 
 
+# What this code does: Implements the deliver purchase order logic used by this part of the TracePass application.
 @partners_bp.route("/partners/purchase-orders/<int:po_id>/deliver", methods=["POST"])
 @login_required
 @role_required(*CAN_FULFILL_PO)
@@ -482,6 +499,7 @@ def deliver_purchase_order(po_id):
     return redirect(url_for("partners.list_purchase_orders"))
 
 
+# What this code does: Implements the receive purchase order logic used by this part of the TracePass application.
 @partners_bp.route("/partners/purchase-orders/<int:po_id>/receive", methods=["POST"])
 @login_required
 def receive_purchase_order(po_id):

@@ -1,9 +1,11 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 import os
 from datetime import timedelta
 
 basedir = os.path.abspath(os.path.dirname(__file__))
 
 
+# What this code does: Defines the Config class, grouping related data and behavior used by this part of the application.
 class Config:
     """Base config. Never hardcode secrets here — everything comes from env."""
 
@@ -25,6 +27,7 @@ class Config:
     EMAIL_OTP_MAX_ATTEMPTS = int(os.environ.get("EMAIL_OTP_MAX_ATTEMPTS", "5"))
 
 
+# What this code does: Defines the DevelopmentConfig class, grouping related data and behavior used by this part of the application.
 class DevelopmentConfig(Config):
     DEBUG = True
     SQLALCHEMY_DATABASE_URI = os.environ.get(
@@ -32,16 +35,19 @@ class DevelopmentConfig(Config):
     )
 
 
+# What this code does: Defines the TestingConfig class, grouping related data and behavior used by this part of the application.
 class TestingConfig(Config):
     TESTING = True
     WTF_CSRF_ENABLED = False
     SQLALCHEMY_DATABASE_URI = "sqlite:///:memory:"
 
 
+# What this code does: Defines the ProductionConfig class, grouping related data and behavior used by this part of the application.
 class ProductionConfig(Config):
     DEBUG = False
     SQLALCHEMY_DATABASE_URI = os.environ.get("DATABASE_URL")
 
+    # What this code does: Implements the validate logic used by this part of the TracePass application.
     @classmethod
     def validate(cls):
         if not cls.SECRET_KEY or cls.SECRET_KEY == "dev-key-change-me":

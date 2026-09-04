@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 """Phase 1: product category master data.
 
 Revision ID: 7f3a9c2d11ab
@@ -12,6 +13,7 @@ branch_labels = None
 depends_on = None
 
 
+# What this code does: Applies this database migration by creating or changing the required database structures.
 def upgrade():
     op.create_table(
         "product_categories",
@@ -31,6 +33,7 @@ def upgrade():
         batch_op.create_foreign_key("fk_products_category_id", "product_categories", ["category_id"], ["id"])
 
 
+# What this code does: Reverses this database migration to return the schema to the previous version.
 def downgrade():
     with op.batch_alter_table("products") as batch_op:
         batch_op.drop_constraint("fk_products_category_id", type_="foreignkey")

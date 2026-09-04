@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -8,6 +9,7 @@ SHIPMENT_DELAYED = "delayed"
 SHIPMENT_STATUSES = [SHIPMENT_PENDING, SHIPMENT_IN_TRANSIT, SHIPMENT_DELIVERED, SHIPMENT_DELAYED]
 
 
+# What this code does: Defines the Shipment class, grouping related data and behavior used by this part of the application.
 class Shipment(db.Model):
     __tablename__ = "shipments"
 
@@ -31,5 +33,6 @@ class Shipment(db.Model):
     from_org = db.relationship("Organization", foreign_keys=[from_org_id])
     to_org = db.relationship("Organization", foreign_keys=[to_org_id])
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<Shipment {self.tracking_no or self.id} status={self.status}>"

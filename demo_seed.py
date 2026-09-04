@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 """Create a presentation-ready TracePass end-to-end demo dataset.
 
 Run after `flask db upgrade` and `python seed.py`:
@@ -40,6 +41,7 @@ DEMO_PASSWORD = os.environ.get("DEMO_PASSWORD", "Demo1234!")
 BASE_URL = os.environ.get("DEMO_BASE_URL", "http://127.0.0.1:5000")
 
 
+# What this code does: Retrieves or create needed by the surrounding feature.
 def get_or_create(model, filters, **values):
     obj = model.query.filter_by(**filters).first()
     if obj is None:
@@ -49,6 +51,7 @@ def get_or_create(model, filters, **values):
     return obj
 
 
+# What this code does: Implements the demo user logic used by this part of the TracePass application.
 def demo_user(email, name, role_name, organization=None):
     role = Role.query.filter_by(name=role_name).first()
     obj = User.query.filter_by(email=email).first()
@@ -64,6 +67,7 @@ def demo_user(email, name, role_name, organization=None):
     return obj
 
 
+# What this code does: Implements the organization logic used by this part of the TracePass application.
 def organization(name, org_type, reg_no, email, phone):
     return get_or_create(Organization, {"registration_no": reg_no}, name=name, type=org_type, contact_email=email, contact_phone=phone, address="Karachi, Sindh, Pakistan", is_verified=True)
 
@@ -216,6 +220,7 @@ with app.app_context():
     evidence_dir.mkdir(parents=True, exist_ok=True)
     try:
         from reportlab.pdfgen import canvas
+        # What this code does: Implements the make pdf logic used by this part of the TracePass application.
         def make_pdf(filename, title, lines):
             path = evidence_dir / filename
             if not path.exists():
@@ -231,6 +236,7 @@ with app.app_context():
     except ImportError:
         iso = oeko = test = None
 
+    # What this code does: Adds cert to the relevant application or database context.
     def add_cert(cert_type, number, path, issuing):
         cert = Certificate.query.filter_by(cert_number=number).first()
         if cert is None:

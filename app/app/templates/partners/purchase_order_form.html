@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}New Purchase Order · TracePass{% endblock %}
+{% block content %}
+<div class="row">
+<div class="col-12 col-xl-10"><div class="card p-4">
+<h3>New Purchase Order</h3>
+<p class="text-muted">Use this form to request raw material from a supplier. The supplier will receive the request and respond with confirmed quantity and delivery dates.</p>
+<form method="POST">{{ form.hidden_tag() }}
+{% for f in [form.product_id, form.material_id, form.to_org_id, form.quantity, form.requested_delivery_date, form.notes] %}
+<div class="mb-3">{{ f.label(class="form-label") }}{{ f(class="form-select" if f.type=='SelectField' else 'form-control') }}{% for e in f.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}</div>
+{% endfor %}
+{% if raw_material_required %}<div class="alert alert-info small">As a manufacturer, select the raw material first. The Supplier list is filtered to organizations that have registered that material as an active trading item.</div>{% else %}<div class="alert alert-secondary small">For downstream finished-goods orders, select “Finished goods / no raw material”.</div>{% endif %}
+{{ form.submit(class="btn btn-primary") }} <a href="{{ url_for('partners.list_purchase_orders') }}" class="btn btn-outline-secondary">Cancel</a>
+</form></div></div></div>
+{% if raw_material_required %}
+<script>
+const supplierMap = {{ supplier_map|safe }};
+const materialSelect = document.getElementById('{{ form.material_id.id }}');
+const supplierSelect = document.getElementById('{{ form.to_org_id.id }}');
+function filterSuppliers() {
+  const allowed = (supplierMap[materialSelect.value] || []).map(String);
+  Array.from(supplierSelect.options).forEach((option, index) => {
+    if (index === 0) { option.hidden = false; option.disabled = false; return; }
+    const visible = allowed.includes(option.value);
+    option.hidden = !visible;
+    option.disabled = !visible;
+  });
+  if (supplierSelect.value && !allowed.includes(String(supplierSelect.value))) supplierSelect.value = '';
+}
+materialSelect.addEventListener('change', filterSuppliers);
+filterSuppliers();
+</script>
+{% endif %}
+{% endblock %}

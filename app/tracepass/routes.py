@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from flask import Blueprint, render_template, redirect, url_for, flash, request, abort, current_app, send_from_directory
 from flask_login import login_required, current_user
 import os
@@ -44,6 +45,7 @@ CAN_TRACE_SUPPLY_CHAIN = (ROLE_ADMIN, ROLE_SUPPLIER, ROLE_MANUFACTURER, ROLE_DIS
 
 
 
+# What this code does: Implements the  save product image logic used by this part of the TracePass application.
 def _save_product_image(file_storage):
     """Save a product image and return its browser-accessible relative URL."""
     upload_dir = os.path.join(current_app.config["UPLOAD_FOLDER"], "product_images")
@@ -55,6 +57,7 @@ def _save_product_image(file_storage):
     return f"/uploads/product_images/{filename}"
 
 
+# What this code does: Removes product image after checking that the operation is allowed.
 def _delete_product_image(image_url):
     """Delete a locally uploaded product image, but never delete external URLs."""
     prefix = "/uploads/product_images/"
@@ -69,12 +72,14 @@ def _delete_product_image(image_url):
         pass
 
 
+# What this code does: Implements the product image logic used by this part of the TracePass application.
 @tracepass_bp.route("/uploads/product_images/<path:filename>")
 def product_image(filename):
     """Serve product images used by the public Digital Product Passport."""
     upload_dir = os.path.join(current_app.config["UPLOAD_FOLDER"], "product_images")
     return send_from_directory(upload_dir, filename)
 
+# What this code does: Implements the  manufacturer choices logic used by this part of the TracePass application.
 def _manufacturer_choices():
     query = Organization.query.filter_by(type="manufacturer")
     if current_user.has_role(ROLE_MANUFACTURER) and current_user.organization_id:
@@ -85,6 +90,7 @@ def _manufacturer_choices():
 
 # --- internal passport list/detail/create/edit -----------------------------
 
+# What this code does: Builds and returns a list of products for the current feature.
 @tracepass_bp.route("/products")
 @login_required
 def list_products():
@@ -162,6 +168,7 @@ def list_products():
     )
 
 
+# What this code does: Implements the new product logic used by this part of the TracePass application.
 @tracepass_bp.route("/products/new", methods=["GET", "POST"])
 @login_required
 @role_required(*CAN_MANAGE_PASSPORTS)
@@ -267,6 +274,7 @@ def new_product():
     )
 
 
+# What this code does: Implements the edit product logic used by this part of the TracePass application.
 @tracepass_bp.route("/products/<int:product_id>/edit", methods=["GET", "POST"])
 @login_required
 @role_required(*CAN_MANAGE_PASSPORTS)
@@ -328,6 +336,7 @@ def edit_product(product_id):
     return render_template("tracepass/product_form.html", form=form, product=product, editing=True, template_fields=template_fields, existing_attributes=existing_attributes, selected_category=selected_category)
 
 
+# What this code does: Implements the view product logic used by this part of the TracePass application.
 @tracepass_bp.route("/products/<int:product_id>")
 @login_required
 def view_product(product_id):
@@ -408,6 +417,7 @@ def view_product(product_id):
     )
 
 
+# What this code does: Implements the  authorize product access logic used by this part of the TracePass application.
 def _authorize_product_access(product):
     """Authorize internal passport/traceability access by supply-chain relationship."""
     if current_user.has_role(ROLE_ADMIN, ROLE_AUDITOR):
@@ -432,6 +442,7 @@ def _authorize_product_access(product):
 
 # --- batches -----------------------------------------------------------
 
+# What this code does: Adds batch to the relevant application or database context.
 @tracepass_bp.route("/products/<int:product_id>/batches", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_PASSPORTS)
@@ -462,6 +473,7 @@ def add_batch(product_id):
 
 # --- material linking ----------------------------------------------------
 
+# What this code does: Implements the link material logic used by this part of the TracePass application.
 @tracepass_bp.route("/products/<int:product_id>/materials", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_PASSPORTS)
@@ -501,6 +513,7 @@ def link_material(product_id):
 
 # --- supply chain events --------------------------------------------------
 
+# What this code does: Implements the log event logic used by this part of the TracePass application.
 @tracepass_bp.route("/products/<int:product_id>/events", methods=["POST"])
 @login_required
 @role_required(*CAN_TRACE_SUPPLY_CHAIN)
@@ -546,6 +559,7 @@ def log_event(product_id):
 
 # --- shipments -------------------------------------------------------------
 
+# What this code does: Adds shipment to the relevant application or database context.
 @tracepass_bp.route("/batches/<int:batch_id>/shipments", methods=["POST"])
 @login_required
 @role_required(*CAN_TRACE_SUPPLY_CHAIN)
@@ -595,6 +609,7 @@ def add_shipment(batch_id):
                 flash(f"{field}: {err}", "danger")
     return redirect(url_for("tracepass.view_product", product_id=batch.product_id))
 
+# What this code does: Adds lifecycle event to the relevant application or database context.
 @tracepass_bp.route("/products/<int:product_id>/lifecycle", methods=["POST"])
 @login_required
 @role_required(*CAN_TRACE_SUPPLY_CHAIN)
@@ -620,6 +635,7 @@ def add_lifecycle_event(product_id):
             for err in errors: flash(f"{field}: {err}", "danger")
     return redirect(url_for("tracepass.view_product", product_id=product.id))
 
+# What this code does: Implements the supply chain dashboard logic used by this part of the TracePass application.
 @tracepass_bp.route("/supply-chain")
 @login_required
 @role_required(*CAN_TRACE_SUPPLY_CHAIN)
@@ -652,6 +668,7 @@ def supply_chain_dashboard():
     return render_template("tracepass/supply_chain.html", rows=rows)
 
 
+# What this code does: Implements the publish product logic used by this part of the TracePass application.
 @tracepass_bp.route("/products/<int:product_id>/publish", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_PASSPORTS)
@@ -679,6 +696,7 @@ def publish_product(product_id):
     return redirect(url_for("tracepass.view_product", product_id=product.id))
 
 
+# What this code does: Implements the archive product logic used by this part of the TracePass application.
 @tracepass_bp.route("/products/<int:product_id>/archive", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_PASSPORTS)
@@ -694,12 +712,14 @@ def archive_product(product_id):
 
 # --- public verification (no login required) ------------------------------
 
+# What this code does: Implements the verify scanner logic used by this part of the TracePass application.
 @tracepass_bp.route("/verify")
 def verify_scanner():
     """Public QR scanner/manual passport verification entry point."""
     return render_template("tracepass/public/verify_scanner.html")
 
 
+# What this code does: Implements the verify passport logic used by this part of the TracePass application.
 @tracepass_bp.route("/verify/<passport_code>")
 def verify_passport(passport_code):
     product = Product.query.filter_by(passport_code=passport_code).first()
@@ -729,9 +749,12 @@ def verify_passport(passport_code):
         except (ValueError, TypeError):
             sustainability_parsed = None
 
+    industry_obj = product.category_ref.industry if product.category_ref and product.category_ref.industry else None
+
     public_data = {
         "passport_code": product.passport_code, "name": product.name,
-        "industry": product.category_ref.industry.name if product.category_ref and product.category_ref.industry else None,
+        "industry": industry_obj.name if industry_obj else None,
+        "industry_image_url": industry_obj.image_url if industry_obj else None,
         "category": product.category_ref.name if product.category_ref else product.category,
         "template": product.category_ref.template.name if product.category_ref and product.category_ref.template else None,
         "attributes": product.get_attribute_values(), "brand": product.brand, "model": product.model,
@@ -751,6 +774,7 @@ def verify_passport(passport_code):
     return render_template("tracepass/public/passport.html", p=public_data)
 
 
+# What this code does: Implements the verification history logic used by this part of the TracePass application.
 @tracepass_bp.route("/verification-history")
 @login_required
 @role_required(ROLE_ADMIN, ROLE_AUDITOR)

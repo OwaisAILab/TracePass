@@ -1,9 +1,11 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 import smtplib
 from email.message import EmailMessage
 
 from flask import current_app
 
 
+# What this code does: Sends email using the configured notification or email service.
 def send_email(to_address: str, subject: str, text_body: str, html_body: str | None = None) -> None:
     """Send an email using the SMTP settings configured in the environment.
 

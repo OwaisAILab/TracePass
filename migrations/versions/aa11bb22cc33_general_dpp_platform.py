@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 """General industry/template support for TracePass DPP platform.
 
 Merges the two legacy Phase-6 migration heads and introduces configurable
@@ -11,6 +12,7 @@ down_revision = "c3d7e9f2a114"
 branch_labels = None
 depends_on = None
 
+# What this code does: Applies this database migration by creating or changing the required database structures.
 def upgrade():
     op.create_table(
         "industries",
@@ -53,6 +55,7 @@ def upgrade():
     with op.batch_alter_table("products", schema=None) as batch_op:
         batch_op.add_column(sa.Column("attribute_values", sa.Text(), nullable=True))
 
+# What this code does: Reverses this database migration to return the schema to the previous version.
 def downgrade():
     with op.batch_alter_table("products", schema=None) as batch_op:
         batch_op.drop_column("attribute_values")

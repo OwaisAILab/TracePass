@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}New User · TracePass{% endblock %}
+{% block content %}
+<div class="row">
+<div class="col-12 col-lg-8">
+    <div class="card p-4">
+      <h4 class="mb-1">Create User Account</h4>
+      <p class="text-muted small mb-3">
+        Use this to create accounts for suppliers, manufacturers, distributors, and auditors.
+        These roles represent real organizational identities, so they aren't self-registered —
+        verify the person actually represents the organization before creating their account.
+      </p>
+      <form method="POST" novalidate>
+        {{ form.hidden_tag() }}
+        <div class="mb-3">
+          {{ form.name.label(class="form-label") }}
+          {{ form.name(class="form-control") }}
+          {% for e in form.name.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="mb-3">
+          {{ form.email.label(class="form-label") }}
+          {{ form.email(class="form-control") }}
+          {% for e in form.email.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+        </div>
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            {{ form.role.label(class="form-label") }}
+            {{ form.role(class="form-select") }}
+          </div>
+          <div class="col-md-6 mb-3">
+            {{ form.organization_id.label(class="form-label") }}
+            {{ form.organization_id(class="form-select") }}
+            {% for e in form.organization_id.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+            <div class="form-text">Required for supplier / manufacturer / distributor / auditor roles.</div>
+          </div>
+        </div>
+        <div class="mb-3">
+          {{ form.password.label(class="form-label") }}
+          {{ form.password(class="form-control") }}
+          {% for e in form.password.errors %}<div class="text-danger small">{{ e }}</div>{% endfor %}
+          <div class="form-text">Share this with the user through a secure channel — they should change it on first login.</div>
+        </div>
+        {{ form.submit(class="btn btn-primary w-100") }}
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

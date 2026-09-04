@@ -1,7 +1,9 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone, date
 from app.extensions import db
 
 
+# What this code does: Defines the Certificate class, grouping related data and behavior used by this part of the application.
 class Certificate(db.Model):
     __tablename__ = "certificates"
 
@@ -26,19 +28,23 @@ class Certificate(db.Model):
     uploaded_by = db.relationship("User", foreign_keys=[uploaded_by_user_id])
     reviewed_by = db.relationship("User", foreign_keys=[reviewed_by_user_id])
 
+    # What this code does: Checks a condition and returns a boolean result used by the application logic.
     def is_expired(self) -> bool:
         return self.expiry_date is not None and self.expiry_date < date.today()
 
+    # What this code does: Implements the expires soon logic used by this part of the TracePass application.
     def expires_soon(self, days: int = 30) -> bool:
         if self.expiry_date is None:
             return False
         delta = (self.expiry_date - date.today()).days
         return 0 <= delta <= days
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<Certificate {self.cert_type} #{self.cert_number}>"
 
 
+# What this code does: Defines the Document class, grouping related data and behavior used by this part of the application.
 class Document(db.Model):
     __tablename__ = "documents"
 
@@ -54,5 +60,6 @@ class Document(db.Model):
     certificate = db.relationship("Certificate", backref=db.backref("documents", lazy="dynamic"))
     uploaded_by = db.relationship("User")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<Document {self.doc_type}>"

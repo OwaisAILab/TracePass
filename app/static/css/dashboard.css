@@ -655,3 +655,93 @@ small {
 ::-webkit-scrollbar-thumb:hover {
   background: rgba(255, 255, 255, 0.2);
 }
+
+/* ── STATIC BUTTON OVERRIDE (NON-LANDING PAGES) ──
+   Buttons must remain fully visible and visually unchanged on hover, focus,
+   active, and click. Landing page does not load dashboard.css. */
+.btn,
+button.btn,
+a.btn,
+input[type="submit"].btn,
+input[type="button"].btn,
+input[type="reset"].btn {
+  transition: none !important;
+  transform: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+/* Solid black buttons */
+.btn-primary,
+.btn-secondary,
+.btn-dark,
+.btn-success,
+.btn-danger,
+.btn-warning,
+.btn-info {
+  background: #000 !important;
+  background-image: none !important;
+  color: #fff !important;
+  border-color: #000 !important;
+  box-shadow: none !important;
+}
+
+/* Solid white / light buttons */
+.btn-outline-primary,
+.btn-outline-secondary,
+.btn-outline-dark,
+.btn-outline-success,
+.btn-outline-danger,
+.btn-outline-warning,
+.btn-outline-info,
+.btn-light {
+  background: #fff !important;
+  background-image: none !important;
+  color: #000 !important;
+  border-color: #fff !important;
+  box-shadow: none !important;
+}
+
+/* Keep every interaction state exactly the same as the normal state. */
+.btn:hover,
+.btn:focus,
+.btn:focus-visible,
+.btn:active,
+.btn.active,
+.show > .btn,
+.show > .btn:hover,
+.show > .btn:focus,
+.show > .btn:active {
+  transform: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.btn-primary:hover, .btn-primary:focus, .btn-primary:focus-visible, .btn-primary:active, .btn-primary.active,
+.btn-secondary:hover, .btn-secondary:focus, .btn-secondary:focus-visible, .btn-secondary:active, .btn-secondary.active,
+.btn-dark:hover, .btn-dark:focus, .btn-dark:focus-visible, .btn-dark:active, .btn-dark.active,
+.btn-success:hover, .btn-success:focus, .btn-success:focus-visible, .btn-success:active, .btn-success.active,
+.btn-danger:hover, .btn-danger:focus, .btn-danger:focus-visible, .btn-danger:active, .btn-danger.active,
+.btn-warning:hover, .btn-warning:focus, .btn-warning:focus-visible, .btn-warning:active, .btn-warning.active,
+.btn-info:hover, .btn-info:focus, .btn-info:focus-visible, .btn-info:active, .btn-info.active {
+  background: #000 !important;
+  background-image: none !important;
+  color: #fff !important;
+  border-color: #000 !important;
+}
+
+.btn-outline-primary:hover, .btn-outline-primary:focus, .btn-outline-primary:focus-visible, .btn-outline-primary:active, .btn-outline-primary.active,
+.btn-outline-secondary:hover, .btn-outline-secondary:focus, .btn-outline-secondary:focus-visible, .btn-outline-secondary:active, .btn-outline-secondary.active,
+.btn-outline-dark:hover, .btn-outline-dark:focus, .btn-outline-dark:focus-visible, .btn-outline-dark:active, .btn-outline-dark.active,
+.btn-outline-success:hover, .btn-outline-success:focus, .btn-outline-success:focus-visible, .btn-outline-success:active, .btn-outline-success.active,
+.btn-outline-danger:hover, .btn-outline-danger:focus, .btn-outline-danger:focus-visible, .btn-outline-danger:active, .btn-outline-danger.active,
+.btn-outline-warning:hover, .btn-outline-warning:focus, .btn-outline-warning:focus-visible, .btn-outline-warning:active, .btn-outline-warning.active,
+.btn-outline-info:hover, .btn-outline-info:focus, .btn-outline-info:focus-visible, .btn-outline-info:active, .btn-outline-info.active,
+.btn-light:hover, .btn-light:focus, .btn-light:focus-visible, .btn-light:active, .btn-light.active {
+  background: #fff !important;
+  background-image: none !important;
+  color: #000 !important;
+  border-color: #fff !important;
+}

@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 import mimetypes
 import os
 
@@ -20,6 +21,7 @@ ALLOWED_MIME_BY_EXT = {
     "xlsx": {"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "application/zip"},
 }
 
+# What this code does: Validates an uploaded file before it is saved, helping prevent unsupported or unsafe uploads.
 def validate_upload(file_storage, allowed_extensions):
     """Validate extension, MIME and basic file signature before saving."""
     if not file_storage or not file_storage.filename:

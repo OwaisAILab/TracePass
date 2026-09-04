@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -12,6 +13,7 @@ INCIDENT_RESOLVED = "resolved"
 INCIDENT_STATUSES = [INCIDENT_OPEN, INCIDENT_INVESTIGATING, INCIDENT_RESOLVED]
 
 
+# What this code does: Defines the Recall class, grouping related data and behavior used by this part of the application.
 class Recall(db.Model):
     __tablename__ = "recalls"
 
@@ -28,10 +30,12 @@ class Recall(db.Model):
     batch = db.relationship("ProductBatch")
     issued_by = db.relationship("User")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<Recall product={self.product_id} status={self.status}>"
 
 
+# What this code does: Defines the Incident class, grouping related data and behavior used by this part of the application.
 class Incident(db.Model):
     __tablename__ = "incidents"
 
@@ -47,5 +51,6 @@ class Incident(db.Model):
     product = db.relationship("Product", backref=db.backref("incidents", lazy="dynamic"))
     reported_by = db.relationship("User")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<Incident product={self.product_id} status={self.status}>"

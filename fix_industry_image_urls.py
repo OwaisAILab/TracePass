@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 """
 One-time fix for industries whose image_url was saved before the /admin
 routing fix (they were stored as /uploads/industry_images/<file> instead of

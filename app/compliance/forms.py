@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed
 from wtforms import StringField, TextAreaField, SelectField, DateField, BooleanField, SubmitField
@@ -6,6 +7,7 @@ from wtforms.validators import DataRequired, Optional, Length
 from app.models.compliance import REQUIREMENT_TYPES, REVIEW_DECISIONS
 
 
+# What this code does: Defines the CertificateForm class, grouping related data and behavior used by this part of the application.
 class CertificateForm(FlaskForm):
     cert_type = StringField("Certificate Type", validators=[DataRequired(), Length(max=100)])
     issuing_body = StringField("Issuing Body", validators=[Optional(), Length(max=150)])
@@ -17,18 +19,21 @@ class CertificateForm(FlaskForm):
     submit = SubmitField("Add Certificate")
 
 
+# What this code does: Defines the CertificateReviewForm class, grouping related data and behavior used by this part of the application.
 class CertificateReviewForm(FlaskForm):
     decision = SelectField("Decision", choices=[("approved", "Approve evidence"), ("rejected", "Reject evidence")], validators=[DataRequired()])
     comments = TextAreaField("Review Comments", validators=[Optional(), Length(max=1000)])
     submit = SubmitField("Record Certificate Review")
 
 
+# What this code does: Defines the DocumentForm class, grouping related data and behavior used by this part of the application.
 class DocumentForm(FlaskForm):
     doc_type = StringField("Document Type", validators=[DataRequired(), Length(max=100)])
     file = FileField("File", validators=[DataRequired(), FileAllowed(["pdf", "png", "jpg", "jpeg", "avif", "docx", "xlsx"], "Unsupported file type")])
     submit = SubmitField("Upload Document")
 
 
+# What this code does: Defines the ComplianceRuleForm class, grouping related data and behavior used by this part of the application.
 class ComplianceRuleForm(FlaskForm):
     name = StringField("Rule Name", validators=[DataRequired(), Length(max=150)])
     category_id = SelectField("Applies to Category", coerce=int, validators=[Optional()])
@@ -37,6 +42,7 @@ class ComplianceRuleForm(FlaskForm):
     submit = SubmitField("Create Rule")
 
 
+# What this code does: Defines the ComplianceRequirementForm class, grouping related data and behavior used by this part of the application.
 class ComplianceRequirementForm(FlaskForm):
     requirement_type = SelectField("Type", choices=[(t, t.capitalize()) for t in REQUIREMENT_TYPES], validators=[DataRequired()])
     required_value = StringField("Required Value (cert type or document type)", validators=[DataRequired(), Length(max=150)])
@@ -45,6 +51,7 @@ class ComplianceRequirementForm(FlaskForm):
     submit = SubmitField("Add Requirement")
 
 
+# What this code does: Defines the ReviewForm class, grouping related data and behavior used by this part of the application.
 class ReviewForm(FlaskForm):
     decision = SelectField("Decision", choices=[(d, d.replace("_", " ").title()) for d in REVIEW_DECISIONS], validators=[DataRequired()])
     reasoning = TextAreaField("Reasoning", validators=[Optional()])

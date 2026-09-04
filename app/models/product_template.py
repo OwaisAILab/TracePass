@@ -1,6 +1,8 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 from app.extensions import db
 
+# What this code does: Defines the ProductTemplate class, grouping related data and behavior used by this part of the application.
 class ProductTemplate(db.Model):
     __tablename__ = 'product_templates'
     id = db.Column(db.Integer, primary_key=True)
@@ -12,8 +14,10 @@ class ProductTemplate(db.Model):
     industry = db.relationship('Industry', back_populates='templates')
     fields = db.relationship('TemplateField', back_populates='template', cascade='all, delete-orphan', order_by='TemplateField.sort_order')
     categories = db.relationship('ProductCategory', back_populates='template')
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self): return f'<ProductTemplate {self.name}>'
 
+# What this code does: Defines the TemplateField class, grouping related data and behavior used by this part of the application.
 class TemplateField(db.Model):
     __tablename__ = 'template_fields'
     id = db.Column(db.Integer, primary_key=True)
@@ -26,4 +30,5 @@ class TemplateField(db.Model):
     sort_order = db.Column(db.Integer, nullable=False, default=0)
     template = db.relationship('ProductTemplate', back_populates='fields')
     __table_args__ = (db.UniqueConstraint('template_id', 'key', name='uq_template_field_key'),)
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self): return f'<TemplateField {self.key}>'

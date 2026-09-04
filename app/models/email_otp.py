@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone, timedelta
 from app.extensions import db
 
@@ -5,6 +6,7 @@ OTP_PURPOSE_CUSTOMER_REGISTRATION = "customer_registration"
 OTP_PURPOSE_ORG_REQUEST = "org_registration_request"
 
 
+# What this code does: Defines the EmailOTP class, grouping related data and behavior used by this part of the application.
 class EmailOTP(db.Model):
     """Stores temporary one-time passwords generated for email validation."""
 
@@ -23,6 +25,7 @@ class EmailOTP(db.Model):
 
     registration_request = db.relationship("RegistrationRequest", foreign_keys=[request_id])
 
+    # What this code does: Checks a condition and returns a boolean result used by the application logic.
     @property
     def is_expired(self) -> bool:
         now = datetime.now(timezone.utc)
@@ -31,5 +34,6 @@ class EmailOTP(db.Model):
             exp = exp.replace(tzinfo=timezone.utc)
         return now > exp
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<EmailOTP {self.email} ({self.purpose}) {'used' if self.is_used else 'active'}>"

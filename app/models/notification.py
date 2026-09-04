@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -9,6 +10,7 @@ NOTIF_PO_UPDATE = "purchase_order_update"
 NOTIF_TYPES = [NOTIF_CERT_EXPIRING, NOTIF_CHECK_FAILED, NOTIF_REVIEW_PENDING, NOTIF_RECALL_ISSUED, NOTIF_PO_UPDATE]
 
 
+# What this code does: Defines the Notification class, grouping related data and behavior used by this part of the application.
 class Notification(db.Model):
     __tablename__ = "notifications"
 
@@ -23,5 +25,6 @@ class Notification(db.Model):
     user = db.relationship("User", backref=db.backref("notifications", lazy="dynamic"))
     product = db.relationship("Product")
 
+    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
     def __repr__(self):
         return f"<Notification {self.notif_type} user={self.user_id}>"

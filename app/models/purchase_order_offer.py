@@ -1,3 +1,4 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -6,6 +7,7 @@ OFFER_ACCEPTED = 'accepted'
 OFFER_REJECTED = 'rejected'
 OFFER_SUPERSEDED = 'superseded'
 
+# What this code does: Defines the PurchaseOrderOffer class, grouping related data and behavior used by this part of the application.
 class PurchaseOrderOffer(db.Model):
     __tablename__ = 'purchase_order_offers'
 

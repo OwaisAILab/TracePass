@@ -1,8 +1,10 @@
+# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
 import os
 import uuid
+import json
 
 from app.models.industry import Industry
 from app.models.registration_request import RegistrationRequest, REQUEST_PENDING, REQUESTABLE_ROLES
@@ -17,6 +19,7 @@ from app.models.verification import VerificationLog
 main_bp = Blueprint("main", __name__)
 
 
+# What this code does: Implements the index logic used by this part of the TracePass application.
 @main_bp.route("/")
 def index():
     """Public landing page.
@@ -33,9 +36,23 @@ def index():
         "verifications": VerificationLog.query.count(),                               # total verification scans ever logged
         "industries": len(industries),                                                # number of active industries shown above
     }
-    return render_template("main/landing.html", industries=industries, stats=stats)
+    # Serialize industries for the landing page's Industries showcase grid, so it
+    # reflects real admin-managed data (name, description, bundled/uploaded image)
+    # instead of hardcoded marketing content.
+    industries_json = json.dumps([
+        {
+            "name": industry.name,
+            "description": industry.description,
+            "image_url": industry.image_url,
+        }
+        for industry in industries
+    ])
+    return render_template(
+        "main/landing.html", industries=industries, stats=stats, industries_json=industries_json
+    )
 
 
+# What this code does: Implements the contact logic used by this part of the TracePass application.
 @main_bp.route("/contact", methods=["GET", "POST"])
 def contact():
     """Public organizational registration request with mandatory email OTP.
@@ -125,6 +142,7 @@ def contact():
     return render_template("main/contact.html", form=form)
 
 
+# What this code does: Implements the dashboard logic used by this part of the TracePass application.
 @main_bp.route("/dashboard")
 @login_required
 def dashboard():
