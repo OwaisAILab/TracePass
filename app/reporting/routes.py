@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 import os
 import csv
 import json
@@ -29,7 +29,7 @@ CAN_REVIEW = (ROLE_ADMIN, ROLE_AUDITOR)
 
 # --- dashboard --------------------------------------------------------------
 
-# What this code does: Implements the dashboard logic used by this part of the TracePass application.
+# Handles the Flask route /reports/dashboard by validating input and running the dashboard workflow.
 @reporting_bp.route("/reports/dashboard")
 @login_required
 def dashboard():
@@ -64,7 +64,7 @@ def dashboard():
 
 # --- notifications -----------------------------------------------------------
 
-# What this code does: Implements the mark notification read logic used by this part of the TracePass application.
+# Handles the Flask route /notifications/<int:notif_id>/read by validating input and running the mark notification read workflow.
 @reporting_bp.route("/notifications/<int:notif_id>/read", methods=["POST"])
 @login_required
 def mark_notification_read(notif_id):
@@ -78,7 +78,7 @@ def mark_notification_read(notif_id):
 
 # --- notification center -------------------------------------------------------
 
-# What this code does: Implements the notifications logic used by this part of the TracePass application.
+# Handles the Flask route /notifications by validating input and running the notifications workflow.
 @reporting_bp.route("/notifications")
 @login_required
 def notifications():
@@ -90,7 +90,7 @@ def notifications():
     return render_template("reporting/notifications.html", pagination=pagination, notifications=pagination.items)
 
 
-# What this code does: Implements the mark all notifications read logic used by this part of the TracePass application.
+# Handles the Flask route /notifications/read-all by validating input and running the mark all notifications read workflow.
 @reporting_bp.route("/notifications/read-all", methods=["POST"])
 @login_required
 def mark_all_notifications_read():
@@ -102,7 +102,7 @@ def mark_all_notifications_read():
 
 # --- recalls -------------------------------------------------------------------
 
-# What this code does: Implements the issue recall logic used by this part of the TracePass application.
+# Handles the Flask route /products/<int:product_id>/recalls by validating input and running the issue recall workflow.
 @reporting_bp.route("/products/<int:product_id>/recalls", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -128,7 +128,7 @@ def issue_recall(product_id):
     return redirect(url_for("tracepass.view_product", product_id=product.id))
 
 
-# What this code does: Updates recall status using validated data and saves the change when appropriate.
+#  Updates recall status using validated data and saves the change when appropriate.
 @reporting_bp.route("/recalls/<int:recall_id>/status", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -147,7 +147,7 @@ def update_recall_status(recall_id):
 
 # --- incidents -----------------------------------------------------------------
 
-# What this code does: Implements the report incident logic used by this part of the TracePass application.
+# Handles the Flask route /products/<int:product_id>/incidents by validating input and running the report incident workflow.
 @reporting_bp.route("/products/<int:product_id>/incidents", methods=["POST"])
 @login_required
 def report_incident(product_id):
@@ -167,7 +167,7 @@ def report_incident(product_id):
     return redirect(url_for("tracepass.view_product", product_id=product.id))
 
 
-# What this code does: Updates incident status using validated data and saves the change when appropriate.
+#  Updates incident status using validated data and saves the change when appropriate.
 @reporting_bp.route("/incidents/<int:incident_id>/status", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -185,7 +185,7 @@ def update_incident_status(incident_id):
     return redirect(url_for("tracepass.view_product", product_id=incident.product_id))
 
 
-# What this code does: Implements the  format audit details logic used by this part of the TracePass application.
+# Provides the internal format audit details helper used by this module's workflow.
 def _format_audit_details(raw_value):
     """Convert audit JSON into a concise, human-readable summary for admins."""
     if not raw_value:
@@ -216,7 +216,7 @@ def _format_audit_details(raw_value):
 
 # --- audit log viewer (admin only) ----------------------------------------------
 
-# What this code does: Builds and returns a list of audit logs for the current feature.
+# Handles the Flask route /admin/audit-logs by running the list audit logs workflow.
 @reporting_bp.route("/admin/audit-logs")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -240,7 +240,7 @@ def list_audit_logs():
                            format_audit_details=_format_audit_details)
 
 
-# What this code does: Implements the export summary csv logic used by this part of the TracePass application.
+# Handles the Flask route /reports/summary.csv by validating input and running the export summary csv workflow.
 @reporting_bp.route("/reports/summary.csv")
 @login_required
 def export_summary_csv():
@@ -259,7 +259,7 @@ def export_summary_csv():
 
 # --- PDF export ------------------------------------------------------------------
 
-# What this code does: Implements the export compliance report logic used by this part of the TracePass application.
+# Handles the Flask route /products/<int:product_id>/report.pdf by validating input and running the export compliance report workflow.
 @reporting_bp.route("/products/<int:product_id>/report.pdf")
 @login_required
 def export_compliance_report(product_id):

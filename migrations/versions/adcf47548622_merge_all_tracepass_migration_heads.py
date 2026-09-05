@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 """Merge all TracePass migration heads
 
 Revision ID: adcf47548622
@@ -17,11 +17,11 @@ branch_labels = None
 depends_on = None
 
 
-# What this code does: Applies this database migration by creating or changing the required database structures.
+#  Applies this database migration by creating or changing the required database structures.
 def upgrade():
     pass
 
 
-# What this code does: Reverses this database migration to return the schema to the previous version.
+#  Reverses this database migration to return the schema to the previous version.
 def downgrade():
     pass

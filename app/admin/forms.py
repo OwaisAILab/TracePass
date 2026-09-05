@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from flask_wtf import FlaskForm
 from flask_wtf.file import FileField, FileAllowed, FileRequired
 from wtforms import StringField, SelectField, TextAreaField, FloatField, BooleanField, SubmitField, PasswordField
@@ -8,7 +8,7 @@ from app.models.organization import ORG_TYPES
 from app.models.user import User
 
 
-# What this code does: Defines the OrganizationForm class, grouping related data and behavior used by this part of the application.
+# Defines the organization form class and groups its related data and behavior.
 class OrganizationForm(FlaskForm):
     name = StringField("Organization Name", validators=[DataRequired(), Length(max=150)])
     type = SelectField("Type", choices=[(x, x.replace("_", " ").title()) for x in ORG_TYPES], validators=[DataRequired()])
@@ -19,7 +19,7 @@ class OrganizationForm(FlaskForm):
     submit = SubmitField("Save Organization")
 
 
-# What this code does: Defines the SupplierForm class, grouping related data and behavior used by this part of the application.
+# Defines the supplier form class and groups its related data and behavior.
 class SupplierForm(FlaskForm):
     organization_id = SelectField("Supplier Organization", coerce=int, validators=[DataRequired()])
     material_categories_supplied = StringField("Material Categories Supplied", validators=[Optional(), Length(max=255)])
@@ -27,7 +27,7 @@ class SupplierForm(FlaskForm):
     submit = SubmitField("Save Supplier")
 
 
-# What this code does: Defines the MaterialForm class, grouping related data and behavior used by this part of the application.
+# Defines the material form class and groups its related data and behavior.
 class MaterialForm(FlaskForm):
     name = StringField("Material Name", validators=[DataRequired(), Length(max=150)])
     category = StringField("Material Category", validators=[Optional(), Length(max=100)])
@@ -36,7 +36,7 @@ class MaterialForm(FlaskForm):
     submit = SubmitField("Save Material")
 
 
-# What this code does: Defines the ProductCategoryForm class, grouping related data and behavior used by this part of the application.
+# Defines the product category form class and groups its related data and behavior.
 class ProductCategoryForm(FlaskForm):
     name = StringField("Category Name", validators=[DataRequired(), Length(max=100)])
     description = TextAreaField("Description", validators=[Optional()])
@@ -45,7 +45,7 @@ class ProductCategoryForm(FlaskForm):
     is_active = BooleanField("Active", default=True)
     submit = SubmitField("Save Category")
 
-# What this code does: Defines the IndustryForm class, grouping related data and behavior used by this part of the application.
+# Defines the industry form class and groups its related data and behavior.
 class IndustryForm(FlaskForm):
     name = StringField("Industry Name", validators=[DataRequired(), Length(max=120)])
     description = TextAreaField("Description", validators=[Optional()])
@@ -60,7 +60,7 @@ class IndustryForm(FlaskForm):
     submit = SubmitField("Save Industry")
 
 
-# What this code does: Defines the EditIndustryForm class, grouping related data and behavior used by this part of the application.
+# Defines the edit industry form class and groups its related data and behavior.
 class EditIndustryForm(FlaskForm):
     name = StringField("Industry Name", validators=[DataRequired(), Length(max=120)])
     description = TextAreaField("Description", validators=[Optional()])
@@ -74,7 +74,7 @@ class EditIndustryForm(FlaskForm):
     is_active = BooleanField("Active", default=True)
     submit = SubmitField("Save Industry")
 
-# What this code does: Defines the ProductTemplateForm class, grouping related data and behavior used by this part of the application.
+# Defines the product template form class and groups its related data and behavior.
 class ProductTemplateForm(FlaskForm):
     name = StringField("Template Name", validators=[DataRequired(), Length(max=150)])
     industry_id = SelectField("Industry", coerce=int, validators=[DataRequired()])
@@ -84,7 +84,7 @@ class ProductTemplateForm(FlaskForm):
     is_active = BooleanField("Active", default=True)
     submit = SubmitField("Save Template")
 
-# What this code does: Checks whether request password strength satisfies the project rules before processing continues.
+#  Checks whether request password strength satisfies the project rules before processing continues.
 def _validate_request_password_strength(form, field):
     """Require a strong password for the account that will be created after approval."""
     value = field.data or ""
@@ -94,7 +94,7 @@ def _validate_request_password_strength(form, field):
         raise ValidationError("Password must include uppercase, lowercase and a number.")
 
 
-# What this code does: Defines the RegistrationRequestForm class, grouping related data and behavior used by this part of the application.
+# Defines the registration request form class and groups its related data and behavior.
 class RegistrationRequestForm(FlaskForm):
     """Public form used to request a non-customer organizational account."""
 
@@ -130,7 +130,7 @@ class RegistrationRequestForm(FlaskForm):
     )
     submit = SubmitField("Submit Account Request")
 
-    # What this code does: Checks whether email satisfies the project rules before processing continues.
+    #  Checks whether email satisfies the project rules before processing continues.
     def validate_email(self, field):
         if User.query.filter_by(email=field.data.lower().strip()).first():
             raise ValidationError("An account with this email already exists. Please use Login instead.")

@@ -1,8 +1,8 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from app.extensions import db
 
 
-# What this code does: Defines the Material class, grouping related data and behavior used by this part of the application.
+# Defines the material class and groups its related data and behavior.
 class Material(db.Model):
     __tablename__ = "materials"
 
@@ -14,6 +14,6 @@ class Material(db.Model):
 
     product_links = db.relationship("ProductMaterial", back_populates="material", lazy="dynamic")
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<Material {self.name}>"

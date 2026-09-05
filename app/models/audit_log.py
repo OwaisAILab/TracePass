@@ -1,9 +1,9 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from datetime import datetime, timezone
 from app.extensions import db
 
 
-# What this code does: Defines the AuditLog class, grouping related data and behavior used by this part of the application.
+# Defines the audit log class and groups its related data and behavior.
 class AuditLog(db.Model):
     """
     Append-only log of significant actions. Never updated or deleted.
@@ -25,6 +25,6 @@ class AuditLog(db.Model):
 
     user = db.relationship("User")
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<AuditLog {self.action} {self.entity_type}#{self.entity_id}>"

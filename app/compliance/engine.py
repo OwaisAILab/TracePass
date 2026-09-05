@@ -1,11 +1,11 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from app.extensions import db
 from app.models.compliance import ComplianceRule, ComplianceRequirement, ComplianceCheck, CHECK_PASS, CHECK_FAIL
 from app.models.certificate import Certificate, Document
 from app.models.product import Product, COMPLIANCE_COMPLIANT, COMPLIANCE_NON_COMPLIANT, COMPLIANCE_PENDING
 
 
-# What this code does: Implements the applicable rules for logic used by this part of the TracePass application.
+# Implements the applicable rules for operation used by this module.
 def applicable_rules_for(product: Product):
     return ComplianceRule.query.filter(
         ComplianceRule.is_active.is_(True),
@@ -13,7 +13,7 @@ def applicable_rules_for(product: Product):
     ).all()
 
 
-# What this code does: Implements the  requirement satisfied logic used by this part of the TracePass application.
+# Provides the internal requirement satisfied helper used by this module's workflow.
 def _requirement_satisfied(product: Product, requirement: ComplianceRequirement):
     if requirement.requirement_type == "certificate":
         cert = (
@@ -43,7 +43,7 @@ def _requirement_satisfied(product: Product, requirement: ComplianceRequirement)
     return False, f"Unknown requirement type '{requirement.requirement_type}'."
 
 
-# What this code does: Runs the product compliance rules and returns the compliance status, findings, and missing requirements.
+#  Runs the product compliance rules and returns the compliance status, findings, and missing requirements.
 def evaluate_product_compliance(product: Product) -> dict:
     rules = applicable_rules_for(product)
     new_checks = []

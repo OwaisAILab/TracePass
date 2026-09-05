@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 import logging
 import secrets
 import smtplib
@@ -17,14 +17,14 @@ from app.models.email_otp import (
 logger = logging.getLogger(__name__)
 
 
-# What this code does: Generates otp code from the available project data.
+#  Generates otp code from the available project data.
 def generate_otp_code(length: int = 6) -> str:
     """Generate a cryptographically secure numeric OTP code."""
     digits = "0123456789"
     return "".join(secrets.choice(digits) for _ in range(length))
 
 
-# What this code does: Implements the build otp email content logic used by this part of the TracePass application.
+# Implements the build otp email content operation used by this module.
 def build_otp_email_content(otp_code: str, purpose: str, recipient_name: str = None) -> tuple[str, str, str]:
     """Generate subject, HTML body, and plain text body for the OTP email."""
     name_greeting = f"Hello {recipient_name}," if recipient_name else "Hello,"
@@ -165,7 +165,7 @@ https://tracepass.app
     return subject, html_body, text_body
 
 
-# What this code does: Sends email using the configured notification or email service.
+#  Sends email using the configured notification or email service.
 def send_email(to_email: str, subject: str, html_body: str, text_body: str) -> bool:
     """Send an email using configured SMTP parameters, with graceful fallback logging."""
     mail_server = current_app.config.get("MAIL_SERVER")
@@ -220,7 +220,7 @@ def send_email(to_email: str, subject: str, html_body: str, text_body: str) -> b
         return False
 
 
-# What this code does: Creates a new and send otp and performs the required validation or setup.
+# Implements the create and send otp operation used by this module.
 def create_and_send_otp(
     email: str,
     purpose: str,
@@ -263,7 +263,7 @@ def create_and_send_otp(
     return otp_record, sent_success
 
 
-# What this code does: Implements the verify otp code logic used by this part of the TracePass application.
+# Implements the verify otp code operation used by this module.
 def verify_otp_code(email: str, purpose: str, code: str) -> tuple[bool, str, EmailOTP | None]:
     """
     Validate a user-submitted OTP code.

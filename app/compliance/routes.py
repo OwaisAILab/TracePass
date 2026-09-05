@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 import os
 import uuid
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app, abort, send_from_directory
@@ -27,7 +27,7 @@ CAN_REVIEW = (ROLE_ADMIN, ROLE_AUDITOR)
 CAN_VIEW_EVIDENCE = (ROLE_ADMIN, ROLE_MANUFACTURER, ROLE_AUDITOR)
 
 
-# What this code does: Implements the  save upload logic used by this part of the TracePass application.
+# Provides the internal save upload helper used by this module's workflow.
 def _save_upload(file_storage):
     """Saves an uploaded file with a random-prefixed safe filename, returns the relative path."""
     upload_dir = current_app.config["UPLOAD_FOLDER"]
@@ -41,7 +41,7 @@ def _save_upload(file_storage):
 
 # --- certificates -----------------------------------------------------------
 
-# What this code does: Adds certificate to the relevant application or database context.
+#  Adds certificate to the relevant application or database context.
 @compliance_bp.route("/products/<int:product_id>/certificates", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -81,7 +81,7 @@ def add_certificate(product_id):
 
 # --- documents ---------------------------------------------------------------
 
-# What this code does: Adds document to the relevant application or database context.
+#  Adds document to the relevant application or database context.
 @compliance_bp.route("/products/<int:product_id>/documents", methods=["POST"])
 @login_required
 @role_required(*CAN_MANAGE_EVIDENCE)
@@ -115,7 +115,7 @@ def add_document(product_id):
 # no way for a manufacturer to double check what they filed, or for an auditor
 # to open the evidence they are supposed to be reviewing (spec section 11).
 
-# What this code does: Implements the download certificate logic used by this part of the TracePass application.
+# Handles the Flask route /certificates/<int:cert_id>/file by validating input and running the download certificate workflow.
 @compliance_bp.route("/certificates/<int:cert_id>/file")
 @login_required
 @role_required(*CAN_VIEW_EVIDENCE)
@@ -127,7 +127,7 @@ def download_certificate(cert_id):
     return send_from_directory(upload_dir, cert.file_path, as_attachment=True)
 
 
-# What this code does: Implements the download document logic used by this part of the TracePass application.
+# Handles the Flask route /documents/<int:doc_id>/file by validating input and running the download document workflow.
 @compliance_bp.route("/documents/<int:doc_id>/file")
 @login_required
 @role_required(*CAN_VIEW_EVIDENCE)
@@ -139,7 +139,7 @@ def download_document(doc_id):
 
 # --- certificate evidence review ---------------------------------------------
 
-# What this code does: Implements the review certificate logic used by this part of the TracePass application.
+# Handles the Flask route /certificates/<int:cert_id>/review by validating input and running the review certificate workflow.
 @compliance_bp.route("/certificates/<int:cert_id>/review", methods=["POST"])
 @login_required
 @role_required(*CAN_REVIEW)
@@ -177,7 +177,7 @@ def review_certificate(cert_id):
 
 # --- rule engine trigger ------------------------------------------------------
 
-# What this code does: Implements the run compliance check logic used by this part of the TracePass application.
+# Handles the Flask route /products/<int:product_id>/run-check by validating input and running the run compliance check workflow.
 @compliance_bp.route("/products/<int:product_id>/run-check", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN, ROLE_MANUFACTURER, ROLE_AUDITOR)
@@ -199,7 +199,7 @@ def run_compliance_check(product_id):
 
 # --- officer review ------------------------------------------------------------
 
-# What this code does: Implements the submit review logic used by this part of the TracePass application.
+# Handles the Flask route /products/<int:product_id>/reviews by validating input and running the submit review workflow.
 @compliance_bp.route("/products/<int:product_id>/reviews", methods=["POST"])
 @login_required
 @role_required(*CAN_REVIEW)
@@ -244,7 +244,7 @@ def submit_review(product_id):
 
 # --- rule & requirement management (admin only) -------------------------------
 
-# What this code does: Builds and returns a list of rules for the current feature.
+# Handles the Flask route /admin/compliance-rules by running the list rules workflow.
 @compliance_bp.route("/admin/compliance-rules")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -253,7 +253,7 @@ def list_rules():
     return render_template("compliance/rules.html", rules=rules)
 
 
-# What this code does: Implements the new rule logic used by this part of the TracePass application.
+# Handles the Flask route /admin/compliance-rules/new by validating input and running the new rule workflow.
 @compliance_bp.route("/admin/compliance-rules/new", methods=["GET", "POST"])
 @login_required
 @role_required(ROLE_ADMIN)
@@ -275,7 +275,7 @@ def new_rule():
     return render_template("compliance/rule_form.html", form=form)
 
 
-# What this code does: Implements the view rule logic used by this part of the TracePass application.
+# Handles the Flask route /admin/compliance-rules/<int:rule_id> by validating input and running the view rule workflow.
 @compliance_bp.route("/admin/compliance-rules/<int:rule_id>")
 @login_required
 @role_required(ROLE_ADMIN)
@@ -285,7 +285,7 @@ def view_rule(rule_id):
     return render_template("compliance/rule_detail.html", rule=rule, req_form=req_form)
 
 
-# What this code does: Adds requirement to the relevant application or database context.
+#  Adds requirement to the relevant application or database context.
 @compliance_bp.route("/admin/compliance-rules/<int:rule_id>/requirements", methods=["POST"])
 @login_required
 @role_required(ROLE_ADMIN)

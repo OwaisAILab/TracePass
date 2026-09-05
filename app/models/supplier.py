@@ -1,8 +1,8 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from app.extensions import db
 
 
-# What this code does: Defines the Supplier class, grouping related data and behavior used by this part of the application.
+# Defines the supplier class and groups its related data and behavior.
 class Supplier(db.Model):
     __tablename__ = "suppliers"
 
@@ -15,6 +15,6 @@ class Supplier(db.Model):
     material_links = db.relationship("ProductMaterial", back_populates="supplier", lazy="dynamic")
     material_offerings = db.relationship("SupplierMaterial", back_populates="supplier", cascade="all, delete-orphan", lazy="dynamic")
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<Supplier org_id={self.organization_id}>"

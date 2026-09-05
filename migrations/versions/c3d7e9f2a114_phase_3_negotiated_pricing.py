@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 """Phase 3: negotiated purchase prices and supplier offering cleanup."""
 from alembic import op
 import sqlalchemy as sa
@@ -9,7 +9,7 @@ branch_labels = None
 depends_on = None
 
 
-# What this code does: Applies this database migration by creating or changing the required database structures.
+#  Applies this database migration by creating or changing the required database structures.
 def upgrade():
     with op.batch_alter_table("supplier_materials", schema=None) as batch_op:
         batch_op.drop_column("price_per_unit")
@@ -44,7 +44,7 @@ def upgrade():
         batch_op.alter_column("agreed_currency", server_default=None)
 
 
-# What this code does: Reverses this database migration to return the schema to the previous version.
+#  Reverses this database migration to return the schema to the previous version.
 def downgrade():
     op.drop_table("purchase_order_offers")
     with op.batch_alter_table("purchase_orders", schema=None) as batch_op:

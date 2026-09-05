@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 """Add authenticity documents for registration requests.
 
 Revision ID: c5e6f7a89012
@@ -13,7 +13,7 @@ branch_labels = None
 depends_on = None
 
 
-# What this code does: Applies this database migration by creating or changing the required database structures.
+#  Applies this database migration by creating or changing the required database structures.
 def upgrade():
     op.create_table(
         "registration_request_documents",
@@ -29,7 +29,7 @@ def upgrade():
     op.create_index("ix_registration_request_documents_registration_request_id", "registration_request_documents", ["registration_request_id"], unique=False)
 
 
-# What this code does: Reverses this database migration to return the schema to the previous version.
+#  Reverses this database migration to return the schema to the previous version.
 def downgrade():
     op.drop_index("ix_registration_request_documents_registration_request_id", table_name="registration_request_documents")
     op.drop_table("registration_request_documents")

@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from app.models.role import Role  # noqa: F401
 from app.models.organization import Organization  # noqa: F401
 from app.models.user import User  # noqa: F401

@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from app.extensions import db
 
 # Fixed role set per spec section 4. Used by seed.py and by decorators.py
@@ -22,7 +22,7 @@ ALL_ROLES = [
 ]
 
 
-# What this code does: Defines the Role class, grouping related data and behavior used by this part of the application.
+# Defines the role class and groups its related data and behavior.
 class Role(db.Model):
     __tablename__ = "roles"
 
@@ -32,6 +32,6 @@ class Role(db.Model):
 
     users = db.relationship("User", back_populates="role", lazy="dynamic")
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<Role {self.name}>"

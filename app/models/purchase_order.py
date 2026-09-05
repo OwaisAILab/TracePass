@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -18,7 +18,7 @@ PO_STATUSES = [
 ]
 
 
-# What this code does: Defines the PurchaseOrder class, grouping related data and behavior used by this part of the application.
+# Defines the purchase order class and groups its related data and behavior.
 class PurchaseOrder(db.Model):
     """B2B procurement order connecting a buyer to a supplying organization.
 
@@ -66,6 +66,6 @@ class PurchaseOrder(db.Model):
     shipments = db.relationship("Shipment", back_populates="purchase_order", lazy="dynamic")
     offers = db.relationship("PurchaseOrderOffer", back_populates="purchase_order", order_by="PurchaseOrderOffer.created_at.asc()", cascade="all, delete-orphan")
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<PurchaseOrder {self.po_number} status={self.status}>"

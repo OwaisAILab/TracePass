@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 """Add mandatory email OTP verification for registration
 
 Revision ID: emailotp20260902
@@ -15,7 +15,7 @@ branch_labels = None
 depends_on = None
 
 
-# What this code does: Applies this database migration by creating or changing the required database structures.
+#  Applies this database migration by creating or changing the required database structures.
 def upgrade():
     op.create_table(
         "email_verifications",
@@ -36,7 +36,7 @@ def upgrade():
     op.create_index("ix_email_verifications_expires_at", "email_verifications", ["expires_at"])
 
 
-# What this code does: Reverses this database migration to return the schema to the previous version.
+#  Reverses this database migration to return the schema to the previous version.
 def downgrade():
     op.drop_index("ix_email_verifications_expires_at", table_name="email_verifications")
     op.drop_index("ix_email_verifications_purpose", table_name="email_verifications")

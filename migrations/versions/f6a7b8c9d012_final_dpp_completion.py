@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 """Complete general DPP controls: verification history, sustainability and lifecycle data.
 
 This migration is intentionally safe when upgrading from the final hardening
@@ -14,17 +14,17 @@ branch_labels = None
 depends_on = None
 
 
-# What this code does: Checks a condition and returns a boolean result used by the application logic.
+#  Checks a condition and returns a boolean result used by the application logic.
 def _has_table(bind, name):
     return inspect(bind).has_table(name)
 
 
-# What this code does: Checks a condition and returns a boolean result used by the application logic.
+#  Checks a condition and returns a boolean result used by the application logic.
 def _has_column(bind, table, column):
     return column in {c["name"] for c in inspect(bind).get_columns(table)}
 
 
-# What this code does: Applies this database migration by creating or changing the required database structures.
+#  Applies this database migration by creating or changing the required database structures.
 def upgrade():
     bind = op.get_bind()
 
@@ -74,7 +74,7 @@ def upgrade():
         )
 
 
-# What this code does: Reverses this database migration to return the schema to the previous version.
+#  Reverses this database migration to return the schema to the previous version.
 def downgrade():
     bind = op.get_bind()
     if _has_table(bind, "lifecycle_events"):

@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 """add controlled organizational registration requests
 
 Revision ID: c4d5e6f7a890
@@ -16,7 +16,7 @@ branch_labels = None
 depends_on = None
 
 
-# What this code does: Applies this database migration by creating or changing the required database structures.
+#  Applies this database migration by creating or changing the required database structures.
 def upgrade():
     op.create_table(
         "registration_requests",
@@ -45,7 +45,7 @@ def upgrade():
     op.create_index("ix_registration_requests_status", "registration_requests", ["status"])
 
 
-# What this code does: Reverses this database migration to return the schema to the previous version.
+#  Reverses this database migration to return the schema to the previous version.
 def downgrade():
     op.drop_index("ix_registration_requests_status", table_name="registration_requests")
     op.drop_index("ix_registration_requests_email", table_name="registration_requests")

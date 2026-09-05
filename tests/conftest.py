@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 import pytest
 from app import create_app
 from app.extensions import db
@@ -6,7 +6,7 @@ from app.models.role import Role, ALL_ROLES
 from app.models.user import User
 
 
-# What this code does: Implements the app logic used by this part of the TracePass application.
+# Implements the app operation used by this module.
 @pytest.fixture()
 def app():
     app = create_app('testing')
@@ -20,13 +20,13 @@ def app():
         db.drop_all()
 
 
-# What this code does: Implements the client logic used by this part of the TracePass application.
+# Implements the client operation used by this module.
 @pytest.fixture()
 def client(app):
     return app.test_client()
 
 
-# What this code does: Implements the admin logic used by this part of the TracePass application.
+# Implements the admin operation used by this module.
 @pytest.fixture()
 def admin(app):
     with app.app_context():

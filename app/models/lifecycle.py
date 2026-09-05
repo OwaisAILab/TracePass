@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from datetime import datetime, timezone
 from app.extensions import db
 
@@ -15,7 +15,7 @@ LIFECYCLE_EVENT_TYPES = [
 ]
 
 
-# What this code does: Defines the LifecycleEvent class, grouping related data and behavior used by this part of the application.
+# Defines the lifecycle event class and groups its related data and behavior.
 class LifecycleEvent(db.Model):
     """Post-manufacturing and end-of-life events for a product passport."""
 
@@ -35,6 +35,6 @@ class LifecycleEvent(db.Model):
     organization = db.relationship("Organization")
     recorded_by = db.relationship("User")
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<LifecycleEvent {self.event_type} product={self.product_id}>"

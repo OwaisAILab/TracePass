@@ -1,11 +1,11 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from datetime import datetime, timezone
 from flask_login import UserMixin
 from werkzeug.security import generate_password_hash, check_password_hash
 from app.extensions import db
 
 
-# What this code does: Defines the User class, grouping related data and behavior used by this part of the application.
+# Defines the user class and groups its related data and behavior.
 class User(UserMixin, db.Model):
     __tablename__ = "users"
 
@@ -22,11 +22,11 @@ class User(UserMixin, db.Model):
     organization = db.relationship("Organization", back_populates="users")
 
     # --- password handling ---
-    # What this code does: Securely hashes the plain-text password and stores only the resulting hash, so the original password is never saved in the database.
+    #  Securely hashes the plain-text password and stores only the resulting hash, so the original password is never saved in the database.
     def set_password(self, password: str) -> None:
         self.password_hash = generate_password_hash(password)
 
-    # What this code does: Verifies a login password by safely comparing it with the stored password hash.
+    #  Verifies a login password by safely comparing it with the stored password hash.
     def check_password(self, password: str) -> bool:
         return check_password_hash(self.password_hash, password)
 
@@ -35,10 +35,10 @@ class User(UserMixin, db.Model):
     # Python resolves that first — the column wins automatically, no override needed.
 
     # --- convenience helpers used throughout the app ---
-    # What this code does: Checks a condition and returns a boolean result used by the application logic.
+    #  Checks a condition and returns a boolean result used by the application logic.
     def has_role(self, *role_names: str) -> bool:
         return self.role is not None and self.role.name in role_names
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<User {self.email}>"

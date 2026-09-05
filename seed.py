@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 """Seed roles, admin, and a multi-industry starter catalog for TracePass."""
 import os
 from app import create_app

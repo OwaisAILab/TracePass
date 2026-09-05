@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 import secrets
 import json
 from datetime import datetime, timezone
@@ -16,14 +16,14 @@ COMPLIANCE_NON_COMPLIANT = "non_compliant"
 COMPLIANCE_STATUSES = [COMPLIANCE_PENDING, COMPLIANCE_COMPLIANT, COMPLIANCE_NON_COMPLIANT]
 
 
-# What this code does: Generates passport code from the available project data.
+#  Generates passport code from the available project data.
 def generate_passport_code() -> str:
     # Short, URL-safe, unique-enough identifier. Collision handled by
     # unique constraint + retry in the create-product route, not here.
     return "TP-" + secrets.token_hex(4).upper()
 
 
-# What this code does: Defines the Product class, grouping related data and behavior used by this part of the application.
+# Defines the product class and groups its related data and behavior.
 class Product(db.Model):
     __tablename__ = "products"
 
@@ -51,14 +51,14 @@ class Product(db.Model):
     qr_code = db.relationship("QRCode", back_populates="product", uselist=False, cascade="all, delete-orphan")
 
     # --- publish readiness check (spec section 6: mandatory fields before publish) ---
-    # What this code does: Retrieves attribute values needed by the surrounding feature.
+    #  Retrieves attribute values needed by the surrounding feature.
     def get_attribute_values(self):
         try:
             return json.loads(self.attribute_values or "{}")
         except (TypeError, ValueError):
             return {}
 
-    # What this code does: Implements the material percentage total logic used by this part of the TracePass application.
+# Implements the material percentage total operation used by this module.
     def material_percentage_total(self):
         """Return the sum of declared material percentages.
 
@@ -67,7 +67,7 @@ class Product(db.Model):
         """
         return round(sum((link.percentage or 0) for link in self.materials), 2)
 
-    # What this code does: Implements the missing required fields logic used by this part of the TracePass application.
+# Implements the missing required fields operation used by this module.
     def missing_required_fields(self):
         missing = []
         if not self.name:
@@ -92,16 +92,16 @@ class Product(db.Model):
                 missing.append(f"material composition totaling 100% (currently {total:g}%)")
         return missing
 
-    # What this code does: Determines whether the current object or user is allowed to perform the requested action.
+    #  Determines whether the current object or user is allowed to perform the requested action.
     def can_publish(self) -> bool:
         return len(self.missing_required_fields()) == 0
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<Product {self.passport_code}>"
 
 
-# What this code does: Defines the ProductBatch class, grouping related data and behavior used by this part of the application.
+# Defines the product batch class and groups its related data and behavior.
 class ProductBatch(db.Model):
     __tablename__ = "product_batches"
 
@@ -115,12 +115,12 @@ class ProductBatch(db.Model):
     product = db.relationship("Product", back_populates="batches")
     events = db.relationship("SupplyChainEvent", back_populates="batch", lazy="dynamic")
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<ProductBatch {self.batch_no}>"
 
 
-# What this code does: Defines the ProductMaterial class, grouping related data and behavior used by this part of the application.
+# Defines the product material class and groups its related data and behavior.
 class ProductMaterial(db.Model):
     __tablename__ = "product_materials"
 
@@ -135,12 +135,12 @@ class ProductMaterial(db.Model):
     material = db.relationship("Material", back_populates="product_links")
     supplier = db.relationship("Supplier", back_populates="material_links")
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<ProductMaterial product={self.product_id} material={self.material_id}>"
 
 
-# What this code does: Defines the QRCode class, grouping related data and behavior used by this part of the application.
+# Defines the qrcode class and groups its related data and behavior.
 class QRCode(db.Model):
     __tablename__ = "qr_codes"
 
@@ -151,6 +151,6 @@ class QRCode(db.Model):
 
     product = db.relationship("Product", back_populates="qr_code")
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<QRCode {self.code_value}>"

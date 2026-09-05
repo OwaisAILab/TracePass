@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 """
 Notification generation. Rather than a background scheduler (out of scope
 for this phase), notifications are generated on-demand by calling
@@ -26,7 +26,7 @@ from app.models.notification import (
 from app.models.role import ROLE_ADMIN, ROLE_MANUFACTURER, ROLE_AUDITOR
 
 
-# What this code does: Creates a new if new and performs the required validation or setup.
+# Provides the internal create if new helper used by this module.
 def _create_if_new(user_id, notif_type, message, product_id=None):
     exists = Notification.query.filter_by(user_id=user_id, notif_type=notif_type, product_id=product_id).first()
     if exists is None:
@@ -35,7 +35,7 @@ def _create_if_new(user_id, notif_type, message, product_id=None):
     return False
 
 
-# What this code does: Generates notifications for user from the available project data.
+#  Generates notifications for user from the available project data.
 def generate_notifications_for_user(user):
     """Generates any notifications this user doesn't already have, scoped to their role."""
     created = 0

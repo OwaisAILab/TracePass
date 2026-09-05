@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 import io
 import json
 from app.extensions import db
@@ -10,7 +10,7 @@ from app.models.registration_request_document import RegistrationRequestDocument
 from app.models.notification import Notification
 
 
-# What this code does: Automated test that verifies the expected behavior of customer registration creates otp and redirects.
+#  Automated test that verifies the expected behavior of customer registration creates otp and redirects.
 def test_customer_registration_creates_otp_and_redirects(client, app):
     """Customer registration should create an OTP record and redirect to /verify-otp without creating User immediately."""
     with app.app_context():
@@ -40,7 +40,7 @@ def test_customer_registration_creates_otp_and_redirects(client, app):
         assert len(otp_record.otp_code) == 6
 
 
-# What this code does: Automated test that verifies the expected behavior of customer otp verification creates user and allows login.
+#  Automated test that verifies the expected behavior of customer otp verification creates user and allows login.
 def test_customer_otp_verification_creates_user_and_allows_login(client, app):
     """Submitting the correct OTP should create the User account and allow authentication."""
     with app.app_context():
@@ -85,7 +85,7 @@ def test_customer_otp_verification_creates_user_and_allows_login(client, app):
         assert updated_otp.is_used is True
 
 
-# What this code does: Automated test that verifies the expected behavior of customer otp verification rejects invalid code.
+#  Automated test that verifies the expected behavior of customer otp verification rejects invalid code.
 def test_customer_otp_verification_rejects_invalid_code(client, app):
     """Submitting an invalid OTP should show an error and keep the account uncreated."""
     with app.app_context():
@@ -113,7 +113,7 @@ def test_customer_otp_verification_rejects_invalid_code(client, app):
         assert User.query.filter_by(email="invalid@example.com").first() is None
 
 
-# What this code does: Automated test that verifies the expected behavior of customer resend otp.
+#  Automated test that verifies the expected behavior of customer resend otp.
 def test_customer_resend_otp(client, app):
     """Resending OTP should invalidate prior active code and issue a fresh 6-digit code."""
     with app.app_context():
@@ -153,7 +153,7 @@ def test_customer_resend_otp(client, app):
         assert new_otp.id != first_otp.id
 
 
-# What this code does: Automated test that verifies the expected behavior of organizational request otp flow and admin forwarding.
+#  Automated test that verifies the expected behavior of organizational request otp flow and admin forwarding.
 def test_organizational_request_otp_flow_and_admin_forwarding(client, app, admin):
     """Organizational requests should require OTP email validation before dispatching admin notifications."""
     with app.app_context():

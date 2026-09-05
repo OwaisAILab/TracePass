@@ -1,9 +1,9 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from datetime import datetime, timezone
 from app.extensions import db
 
 
-# What this code does: Defines the SupplierMaterial class, grouping related data and behavior used by this part of the application.
+# Defines the supplier material class and groups its related data and behavior.
 class SupplierMaterial(db.Model):
     __tablename__ = "supplier_materials"
 
@@ -21,6 +21,6 @@ class SupplierMaterial(db.Model):
 
     __table_args__ = (db.UniqueConstraint("supplier_id", "material_id", name="uq_supplier_material"),)
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<SupplierMaterial supplier={self.supplier_id} material={self.material_id}>"

@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from datetime import datetime, timezone
 
 from werkzeug.security import generate_password_hash
@@ -22,7 +22,7 @@ REQUEST_REJECTED = "rejected"
 REQUEST_STATUSES = (REQUEST_PENDING, REQUEST_APPROVED, REQUEST_REJECTED)
 
 
-# What this code does: Defines the RegistrationRequest class, grouping related data and behavior used by this part of the application.
+# Defines the registration request class and groups its related data and behavior.
 class RegistrationRequest(db.Model):
     """Public request for a controlled TracePass organizational account.
 
@@ -59,11 +59,11 @@ class RegistrationRequest(db.Model):
     organization = db.relationship("Organization", foreign_keys=[organization_id])
     authenticity_documents = db.relationship("RegistrationRequestDocument", back_populates="registration_request", cascade="all, delete-orphan", order_by="RegistrationRequestDocument.uploaded_at")
 
-    # What this code does: Securely hashes the plain-text password and stores only the resulting hash, so the original password is never saved in the database.
+    #  Securely hashes the plain-text password and stores only the resulting hash, so the original password is never saved in the database.
     def set_password(self, password: str) -> None:
         """Hash the requested password; never store the plaintext password."""
         self.password_hash = generate_password_hash(password)
 
-    # What this code does: Implements the   repr   logic used by this part of the TracePass application.
+# Provides the internal repr helper used by this module's workflow.
     def __repr__(self):
         return f"<RegistrationRequest {self.email} ({self.status})>"

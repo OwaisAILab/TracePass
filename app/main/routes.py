@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from flask import Blueprint, render_template, redirect, url_for, flash, request, current_app
 from flask_login import login_required, current_user
 from werkzeug.utils import secure_filename
@@ -19,7 +19,7 @@ from app.models.verification import VerificationLog
 main_bp = Blueprint("main", __name__)
 
 
-# What this code does: Implements the index logic used by this part of the TracePass application.
+# Handles the Flask route / by validating input and running the index workflow.
 @main_bp.route("/")
 def index():
     """Public landing page.
@@ -52,7 +52,7 @@ def index():
     )
 
 
-# What this code does: Implements the contact logic used by this part of the TracePass application.
+# Handles the Flask route /contact by validating input and running the contact workflow.
 @main_bp.route("/contact", methods=["GET", "POST"])
 def contact():
     """Public organizational registration request with mandatory email OTP.
@@ -142,7 +142,7 @@ def contact():
     return render_template("main/contact.html", form=form)
 
 
-# What this code does: Implements the dashboard logic used by this part of the TracePass application.
+# Handles the Flask route /dashboard by validating input and running the dashboard workflow.
 @main_bp.route("/dashboard")
 @login_required
 def dashboard():

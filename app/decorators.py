@@ -1,10 +1,10 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from functools import wraps
 from flask import abort
 from flask_login import current_user
 
 
-# What this code does: Creates a decorator that blocks users who do not have one of the required roles.
+#  Creates a decorator that blocks users who do not have one of the required roles.
 def role_required(*role_names: str):
     """
     Restrict a view to users whose role is one of role_names.
@@ -19,9 +19,9 @@ def role_required(*role_names: str):
     redirected to login instead of a 403.
     """
 
-    # What this code does: Implements the decorator logic used by this part of the TracePass application.
+# Implements the decorator operation used by this module.
     def decorator(view_func):
-        # What this code does: Implements the wrapped logic used by this part of the TracePass application.
+# Implements the wrapped operation used by this module.
         @wraps(view_func)
         def wrapped(*args, **kwargs):
             if not current_user.is_authenticated:

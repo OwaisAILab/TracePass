@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 import logging
 from logging.config import fileConfig
 
@@ -16,7 +16,7 @@ fileConfig(config.config_file_name)
 logger = logging.getLogger('alembic.env')
 
 
-# What this code does: Retrieves engine needed by the surrounding feature.
+#  Retrieves engine needed by the surrounding feature.
 def get_engine():
     try:
         # this works with Flask-SQLAlchemy<3 and Alchemical
@@ -26,7 +26,7 @@ def get_engine():
         return current_app.extensions['migrate'].db.engine
 
 
-# What this code does: Retrieves engine url needed by the surrounding feature.
+#  Retrieves engine url needed by the surrounding feature.
 def get_engine_url():
     try:
         return get_engine().url.render_as_string(hide_password=False).replace(
@@ -48,14 +48,14 @@ target_db = current_app.extensions['migrate'].db
 # ... etc.
 
 
-# What this code does: Retrieves metadata needed by the surrounding feature.
+#  Retrieves metadata needed by the surrounding feature.
 def get_metadata():
     if hasattr(target_db, 'metadatas'):
         return target_db.metadatas[None]
     return target_db.metadata
 
 
-# What this code does: Implements the run migrations offline logic used by this part of the TracePass application.
+# Implements the run migrations offline operation used by this module.
 def run_migrations_offline():
     """Run migrations in 'offline' mode.
 
@@ -77,7 +77,7 @@ def run_migrations_offline():
         context.run_migrations()
 
 
-# What this code does: Implements the run migrations online logic used by this part of the TracePass application.
+# Implements the run migrations online operation used by this module.
 def run_migrations_online():
     """Run migrations in 'online' mode.
 
@@ -89,7 +89,7 @@ def run_migrations_online():
     # this callback is used to prevent an auto-migration from being generated
     # when there are no changes to the schema
     # reference: http://alembic.zzzcomputing.com/en/latest/cookbook.html
-    # What this code does: Implements the process revision directives logic used by this part of the TracePass application.
+# Implements the process revision directives operation used by this module.
     def process_revision_directives(context, revision, directives):
         if getattr(config.cmd_opts, 'autogenerate', False):
             script = directives[0]

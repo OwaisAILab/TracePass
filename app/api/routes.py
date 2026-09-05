@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 from datetime import date, datetime, timezone
 from functools import wraps
 
@@ -19,7 +19,7 @@ from app.models.shipment import Shipment
 from app.models.verification import VerificationLog
 
 
-# What this code does: Implements the json error logic used by this part of the TracePass application.
+# Implements the json error operation used by this module.
 def json_error(message, status=400, details=None):
     payload = {'error': message}
     if details:
@@ -27,9 +27,9 @@ def json_error(message, status=400, details=None):
     return jsonify(payload), status
 
 
-# What this code does: Protects an API endpoint by requiring an authenticated user before the endpoint logic runs.
+#  Protects an API endpoint by requiring an authenticated user before the endpoint logic runs.
 def api_login_required(fn):
-    # What this code does: Implements the wrapped logic used by this part of the TracePass application.
+# Implements the wrapped operation used by this module.
     @wraps(fn)
     def wrapped(*args, **kwargs):
         if not current_user.is_authenticated:
@@ -40,11 +40,11 @@ def api_login_required(fn):
     return wrapped
 
 
-# What this code does: Implements the api roles logic used by this part of the TracePass application.
+# Implements the api roles operation used by this module.
 def api_roles(*roles):
-    # What this code does: Implements the decorator logic used by this part of the TracePass application.
+# Implements the decorator operation used by this module.
     def decorator(fn):
-        # What this code does: Implements the wrapped logic used by this part of the TracePass application.
+# Implements the wrapped operation used by this module.
         @wraps(fn)
         def wrapped(*args, **kwargs):
             if not current_user.has_role(*roles):
@@ -54,7 +54,7 @@ def api_roles(*roles):
     return decorator
 
 
-# What this code does: Implements the api product allowed logic used by this part of the TracePass application.
+# Implements the api product allowed operation used by this module.
 def api_product_allowed(product):
     """Enforce organization-aware access to internal product APIs."""
     if current_user.has_role('admin', 'auditor'):
@@ -71,7 +71,7 @@ def api_product_allowed(product):
     return False
 
 
-# What this code does: Implements the product json logic used by this part of the TracePass application.
+# Implements the product json operation used by this module.
 def product_json(product):
     return {
         'id': product.id,
@@ -89,13 +89,13 @@ def product_json(product):
     }
 
 
-# What this code does: Implements the health logic used by this part of the TracePass application.
+# Implements the health operation used by this module.
 @api_bp.get('/health')
 def health():
     return jsonify({'status': 'ok', 'service': 'TracePass API', 'version': 'v1'})
 
 
-# What this code does: Implements the products logic used by this part of the TracePass application.
+# Implements the products operation used by this module.
 @api_bp.get('/products')
 @api_login_required
 def products():
@@ -134,7 +134,7 @@ def products():
     })
 
 
-# What this code does: Implements the product logic used by this part of the TracePass application.
+# Implements the product operation used by this module.
 @api_bp.get('/products/<passport_code>')
 @api_login_required
 def product(passport_code):
@@ -146,7 +146,7 @@ def product(passport_code):
     return jsonify(product_json(item))
 
 
-# What this code does: Implements the public passport logic used by this part of the TracePass application.
+# Implements the public passport operation used by this module.
 @api_bp.get('/public/passports/<passport_code>')
 def public_passport(passport_code):
     item = Product.query.filter_by(passport_code=passport_code, status=STATUS_PUBLISHED).first()
@@ -188,7 +188,7 @@ def public_passport(passport_code):
     })
 
 
-# What this code does: Implements the report summary logic used by this part of the TracePass application.
+# Implements the report summary operation used by this module.
 @api_bp.get('/reports/summary')
 @api_login_required
 @api_roles('admin', 'auditor')
@@ -210,7 +210,7 @@ def report_summary():
     })
 
 
-# What this code does: Implements the api 404 logic used by this part of the TracePass application.
+# Implements the api 404 operation used by this module.
 @api_bp.errorhandler(404)
 def api_404(_):
     return json_error('API endpoint not found', 404)

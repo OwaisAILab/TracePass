@@ -1,4 +1,4 @@
-# PRESENTATION NOTE: This file is commented to make the project easier to explain during the final committee presentation.
+
 """Final TracePass hardening: remove e-commerce schema and normalize DPP compliance categories/evidence reviews."""
 from alembic import op
 import sqlalchemy as sa
@@ -10,17 +10,17 @@ branch_labels = None
 depends_on = None
 
 
-# What this code does: Checks a condition and returns a boolean result used by the application logic.
+#  Checks a condition and returns a boolean result used by the application logic.
 def _has_table(bind, name):
     return inspect(bind).has_table(name)
 
 
-# What this code does: Checks a condition and returns a boolean result used by the application logic.
+#  Checks a condition and returns a boolean result used by the application logic.
 def _has_column(bind, table, column):
     return column in {c["name"] for c in inspect(bind).get_columns(table)}
 
 
-# What this code does: Applies this database migration by creating or changing the required database structures.
+#  Applies this database migration by creating or changing the required database structures.
 def upgrade():
     bind = op.get_bind()
 
@@ -97,7 +97,7 @@ def upgrade():
         op.execute(text("UPDATE certificates SET review_status = 'pending' WHERE review_status IS NULL OR review_status = ''"))
 
 
-# What this code does: Reverses this database migration to return the schema to the previous version.
+#  Reverses this database migration to return the schema to the previous version.
 def downgrade():
     # Deliberately do not recreate the removed e-commerce tables. This release
     # permanently excludes the online store/cart scope.
